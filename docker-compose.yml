@@ -1,0 +1,107 @@
+# Production stack: app + PostgreSQL + daily database backups.
+#
+# Coolify: New Resource -> your Git repo -> Build Pack "Docker Compose" (this file).
+#   SERVICE_* variables are filled in by Coolify automatically (random passwords, domain).
+#   You only have to set SITE_URL. See DEPLOY.md for the full walkthrough.
+# Any other Docker host: copy .env.production.example to .env, fill it in, `docker compose up -d --build`.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_TRUSTEDFORM_ENABLED: ${NEXT_PUBLIC_TRUSTEDFORM_ENABLED:-false}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Coolify: routes your domain to port 3000 of this container (set the domain in the Coolify UI).
+      - SERVICE_FQDN_APP_3000
+      # Public https address of the site, e.g. https://www.vertexautocare.com (no trailing slash).
+      - SITE_URL=${SITE_URL:?Set SITE_URL to the site's https address}
+      - DATABASE_URL=postgresql://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@db:5432/${POSTGRES_DB:-vertex}?schema=public&connection_limit=10
+      # First sign-in to /admin creates the owner account from these; afterwards they are ignored.
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${SERVICE_PASSWORD_ADMIN}
+      - OG_SECRET=${SERVICE_PASSWORD_64_OGSECRET}
+      - RATER_PROVIDER=${RATER_PROVIDER:-demo}
+      - RATER_TIMEOUT_MS=${RATER_TIMEOUT_MS:-8000}
+      - LEAD_DISTRIBUTION=${LEAD_DISTRIBUTION:-demo}
+      - LEAD_POST_URL=${LEAD_POST_URL:-}
+      - LEAD_POST_API_KEY=${LEAD_POST_API_KEY:-}
+      - NEXT_PUBLIC_TRUSTEDFORM_ENABLED=${NEXT_PUBLIC_TRUSTEDFORM_ENABLED:-false}
+      # Optional new-lead alerts (see /admin/settings).
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - NOTIFY_FROM=${NOTIFY_FROM:-}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID:-}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN:-}
+      - TWILIO_FROM=${TWILIO_FROM:-}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    logging: *logging
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${SERVICE_USER_POSTGRES}
+      - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
+      - POSTGRES_DB=${POSTGRES_DB:-vertex}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    shm_size: 256mb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    logging: *logging
+
+  # Dumps the database every BACKUP_EVERY_HOURS and keeps BACKUP_KEEP_DAYS of dumps in the
+  # "backups" volume. Copy them off the server too (see DEPLOY.md), a backup on the same disk
+  # doesn't survive losing the server.
+  backup:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - PGHOST=db
+      - PGUSER=${SERVICE_USER_POSTGRES}
+      - PGPASSWORD=${SERVICE_PASSWORD_POSTGRES}
+      - PGDATABASE=${POSTGRES_DB:-vertex}
+      - BACKUP_KEEP_DAYS=${BACKUP_KEEP_DAYS:-14}
+      - BACKUP_EVERY_HOURS=${BACKUP_EVERY_HOURS:-24}
+    volumes:
+      - backups:/backups
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        sleep 120 # let the app apply migrations before the first dump
+        while true; do
+          f="/backups/vertex-$$(date -u +%Y-%m-%d-%H%M).dump"
+          if pg_dump -Fc -f "$$f.tmp"; then
+            mv "$$f.tmp" "$$f" && echo "Backup saved: $$f"
+          else
+            rm -f "$$f.tmp"; echo "Backup FAILED" >&2
+          fi
+          find /backups -name 'vertex-*.dump' -mtime +"$$BACKUP_KEEP_DAYS" -delete
+          sleep $$((BACKUP_EVERY_HOURS * 3600))
+        done
+    logging: *logging
+
+volumes:
+  postgres-data:
+  backups:

@@ -1,0 +1,10 @@
+node_modules
+.next
+.env
+*.db
+*.db-journal
+next-env.d.ts
+.playwright-mcp
+tsconfig.tsbuildinfo
+backups
+*.bak

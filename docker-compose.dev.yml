@@ -1,0 +1,23 @@
+# Local development database only. The app itself runs with `npm run dev`.
+#   npm run db:up      start PostgreSQL on localhost:5432
+#   npm run db:down    stop it (data is kept in the volume)
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vertex
+      POSTGRES_PASSWORD: vertex_dev
+      POSTGRES_DB: vertex
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vertex -d vertex"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  postgres-dev-data:

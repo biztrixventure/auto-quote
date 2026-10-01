@@ -1,0 +1,280 @@
+// Database schema for the auto quote platform.
+// PostgreSQL everywhere: locally via docker-compose.dev.yml, in production via docker-compose.yml.
+// After changing a model run `npm run db:migrate -- --name what_changed` to create a migration;
+// the container applies pending migrations when it starts.
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // new | quoted | agent_followup | sold_lead | bound | unsold
+  status String @default("new")
+  line   String @default("auto")
+
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  address   String
+  city      String
+  state     String
+  zip       String
+
+  currentlyInsured Boolean
+  currentCarrier   String?
+  coverageLevel    String // state_minimum | standard | premium
+
+  // Marketing attribution
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+  gclid       String?
+  fbclid      String?
+  landingPage String?
+  referrer    String?
+
+  ipAddress          String?
+  userAgent          String?
+  trustedFormCertUrl String?
+
+  routedTo    String? // e.g. "rater:demo", "distributor:webhook"
+  leadRevenue Float?
+
+  // Working the lead
+  assignedToId String?
+  assignedTo   AdminUser? @relation("AssignedLeads", fields: [assignedToId], references: [id], onDelete: SetNull)
+  doNotContact Boolean    @default(false)
+  notes        LeadNote[]
+  tasks        LeadTask[]
+
+  drivers  Driver[]
+  vehicles Vehicle[]
+  consent  Consent?
+  quotes   Quote[]
+  sales    LeadSale[]
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([phone])
+  @@index([email])
+  @@index([assignedToId])
+}
+
+model Driver {
+  id            String  @id @default(cuid())
+  leadId        String
+  lead          Lead    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  isPrimary     Boolean @default(true)
+  firstName     String
+  lastName      String
+  dateOfBirth   String // YYYY-MM-DD
+  gender        String
+  maritalStatus String
+  licenseStatus String
+  accidents     Int     @default(0)
+  violations    Int     @default(0)
+}
+
+model Vehicle {
+  id          String @id @default(cuid())
+  leadId      String
+  lead        Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  year        Int
+  make        String
+  model       String
+  ownership   String // own | finance | lease
+  primaryUse  String // commute | pleasure | business
+  annualMiles Int
+}
+
+// Proof of TCPA consent. Never delete or edit these rows.
+model Consent {
+  id             String   @id @default(cuid())
+  leadId         String   @unique
+  lead           Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  consentText    String
+  consentVersion String
+  ipAddress      String
+  userAgent      String
+  pageUrl        String
+  createdAt      DateTime @default(now())
+}
+
+model Quote {
+  id               String   @id @default(cuid())
+  leadId           String
+  lead             Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  source           String // demo | ezlynx | turborater | carrier:<name>
+  carrier          String
+  monthlyPremium   Float
+  termPremium      Float
+  termMonths       Int      @default(6)
+  coverageSummary  String
+  bindUrl          String?
+  carrierReference String?
+  createdAt        DateTime @default(now())
+}
+
+model LeadSale {
+  id          String   @id @default(cuid())
+  leadId      String
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  distributor String
+  buyer       String?
+  price       Float?
+  accepted    Boolean
+  responseRaw String?
+  createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  actor     String // system | admin | api
+  action    String
+  entity    String
+  entityId  String
+  detail    String?
+
+  @@index([entity, entityId])
+}
+
+// Admin-editable settings (tracking IDs, SEO text, pricing rules). Values are strings or JSON.
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// Insurance partners shown on the results page. Managed in /admin/partners.
+model Partner {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  name             String
+  active           Boolean  @default(true)
+  sortOrder        Int      @default(0)
+  logoUrl          String?
+  tagline          String?  // short line under the name, e.g. "Great for young drivers"
+  bindUrl          String?  // "Buy online" link; empty = call to buy
+  priceFactor      Float    @default(1) // multiplier on the base price from /admin/pricing
+  states           String   @default("") // comma-separated state codes; empty = all states
+  coverageLevels   String   @default("state_minimum,standard,premium")
+  minAge           Int?
+  maxAge           Int?
+  maxAccidents     Int?
+  maxViolations    Int?
+  acceptsUninsured Boolean  @default(true)
+}
+
+// ── Admin accounts ─────────────────────────────────────────────
+// role: owner (everything, incl. users) | admin (everything except users) | agent (leads only)
+model AdminUser {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  email        String     @unique // login name; may be a plain username for the first owner
+  name         String
+  role         String     @default("agent")
+  passwordHash String
+  totpSecret   String? // base32; set during 2FA setup
+  totpEnabled  Boolean    @default(false)
+  active       Boolean    @default(true)
+  lastLoginAt  DateTime?
+  sessions     AdminSession[]
+  leads        Lead[]     @relation("AssignedLeads")
+  notes        LeadNote[]
+  tasks        LeadTask[]
+}
+
+// Browser sessions. Only a SHA-256 hash of the cookie token is stored.
+model AdminSession {
+  id         String    @id @default(cuid())
+  tokenHash  String    @unique
+  userId     String
+  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime
+  mfaPending Boolean   @default(false) // true until the 2FA code has been entered
+  ipAddress  String?
+  userAgent  String?
+
+  @@index([userId])
+}
+
+model LeadNote {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  leadId    String
+  lead      Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    AdminUser? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  body      String
+
+  @@index([leadId])
+}
+
+model LeadTask {
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  leadId     String
+  lead       Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  assigneeId String?
+  assignee   AdminUser? @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  title      String
+  dueAt      DateTime
+  doneAt     DateTime?
+
+  @@index([leadId])
+  @@index([assigneeId, doneAt])
+}
+
+// Lead buyers that unquoted leads can be sent to. Managed in /admin/buyers.
+model LeadBuyer {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  name       String
+  active     Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  webhookUrl String   // https only; receives the lead as JSON
+  authHeader String?  // e.g. "Bearer xyz" sent as Authorization
+  states     String   @default("") // comma-separated; empty = all states
+  minPrice   Float?   // reject the buyer's response if it pays less
+}
+
+// People who asked not to be contacted. New leads that match are flagged automatically.
+model Suppression {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String?
+  phone     String?
+  reason    String?
+
+  @@index([email])
+  @@index([phone])
+}
+
+// Anonymous quote-form progress, for the drop-off report. No personal data.
+model FunnelEvent {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  sessionId String
+  step      Int // 0-5 = form steps, 6 = submitted
+
+  @@index([createdAt])
+  @@unique([sessionId, step])
+}
