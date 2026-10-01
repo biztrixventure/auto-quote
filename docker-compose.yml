@@ -21,28 +21,27 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    # In Coolify, set this service's domain to https://your-domain:3000 (the port is the container port).
     environment:
-      # Coolify: routes your domain to port 3000 of this container (set the domain in the Coolify UI).
-      - SERVICE_FQDN_APP_3000
       # Public https address of the site, e.g. https://www.vertexautocare.com (no trailing slash).
-      - SITE_URL=${SITE_URL:?Set SITE_URL to the site's https address}
-      - DATABASE_URL=postgresql://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@db:5432/${POSTGRES_DB:-vertex}?schema=public&connection_limit=10
+      SITE_URL: ${SITE_URL:?Set SITE_URL to the site's https address}
+      DATABASE_URL: postgresql://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@db:5432/${POSTGRES_DB:-vertex}?schema=public&connection_limit=10
       # First sign-in to /admin creates the owner account from these; afterwards they are ignored.
-      - ADMIN_USER=${ADMIN_USER:-admin}
-      - ADMIN_PASSWORD=${SERVICE_PASSWORD_ADMIN}
-      - OG_SECRET=${SERVICE_PASSWORD_64_OGSECRET}
-      - RATER_PROVIDER=${RATER_PROVIDER:-demo}
-      - RATER_TIMEOUT_MS=${RATER_TIMEOUT_MS:-8000}
-      - LEAD_DISTRIBUTION=${LEAD_DISTRIBUTION:-demo}
-      - LEAD_POST_URL=${LEAD_POST_URL:-}
-      - LEAD_POST_API_KEY=${LEAD_POST_API_KEY:-}
-      - NEXT_PUBLIC_TRUSTEDFORM_ENABLED=${NEXT_PUBLIC_TRUSTEDFORM_ENABLED:-false}
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASSWORD: ${SERVICE_PASSWORD_ADMIN}
+      OG_SECRET: ${SERVICE_PASSWORD_64_OGSECRET}
+      RATER_PROVIDER: ${RATER_PROVIDER:-demo}
+      RATER_TIMEOUT_MS: ${RATER_TIMEOUT_MS:-8000}
+      LEAD_DISTRIBUTION: ${LEAD_DISTRIBUTION:-demo}
+      LEAD_POST_URL: ${LEAD_POST_URL:-}
+      LEAD_POST_API_KEY: ${LEAD_POST_API_KEY:-}
+      NEXT_PUBLIC_TRUSTEDFORM_ENABLED: ${NEXT_PUBLIC_TRUSTEDFORM_ENABLED:-false}
       # Optional new-lead alerts (see /admin/settings).
-      - RESEND_API_KEY=${RESEND_API_KEY:-}
-      - NOTIFY_FROM=${NOTIFY_FROM:-}
-      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID:-}
-      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN:-}
-      - TWILIO_FROM=${TWILIO_FROM:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      NOTIFY_FROM: ${NOTIFY_FROM:-}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_FROM: ${TWILIO_FROM:-}
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
@@ -55,9 +54,9 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=${SERVICE_USER_POSTGRES}
-      - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
-      - POSTGRES_DB=${POSTGRES_DB:-vertex}
+      POSTGRES_USER: ${SERVICE_USER_POSTGRES}
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      POSTGRES_DB: ${POSTGRES_DB:-vertex}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     shm_size: 256mb
@@ -78,12 +77,12 @@ services:
       db:
         condition: service_healthy
     environment:
-      - PGHOST=db
-      - PGUSER=${SERVICE_USER_POSTGRES}
-      - PGPASSWORD=${SERVICE_PASSWORD_POSTGRES}
-      - PGDATABASE=${POSTGRES_DB:-vertex}
-      - BACKUP_KEEP_DAYS=${BACKUP_KEEP_DAYS:-14}
-      - BACKUP_EVERY_HOURS=${BACKUP_EVERY_HOURS:-24}
+      PGHOST: db
+      PGUSER: ${SERVICE_USER_POSTGRES}
+      PGPASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      PGDATABASE: ${POSTGRES_DB:-vertex}
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}
+      BACKUP_EVERY_HOURS: ${BACKUP_EVERY_HOURS:-24}
     volumes:
       - backups:/backups
     entrypoint: ["/bin/sh", "-c"]
