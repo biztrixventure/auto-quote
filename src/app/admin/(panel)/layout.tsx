@@ -21,7 +21,7 @@ export default async function AdminPanelLayout({ children }: { children: React.R
             <span className="block text-xs text-white/50">{role === "writer" ? "Blog" : "Lead management"}</span>
           </span>
         </Link>
-        <div className="mt-8 flex-1 overflow-y-auto">
+        <div className="sidebar-scroll -mr-2 mt-7 flex-1 overflow-y-auto pr-2">
           <AdminNav variant="side" role={role} />
         </div>
         <div className="border-t border-white/10 pt-4">

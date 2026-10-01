@@ -75,6 +75,15 @@
   to { opacity: 1; transform: none; }
 }
 
+/* Admin sidebar: thin, dark scrollbar that only shows while the menu is hovered. */
+.sidebar-scroll { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+.sidebar-scroll:hover { scrollbar-color: rgba(255, 255, 255, 0.18) transparent; }
+.sidebar-scroll::-webkit-scrollbar { width: 6px; }
+.sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+.sidebar-scroll::-webkit-scrollbar-thumb { background: transparent; border-radius: 999px; }
+.sidebar-scroll:hover::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); }
+.sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.32); }
+
 /* Blog article text: used on the public post page and inside the admin editor (same look). */
 .post-content { @apply text-[17px] leading-[1.75] text-[#2F343B]; overflow-wrap: anywhere; }
 .post-content > * + * { margin-top: 1.25em; }

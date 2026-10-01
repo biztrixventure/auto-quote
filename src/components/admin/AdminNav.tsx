@@ -84,10 +84,10 @@ export function AdminNav({ variant, role }: { variant: "side" | "top"; role: Rol
   }
 
   return (
-    <nav className="space-y-6">
+    <nav className="space-y-5">
       {groups.map((g) => (
         <div key={g.group}>
-          <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{g.group}</p>
+          <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{g.group}</p>
           <div className="space-y-0.5">
             {g.items.map((i) => {
               const active = isActive(i.href, i.exact);
@@ -96,7 +96,7 @@ export function AdminNav({ variant, role }: { variant: "side" | "top"; role: Rol
                   key={i.href}
                   href={i.href}
                   aria-current={active ? "page" : undefined}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-[7px] text-sm font-medium transition ${
                     active ? "bg-white/10 text-white" : "text-white/65 hover:bg-white/5 hover:text-white"
                   }`}
                 >
