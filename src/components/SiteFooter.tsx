@@ -14,6 +14,7 @@ export async function SiteFooter() {
         { label: "Repair costs", href: "/#repair-costs" },
         { label: "Why choose us", href: "/#why-choose" },
         { label: "FAQ", href: "/#faq" },
+        { label: "Blog", href: "/blog" },
       ],
     },
     {

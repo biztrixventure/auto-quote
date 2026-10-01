@@ -16,7 +16,8 @@ export type BusinessSettings = {
   consentVersion: string; // changes automatically whenever consentText changes
 };
 
-export type ReviewItem = { name: string; location: string; date: string; rating: number; text: string };
+export type ReviewItem = { name: string; location: string; date: string; rating: number; text: string; title?: string };
+export type ReviewTheme = "trustpilot" | "google";
 export type ContentSettings = {
   hero: { eyebrow: string; title: string; subtitle: string };
   whyIntro: string;
@@ -24,10 +25,30 @@ export type ContentSettings = {
   faqs: { q: string; a: string }[];
   repairCosts: Record<string, string>; // part name -> price shown in the car diagram
   reviews: {
+    theme?: ReviewTheme; // look of the reviews section; defaults to Trustpilot
+    autoplaySeconds?: number; // seconds between slides; 0 = don't move
     summary: { platform: string; rating: number; count: number; url: string } | null;
     items: ReviewItem[];
     award: { text: string; url: string } | null;
   };
+};
+
+export type NavLink = { label: string; href: string };
+export type NavigationSettings = {
+  links: NavLink[]; // shown in the header, left to right
+  showPhone: boolean;
+  ctaLabel: string; // yellow button; empty = hidden
+  ctaHref: string;
+};
+
+export type BlogSettings = {
+  title: string;
+  intro: string;
+  postsPerPage: number;
+  writersCanPublish: boolean; // false = writers send posts to an admin for review
+  showQuoteCta: boolean; // quote box inside every post
+  ctaTitle: string;
+  ctaText: string;
 };
 
 export type NotificationSettings = {
@@ -72,6 +93,26 @@ export const DEFAULTS = {
     consentVersion: site.consentVersion,
   } as BusinessSettings,
   notifications: { emailTo: "", smsTo: "", webhookUrl: "", onNewLead: true, onNoQuotes: true } as NotificationSettings,
+  navigation: {
+    links: [
+      { label: "Repair costs", href: "/#repair-costs" },
+      { label: "Why us", href: "/#why-choose" },
+      { label: "FAQ", href: "/#faq" },
+      { label: "Blog", href: "/blog" },
+    ],
+    showPhone: true,
+    ctaLabel: "Get a quote",
+    ctaHref: "/quote/auto",
+  } as NavigationSettings,
+  blog: {
+    title: "The {company} Blog",
+    intro: "Practical guides on car insurance, extended warranties and keeping repair costs down.",
+    postsPerPage: 9,
+    writersCanPublish: false,
+    showQuoteCta: true,
+    ctaTitle: "See how much you could save",
+    ctaText: "Compare car insurance quotes from several companies in about 3 minutes. Free, no obligation.",
+  } as BlogSettings,
   content: {
     hero: {
       eyebrow: "Auto insurance, made easier",

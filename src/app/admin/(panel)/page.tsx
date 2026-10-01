@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin-guard";
 import { STATUS_COLORS, STATUS_LABELS } from "@/components/admin/statuses";
@@ -21,7 +22,8 @@ function Delta({ now, before }: { now: number; before: number }) {
 }
 
 export default async function AdminDashboard() {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
+  if (me.role === "writer") redirect("/admin/blog"); // writers only have the blog
   const now = new Date();
   const myTasks = await db.leadTask.findMany({
     where: { assigneeId: me.id, doneAt: null },

@@ -6,18 +6,19 @@ import { AdminNav } from "@/components/admin/AdminNav";
 import { signOut } from "../actions";
 
 export default async function AdminPanelLayout({ children }: { children: React.ReactNode }) {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer"); // each page checks its own role on top of this
   const role = me.role as Role;
+  const home = role === "writer" ? "/admin/blog" : "/admin";
   const initials = me.name.split(/\s+/).map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen bg-[#F6F7F9] lg:grid lg:grid-cols-[248px_1fr] lg:bg-[linear-gradient(to_right,#101828_248px,#F6F7F9_248px)]">
       <aside className="hidden flex-col bg-[#101828] px-4 py-6 lg:sticky lg:top-0 lg:flex lg:h-screen">
-        <Link href="/admin" className="flex items-center gap-3 px-2">
+        <Link href={home} className="flex items-center gap-3 px-2">
           <img src="/brand/logo-mark.webp" alt="" width={400} height={270} className="h-8 w-auto rounded bg-white p-1" />
           <span className="leading-tight">
             <span className="block text-sm font-bold text-white">{site.name}</span>
-            <span className="block text-xs text-white/50">Lead management</span>
+            <span className="block text-xs text-white/50">{role === "writer" ? "Blog" : "Lead management"}</span>
           </span>
         </Link>
         <div className="mt-8 flex-1 overflow-y-auto">
@@ -47,7 +48,7 @@ export default async function AdminPanelLayout({ children }: { children: React.R
 
       <div className="min-w-0">
         <header className="flex items-center justify-between gap-3 bg-[#101828] px-4 py-3 lg:hidden">
-          <Link href="/admin" className="shrink-0 text-sm font-bold text-white">{site.name}</Link>
+          <Link href={home} className="shrink-0 text-sm font-bold text-white">{site.name}</Link>
           <AdminNav variant="top" role={role} />
         </header>
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-8 sm:py-8">{children}</main>

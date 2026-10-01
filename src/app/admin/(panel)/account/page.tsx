@@ -1,5 +1,6 @@
 import QRCode from "qrcode";
-import { getSession, ROLES, totpUri, type Role } from "@/lib/auth";
+import { canUseBlog, getSession, ROLES, totpUri, type Role } from "@/lib/auth";
+import { AvatarField } from "./AvatarField";
 import { requireAdmin } from "@/lib/admin-guard";
 import { db } from "@/lib/db";
 import { site } from "@/lib/site";
@@ -17,7 +18,8 @@ function device(ua: string | null) {
 }
 
 export default async function AccountPage({ searchParams }: { searchParams: Promise<{ saved?: string; error?: string; setup2fa?: string }> }) {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
+  const blogger = canUseBlog(me);
   const [sp, current, sessions] = await Promise.all([
     searchParams,
     getSession(),
@@ -84,7 +86,15 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
         <Card title="Profile">
           <form action={updateName} className="space-y-4">
-            <FormField label="Your name" htmlFor="name" hint="Shown on notes and in the activity log."><input id="name" name="name" defaultValue={me.name} required maxLength={80} className={inputCls} /></FormField>
+            <FormField label="Your name" htmlFor="name" hint={blogger ? "Shown on your blog posts, notes and in the activity log." : "Shown on notes and in the activity log."}><input id="name" name="name" defaultValue={me.name} required maxLength={80} className={inputCls} /></FormField>
+            {blogger && (
+              <>
+                <AvatarField initialId={me.avatarId} name={me.name} />
+                <FormField label="Author bio" htmlFor="bio" hint="One or two sentences shown under your blog posts.">
+                  <textarea id="bio" name="bio" defaultValue={me.bio} maxLength={400} rows={3} className={`${inputCls} h-auto py-2`} />
+                </FormField>
+              </>
+            )}
             <FormField label="Sign-in email" htmlFor="email" hint="Ask the account owner to change this."><input id="email" value={me.email} readOnly disabled className={inputCls} /></FormField>
             <SectionFooter><button className={btnPrimary}>Save</button></SectionFooter>
           </form>

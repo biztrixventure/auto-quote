@@ -24,6 +24,8 @@ const SIMPLE: Record<string, string> = {
   privacy_delete: "Deleted a person's data",
   dnc_list_added: "Added to do-not-contact list",
   dnc_list_removed: "Removed from do-not-contact list",
+  media_deleted: "Deleted an image",
+  profile_updated: "Updated their author profile",
 };
 
 const capital = (s: string) => s.replace(/^\w/, (c) => c.toUpperCase());
@@ -90,6 +92,19 @@ export function describe(action: string, detail: string | null): { text: string;
       }[action];
       return { text: `${verb} ${str("email") ?? ""}${str("to") ? ` to ${str("to")}` : ""}`.trim() };
     }
+    case "post_created":
+    case "post_updated":
+    case "post_published":
+    case "post_submitted":
+    case "post_unpublished":
+    case "post_deleted": {
+      const verb = { post_created: "Started blog post", post_updated: "Edited blog post", post_published: "Published blog post", post_submitted: "Sent for review:", post_unpublished: "Unpublished blog post", post_deleted: "Deleted blog post" }[action];
+      return { text: `${verb} “${str("title") ?? "untitled"}”` };
+    }
+    case "category_created":
+    case "category_updated":
+    case "category_deleted":
+      return { text: `${capital(action.split("_")[1])} blog category ${str("name") ?? ""}`.trim() };
     case "rater_error":
       return { text: `Quoting failed${err}`, error: true };
     case "distribution_error":
@@ -111,6 +126,13 @@ export function entityLink(entity: string, id: string) {
   if (entity === "partner") return `/admin/partners/${id}`;
   if (entity === "buyer") return `/admin/buyers?edit=${id}`;
   if (entity === "user") return "/admin/users";
-  if (entity === "setting") return id === "content" ? "/admin/content" : id === "pricing" ? "/admin/pricing" : "/admin/settings";
+  if (entity === "post" && id !== "*") return `/admin/blog/${id}`;
+  if (entity === "category") return "/admin/blog/settings";
+  if (entity === "media") return "/admin/blog/media";
+  if (entity === "setting") {
+    if (id === "content" || id === "navigation") return "/admin/content";
+    if (id === "blog") return "/admin/blog/settings";
+    return id === "pricing" ? "/admin/pricing" : "/admin/settings";
+  }
   return null;
 }

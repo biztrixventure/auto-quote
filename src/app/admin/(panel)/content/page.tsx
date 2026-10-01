@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { getSettings } from "@/lib/settings";
 import { FormField, Notice, SectionFooter, inputCls } from "@/components/admin/forms";
 import { Card, PageHeader, btnPrimary } from "@/components/admin/ui";
-import { saveFaqs, saveHero, saveRepairCosts, saveReviews, saveWhy } from "./actions";
+import { saveFaqs, saveHero, saveNavigation, saveRepairCosts, saveReviews, saveWhy } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +22,9 @@ function Section({ id, title, view, children }: { id: string; title: string; vie
 
 export default async function ContentPage({ searchParams }: { searchParams: Promise<{ saved?: string; error?: string }> }) {
   await requireAdmin("admin");
-  const [{ saved, error }, { content: c }] = await Promise.all([searchParams, getSettings()]);
+  const [{ saved, error }, { content: c, navigation: nav }] = await Promise.all([searchParams, getSettings()]);
+  const navRows = [...nav.links, ...Array(EXTRA_ROWS).fill({ label: "", href: "" })];
+  const theme = c.reviews.theme ?? "trustpilot";
   const reasonRows = [...c.reasons, ...Array(EXTRA_ROWS).fill({ title: "", body: "" })];
   const faqRows = [...c.faqs, ...Array(EXTRA_ROWS).fill({ q: "", a: "" })];
   const reviewRows = [...c.reviews.items, ...Array(EXTRA_ROWS).fill({ name: "", location: "", date: "", rating: 5, text: "" })];
@@ -35,12 +37,39 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
       />
       <Notice saved={saved} error={error} />
       <nav className="mb-6 flex flex-wrap gap-2 text-sm">
-        {[["hero", "Homepage hero"], ["why", "Why choose us"], ["faqs", "FAQs"], ["repair", "Repair prices"], ["reviews", "Reviews"]].map(([id, l]) => (
+        {[["navigation", "Navigation"], ["hero", "Homepage hero"], ["why", "Why choose us"], ["faqs", "FAQs"], ["repair", "Repair prices"], ["reviews", "Reviews"]].map(([id, l]) => (
           <a key={id} href={`#${id}`} className="rounded-lg border border-[#E4E7EC] bg-white px-3 py-1.5 font-medium hover:border-sky hover:text-sky">{l}</a>
         ))}
       </nav>
 
       <div className="space-y-6">
+        <Section id="navigation" title="Navigation bar" view="/">
+          <form action={saveNavigation} className="space-y-4">
+            <p className="text-sm text-road">
+              Links in the header, left to right. Use a page path like <code className="text-asphalt">/blog</code>, a section like <code className="text-asphalt">/#faq</code>, or a full <code className="text-asphalt">https://</code> address. Clear both boxes to remove a link.
+            </p>
+            {navRows.map((l, i) => (
+              <div key={i} className="grid gap-2 sm:grid-cols-[1fr_2fr]">
+                <input name={`nav_label_${i}`} defaultValue={l.label} maxLength={30} placeholder="Label, e.g. Blog" aria-label={`Link ${i + 1} label`} className={inputCls} />
+                <input name={`nav_href_${i}`} defaultValue={l.href} maxLength={300} placeholder="/blog" aria-label={`Link ${i + 1} address`} className={inputCls} />
+              </div>
+            ))}
+            <div className="grid gap-3 border-t border-[#EEF0F3] pt-4 sm:grid-cols-[1fr_2fr]">
+              <FormField label="Button text" htmlFor="ctaLabel" hint="The yellow button on the right. Leave empty to hide it.">
+                <input id="ctaLabel" name="ctaLabel" defaultValue={nav.ctaLabel} maxLength={30} className={inputCls} />
+              </FormField>
+              <FormField label="Button link" htmlFor="ctaHref">
+                <input id="ctaHref" name="ctaHref" defaultValue={nav.ctaHref} maxLength={300} className={inputCls} />
+              </FormField>
+            </div>
+            <label className="flex items-center gap-2.5 text-sm font-medium">
+              <input type="checkbox" name="showPhone" defaultChecked={nav.showPhone} className="h-4 w-4 accent-sky" />
+              Show the phone number in the header
+            </label>
+            <SectionFooter><button className={btnPrimary}>Save navigation</button></SectionFooter>
+          </form>
+        </Section>
+
         <Section id="hero" title="Homepage hero" view="/">
           <form action={saveHero} className="space-y-4">
             <FormField label="Small label above the headline" htmlFor="eyebrow"><input id="eyebrow" name="eyebrow" defaultValue={c.hero.eyebrow} maxLength={60} className={inputCls} /></FormField>
@@ -96,6 +125,33 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
             <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm text-amber-900">
               Only add real reviews of your business, copied word for word, with the platform they came from. The section stays hidden until at least one review is added.
             </div>
+            <fieldset>
+              <legend className="text-sm font-medium">Style</legend>
+              <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                {([
+                  ["trustpilot", "Trustpilot", "Green star boxes, “Excellent” score, review titles", "#00B67A"],
+                  ["google", "Google", "Google “G”, yellow stars, round initials", "#FBBC04"],
+                ] as const).map(([value, label, hint, color]) => (
+                  <label key={value} className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#D0D5DD] p-4 has-[:checked]:border-sky has-[:checked]:ring-4 has-[:checked]:ring-sky/15">
+                    <input type="radio" name="theme" value={value} defaultChecked={theme === value} className="mt-1 h-4 w-4 accent-sky" />
+                    <span>
+                      <span className="flex items-center gap-2 font-semibold">
+                        <span className="flex gap-0.5" aria-hidden>
+                          {Array.from({ length: 5 }, (_, i) => (
+                            <span key={i} className={value === "trustpilot" ? "h-3.5 w-3.5" : "h-3.5 w-3.5 rounded-full"} style={{ background: color }} />
+                          ))}
+                        </span>
+                        {label}
+                      </span>
+                      <span className="mt-1 block text-xs text-road">{hint}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <FormField label="Seconds between slides" htmlFor="autoplaySeconds" hint="The reviews slide sideways on their own and pause when a visitor points at them. 0 = don't move.">
+              <input id="autoplaySeconds" name="autoplaySeconds" type="number" min={0} max={30} defaultValue={c.reviews.autoplaySeconds ?? 4} className={`${inputCls} max-w-[120px]`} />
+            </FormField>
             <p className="text-sm font-medium">Overall rating <span className="font-normal text-road">· optional</span></p>
             <div className="grid gap-3 sm:grid-cols-[1fr_100px_120px_1.4fr]">
               <input name="platform" defaultValue={c.reviews.summary?.platform ?? ""} maxLength={60} placeholder="Platform, e.g. Google" aria-label="Review platform" className={inputCls} />
@@ -112,6 +168,7 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
                 <select name={`rev_rating_${i}`} defaultValue={String(r.rating)} aria-label={`Review ${i + 1} stars`} className={inputCls}>
                   {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{n} ★</option>)}
                 </select>
+                <input name={`rev_title_${i}`} defaultValue={r.title ?? ""} maxLength={100} placeholder="Review title (optional), e.g. Great service, fast quote" aria-label={`Review ${i + 1} title`} className={`${inputCls} sm:col-span-4`} />
                 <textarea name={`rev_text_${i}`} defaultValue={r.text} maxLength={600} rows={2} placeholder="Review text" aria-label={`Review ${i + 1} text`} className={`${area} sm:col-span-4`} />
               </div>
             ))}

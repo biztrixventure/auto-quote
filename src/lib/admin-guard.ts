@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { getSession, hasRole, type Role } from "./auth";
+import { canUseBlog, getSession, hasRole, type Role } from "./auth";
 
 /**
  * Checks the signed-in admin on every admin page, action and API route (server actions
@@ -13,4 +13,11 @@ export async function requireAdmin(minRole: Role = "agent") {
   if (!session || session.mfaPending) redirect("/admin/login");
   if (!hasRole(session.user, minRole)) notFound();
   return session.user;
+}
+
+/** Blog pages and actions: blog writers, admins and owners (not agents). */
+export async function requireBlogAccess() {
+  const user = await requireAdmin("writer");
+  if (!canUseBlog(user)) notFound();
+  return user;
 }

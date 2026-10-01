@@ -9,7 +9,7 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   `connect-src 'self' ${isDev ? "ws: " : ""}https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://api.trustedform.com https://cert.trustedform.com`,
-  "frame-src https://www.googletagmanager.com https://td.doubleclick.net https://www.facebook.com",
+  "frame-src https://www.googletagmanager.com https://td.doubleclick.net https://www.facebook.com https://www.youtube-nocookie.com https://www.youtube.com",
   "frame-ancestors 'none'",
   "form-action 'self'",
   "base-uri 'self'",

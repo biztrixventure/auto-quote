@@ -8,10 +8,15 @@ import { clientIp } from "./security";
 const scrypt = promisify(scryptCb) as (pw: string, salt: Buffer, len: number, opts: { N: number; r: number; p: number }) => Promise<Buffer>;
 
 // ── Roles ──────────────────────────────────────────────────────
-export const ROLES = { agent: "Agent", admin: "Admin", owner: "Owner" } as const;
+export const ROLES = { writer: "Blog writer", agent: "Agent", admin: "Admin", owner: "Owner" } as const;
 export type Role = keyof typeof ROLES;
-const RANK: Record<Role, number> = { agent: 1, admin: 2, owner: 3 };
-export const hasRole = (user: Pick<AdminUser, "role">, min: Role) => (RANK[user.role as Role] ?? 0) >= RANK[min];
+// Writers rank lowest, so every page that needs "agent" or higher (the default) stays closed to them.
+const RANK: Record<Role, number> = { writer: 0, agent: 1, admin: 2, owner: 3 };
+export const hasRole = (user: Pick<AdminUser, "role">, min: Role) => (RANK[user.role as Role] ?? -1) >= RANK[min];
+/** The blog is for writers and admins/owners, not agents. */
+export const canUseBlog = (user: Pick<AdminUser, "role">) => user.role === "writer" || hasRole(user, "admin");
+/** Admins and owners edit and publish every post; writers only their own. */
+export const isEditor = (user: Pick<AdminUser, "role">) => hasRole(user, "admin");
 
 // ── Passwords (scrypt) ─────────────────────────────────────────
 const N = 16384, R = 8, P = 1, KEYLEN = 64;

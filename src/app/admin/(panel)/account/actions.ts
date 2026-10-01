@@ -10,15 +10,23 @@ const back = (q: Record<string, string>) => redirect(`/admin/account?${new URLSe
 const val = (f: FormData, k: string) => String(f.get(k) ?? "");
 
 export async function updateName(f: FormData) {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
   const name = val(f, "name").trim().slice(0, 80);
   if (!name) back({ error: "Enter your name." });
-  await db.adminUser.update({ where: { id: me.id }, data: { name } });
-  back({ saved: "Name updated." });
+  // Author bio and photo (shown under blog posts); only sent by people who use the blog.
+  const profile: { bio?: string; avatarId?: string | null } = {};
+  if (f.has("bio")) profile.bio = val(f, "bio").replace(/\s+/g, " ").trim().slice(0, 400);
+  if (f.has("avatarId")) {
+    const id = val(f, "avatarId");
+    profile.avatarId = id && (await db.media.findUnique({ where: { id }, select: { id: true } })) ? id : null;
+  }
+  await db.adminUser.update({ where: { id: me.id }, data: { name, ...profile } });
+  if (Object.keys(profile).length) await audit(me.email, "profile_updated", "user", me.id);
+  back({ saved: "Profile saved." });
 }
 
 export async function changePassword(f: FormData) {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
   const current = val(f, "current");
   const next = val(f, "password");
   if (!(await verifyPassword(current, me.passwordHash))) back({ error: "Your current password is wrong." });
@@ -32,14 +40,14 @@ export async function changePassword(f: FormData) {
 }
 
 export async function startTwoFactor() {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
   if (me.totpEnabled) back({});
   await db.adminUser.update({ where: { id: me.id }, data: { totpSecret: newTotpSecret() } });
   back({ setup2fa: "1" });
 }
 
 export async function confirmTwoFactor(f: FormData) {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
   if (!me.totpSecret || me.totpEnabled) back({});
   if (!verifyTotp(me.totpSecret!, val(f, "code"))) back({ setup2fa: "1", error: "That code didn't match. Make sure your phone's time is correct and try the newest code." });
   await db.adminUser.update({ where: { id: me.id }, data: { totpEnabled: true } });
@@ -49,7 +57,7 @@ export async function confirmTwoFactor(f: FormData) {
 }
 
 export async function disableTwoFactor(f: FormData) {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
   if (!(await verifyPassword(val(f, "password"), me.passwordHash))) back({ error: "Your password is wrong." });
   if (!me.totpSecret || !verifyTotp(me.totpSecret, val(f, "code"))) back({ error: "That code didn't work." });
   await db.adminUser.update({ where: { id: me.id }, data: { totpEnabled: false, totpSecret: null } });
@@ -58,7 +66,7 @@ export async function disableTwoFactor(f: FormData) {
 }
 
 export async function signOutEverywhereElse() {
-  const me = await requireAdmin();
+  const me = await requireAdmin("writer");
   await destroyOtherSessions(me.id);
   await audit(me.email, "sessions_revoked", "user", me.id);
   back({ saved: "Signed out of every other browser and device." });

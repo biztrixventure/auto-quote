@@ -8,6 +8,7 @@ import { CreateUserForm, ResetPasswordButton } from "./UserForms";
 export const dynamic = "force-dynamic";
 
 const ROLE_HELP: Record<Role, string> = {
+  writer: "Blog only: writes posts and uploads images. Can't see leads or settings.",
   agent: "Dashboard and leads: notes, tasks and status changes.",
   admin: "Everything except managing users.",
   owner: "Everything, including users.",

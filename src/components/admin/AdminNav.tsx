@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type Role = "agent" | "admin" | "owner";
-const RANK: Record<Role, number> = { agent: 1, admin: 2, owner: 3 };
+type Role = "writer" | "agent" | "admin" | "owner";
+const RANK: Record<Role, number> = { writer: 0, agent: 1, admin: 2, owner: 3 }; // keep in sync with src/lib/auth.ts
+const BLOG: Role[] = ["writer", "admin", "owner"];
 
 const icon = (d: string) => (
   <svg aria-hidden width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
@@ -12,7 +13,8 @@ const icon = (d: string) => (
   </svg>
 );
 
-type Item = { href: string; label: string; icon: React.ReactNode; min: Role; exact?: boolean };
+// `roles` lists exactly who sees the item; otherwise everyone at or above `min`.
+type Item = { href: string; label: string; icon: React.ReactNode; min: Role; roles?: Role[]; exact?: boolean };
 
 export const NAV: { group: string; items: Item[] }[] = [
   {
@@ -21,6 +23,14 @@ export const NAV: { group: string; items: Item[] }[] = [
       { href: "/admin", label: "Dashboard", min: "agent", exact: true, icon: icon("M3 13h8V3H3zm10 8h8V11h-8zM3 21h8v-6H3zm10-18v6h8V3z") },
       { href: "/admin/leads", label: "Leads", min: "agent", icon: icon("M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75") },
       { href: "/admin/reports", label: "Reports", min: "admin", icon: icon("M3 3v18h18M7 15l4-4 3 3 5-6") },
+    ],
+  },
+  {
+    group: "Blog",
+    items: [
+      { href: "/admin/blog", label: "Posts", min: "admin", roles: BLOG, icon: icon("M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z") },
+      { href: "/admin/blog/media", label: "Images", min: "admin", roles: BLOG, icon: icon("M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6M15 9h.01") },
+      { href: "/admin/blog/settings", label: "Categories & settings", min: "admin", icon: icon("M4 6h16M4 12h10M4 18h7") },
     ],
   },
   {
@@ -46,8 +56,15 @@ export const NAV: { group: string; items: Item[] }[] = [
 
 export function AdminNav({ variant, role }: { variant: "side" | "top"; role: Role }) {
   const path = usePathname();
-  const isActive = (href: string, exact?: boolean) => (exact ? path === href : path === href || path.startsWith(`${href}/`));
-  const groups = NAV.map((g) => ({ ...g, items: g.items.filter((i) => RANK[role] >= RANK[i.min]) })).filter((g) => g.items.length);
+  // Most specific match wins, so /admin/blog/media highlights "Images", not "Posts".
+  const hrefs = NAV.flatMap((g) => g.items.map((i) => i.href));
+  const isActive = (href: string, exact?: boolean) => {
+    if (exact) return path === href;
+    if (path !== href && !path.startsWith(`${href}/`)) return false;
+    return !hrefs.some((h) => h.length > href.length && (path === h || path.startsWith(`${h}/`)));
+  };
+  const visible = (i: Item) => (i.roles ? i.roles.includes(role) : (RANK[role] ?? -1) >= RANK[i.min]);
+  const groups = NAV.map((g) => ({ ...g, items: g.items.filter(visible) })).filter((g) => g.items.length);
 
   if (variant === "top") {
     return (

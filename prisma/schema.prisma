@@ -188,16 +188,102 @@ model AdminUser {
   updatedAt    DateTime   @updatedAt
   email        String     @unique // login name; may be a plain username for the first owner
   name         String
-  role         String     @default("agent")
+  role         String     @default("agent") // owner | admin | agent | writer
   passwordHash String
   totpSecret   String? // base32; set during 2FA setup
   totpEnabled  Boolean    @default(false)
   active       Boolean    @default(true)
   lastLoginAt  DateTime?
+  bio          String     @default("") // shown under blog posts
+  avatarId     String? // Media id
   sessions     AdminSession[]
   leads        Lead[]     @relation("AssignedLeads")
   notes        LeadNote[]
   tasks        LeadTask[]
+  posts        Post[]     @relation("PostAuthor")
+  revisions    PostRevision[]
+}
+
+// ── Blog ───────────────────────────────────────────────────────
+
+// status: draft | review (sent to an editor) | published. A published post with a
+// future publishedAt is "scheduled" and goes live by itself at that time.
+model Post {
+  id             String         @id @default(cuid())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  title          String
+  slug           String         @unique
+  excerpt        String         @default("")
+  content        String         @default("") // sanitized HTML from the editor
+  status         String         @default("draft")
+  publishedAt    DateTime?
+  featured       Boolean        @default(false)
+  readingMinutes Int            @default(1)
+  views          Int            @default(0)
+  coverImageId   String?
+  coverAlt       String         @default("")
+  seoTitle       String         @default("")
+  seoDescription String         @default("")
+  noindex        Boolean        @default(false)
+  authorId       String
+  author         AdminUser      @relation("PostAuthor", fields: [authorId], references: [id])
+  categoryId     String?
+  category       Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tags           Tag[]
+  revisions      PostRevision[]
+
+  @@index([status, publishedAt])
+  @@index([authorId])
+  @@index([categoryId])
+}
+
+model Category {
+  id          String @id @default(cuid())
+  name        String
+  slug        String @unique
+  description String @default("")
+  sortOrder   Int    @default(0)
+  posts       Post[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+  posts Post[]
+}
+
+// Earlier versions of a post, saved on every edit (the newest 25 are kept).
+model PostRevision {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  postId    String
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  editorId  String
+  editor    AdminUser @relation(fields: [editorId], references: [id])
+  title     String
+  excerpt   String
+  content   String
+
+  @@index([postId, createdAt])
+}
+
+// Uploaded images (blog covers, images in posts, author photos). Stored in the database so
+// they are included in backups; resized and converted to WebP on upload, served from /media/<id>.
+model Media {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  uploaderId String?
+  fileName   String
+  mime       String
+  width      Int
+  height     Int
+  size       Int
+  alt        String   @default("")
+  data       Bytes
+
+  @@index([createdAt])
 }
 
 // Browser sessions. Only a SHA-256 hash of the cookie token is stored.
