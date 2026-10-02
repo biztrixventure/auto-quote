@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/admin-guard";
 import { db } from "@/lib/db";
 import { channelStatus } from "@/lib/notify";
+import { googleConnected } from "@/lib/search-console";
 import { getSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
 import { ERROR_ACTIONS, describe, entityLink } from "@/components/admin/activity";
@@ -150,7 +151,8 @@ export default async function HealthPage() {
           level: verification.google && verification.bing ? "ok" : verification.google ? "info" : "warn",
           detail:
             ([verification.google && "Google", verification.bing && "Bing", verification.yandex && "Yandex", verification.meta && "Meta"].filter(Boolean).join(", ") || "Not connected to Google Search Console yet") +
-            (settings.indexnow.enabled ? " · IndexNow on" : " · IndexNow off"),
+            (settings.indexnow.enabled ? " · IndexNow on" : " · IndexNow off") +
+            (googleConnected() && settings.searchConsole.property ? " · Google sitemap auto-submit on" : " · Google auto-submit not set up"),
           fix: { href: "/admin/settings", text: "Settings" },
         },
       ],

@@ -7,6 +7,8 @@ export type TrackingSettings = { ga4Id: string; gtmId: string; metaPixelId: stri
 export type VerificationSettings = { google: string; bing: string; yandex: string; meta: string };
 /** IndexNow tells Bing, Yandex and other engines about new or changed pages right away. */
 export type IndexNowSettings = { enabled: boolean; key: string; lastSubmitted: string; lastResult: string };
+/** Google Search Console API connection; the service-account key itself lives in the server environment. */
+export type SearchConsoleSettings = { property: string; lastSubmitted: string; lastResult: string };
 export type SeoSettings = { title: string; description: string };
 export type ResultsSettings = { disclaimer: string };
 
@@ -105,6 +107,7 @@ export const DEFAULTS = {
   tracking: { ga4Id: "", gtmId: "", metaPixelId: "" } as TrackingSettings,
   verification: { google: "", bing: "", yandex: "", meta: "" } as VerificationSettings,
   indexnow: { enabled: false, key: "", lastSubmitted: "", lastResult: "" } as IndexNowSettings,
+  searchConsole: { property: "", lastSubmitted: "", lastResult: "" } as SearchConsoleSettings,
   seo: { title: "", description: "" } as SeoSettings,
   results: {
     disclaimer:

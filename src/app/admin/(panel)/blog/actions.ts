@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { audit } from "@/lib/audit";
 import { submitToIndexNow } from "@/lib/indexnow";
+import { submitSitemapToGoogle } from "@/lib/search-console";
 import { isEditor } from "@/lib/auth";
 import { requireAdmin, requireBlogAccess } from "@/lib/admin-guard";
 import { autoExcerpt, parseTags, postState, readingMinutes, sanitizePostHtml, slugify, uniquePostSlug } from "@/lib/blog";
@@ -135,7 +136,12 @@ export async function savePost(input: PostInput): Promise<SaveResult> {
   await audit(me.email, action, "post", post.id, { title });
   // Tell Bing, Yandex & co. about live (or just unpublished) posts, after the save finishes.
   if (state === "published" || existing?.status === "published") {
-    after(() => submitToIndexNow([`/blog/${post.slug}`, "/blog"], me.email));
+    after(() =>
+      Promise.all([
+        submitToIndexNow([`/blog/${post.slug}`, "/blog"], me.email),
+        submitSitemapToGoogle(me.email, { minIntervalMs: 30 * 60_000 }),
+      ]),
+    );
   }
 
   const message =

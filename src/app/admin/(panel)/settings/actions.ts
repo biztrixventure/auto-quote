@@ -7,6 +7,7 @@ import { getSettings, saveSetting } from "@/lib/settings";
 import { assertPublicHttpsUrl } from "@/lib/outbound";
 import { sendTestAlert } from "@/lib/notify";
 import { newIndexNowKey, submitToIndexNow } from "@/lib/indexnow";
+import { submitSitemapToGoogle, validProperty } from "@/lib/search-console";
 import sitemap from "@/app/sitemap";
 
 const back = (q: Record<string, string>) => redirect(`/admin/settings?${new URLSearchParams(q)}`);
@@ -64,13 +65,31 @@ export async function saveIndexNow(f: FormData) {
   back({ saved: enabled ? "IndexNow is on. New and updated pages are sent to Bing and Yandex automatically." : "IndexNow is off." });
 }
 
-/** Sends every page in the sitemap to IndexNow (use after launch or a big update). */
+/** One click: every page to Bing/Yandex (IndexNow) and the sitemap to Google (Search Console API). */
 export async function submitAllToIndexNow() {
   const me = await requireAdmin("admin");
   const urls = (await sitemap()).map((e) => e.url);
-  const r = await submitToIndexNow(urls, me.email);
-  await audit(me.email, "indexnow_submitted", "setting", "indexnow", { pages: urls.length, result: r.message });
-  back(r.ok ? { saved: `${r.message} to Bing, Yandex and other IndexNow search engines.` } : { error: r.message });
+  const [now, google] = await Promise.all([submitToIndexNow(urls, me.email), submitSitemapToGoogle(me.email)]);
+  await audit(me.email, "indexnow_submitted", "setting", "indexnow", { pages: urls.length, indexnow: now.message, google: google.message });
+  const parts = [
+    now.ok ? `Bing & Yandex: ${now.message.toLowerCase()}` : `Bing & Yandex: ${now.message}`,
+    google.ok ? `Google: sitemap with ${urls.length} pages submitted` : `Google: ${google.message}`,
+  ];
+  back(now.ok || google.ok ? { saved: parts.join(" · ") } : { error: parts.join(" · ") });
+}
+
+/** Saves the Search Console property name (the key itself is set in the server environment). */
+export async function saveSearchConsole(f: FormData) {
+  const me = await requireAdmin("admin");
+  let property = val(f, "property").replace(/\s+/g, "");
+  if (property && !property.startsWith("sc-domain:") && !property.endsWith("/")) property += "/";
+  if (property && !validProperty(property)) back({ error: "Use sc-domain:yourdomain.com (domain property) or https://yourdomain.com/ (URL-prefix property), exactly as Search Console shows it." });
+  const { searchConsole } = await getSettings();
+  await saveSetting("searchConsole", { ...searchConsole, property });
+  await audit(me.email, "settings_updated", "setting", "searchConsole", { property });
+  if (!property) back({ saved: "Google connection removed." });
+  const r = await submitSitemapToGoogle(me.email);
+  back(r.ok ? { saved: "Connected to Google Search Console. Your sitemap was submitted." } : { error: `Saved, but Google said: ${r.message}` });
 }
 
 export async function saveSeo(f: FormData) {

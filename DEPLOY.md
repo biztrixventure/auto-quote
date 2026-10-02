@@ -48,6 +48,20 @@ npm run db:migrate -- --name short_description   # creates prisma/migrations/<ti
 
 Commit the new migration folder. The server applies it on the next deploy.
 
+## Google Search Console API (automatic sitemap submission)
+
+Lets the site resubmit its sitemap to Google whenever you publish, and from the "Notify all search engines now" button in Admin → Settings → Search engines. Bing and Yandex use IndexNow and need no setup beyond the checkbox.
+
+1. Go to https://console.cloud.google.com, create a project (e.g. "Vertex website").
+2. **APIs & Services → Library** → search **Google Search Console API** → **Enable**.
+3. **IAM & Admin → Service Accounts → Create service account** (name it e.g. `search-console`). Skip the optional role steps.
+4. Open the service account → **Keys → Add key → Create new key → JSON**. A `.json` file downloads. Keep it private.
+5. In Coolify → Environment Variables, add `GOOGLE_SERVICE_ACCOUNT_JSON` and paste the whole file contents (or the file base64-encoded). Untick "Build Variable". **Restart**.
+6. In Google Search Console → **Settings → Users and permissions → Add user**: the service account's email (shown in Admin → Settings → Search engines), permission **Owner**.
+7. In Admin → Settings → Search engines, enter your property exactly as Search Console shows it: `sc-domain:yourdomain.com` (domain property) or `https://yourdomain.com/` (URL-prefix property) → **Save & test**.
+
+Google allows sitemap submission by API, not forced indexing of ordinary pages. For one urgent page use URL Inspection → Request indexing in Search Console.
+
 ## Backups
 
 - The `backup` service writes `vertex-YYYY-MM-DD-HHMM.dump` every 24 hours (change with `BACKUP_EVERY_HOURS`) and keeps 14 days (`BACKUP_KEEP_DAYS`).
