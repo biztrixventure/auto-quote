@@ -92,26 +92,3 @@ export async function saveReviews(f: FormData) {
   const award = awardText && awardUrl ? { text: awardText, url: awardUrl } : null;
   await save("reviews", "Reviews", me.email, { reviews: { theme, autoplaySeconds, summary, items, award } });
 }
-
-/** A site path like /blog or /#faq, or a full https:// address. */
-const linkOk = (v: string) => (v.startsWith("/") && !v.startsWith("//") && !/\s/.test(v)) || /^https:\/\/\S+$/.test(v);
-
-export async function saveNavigation(f: FormData) {
-  const me = await requireAdmin("admin");
-  let bad = "";
-  const links = rows(f, "nav_label", 10, (i) => {
-    const label = text(f, `nav_label_${i}`, 30);
-    const href = text(f, `nav_href_${i}`, 300);
-    if (!label && !href) return null;
-    if (!label || !linkOk(href)) bad = label || href;
-    return { label, href };
-  });
-  const ctaLabel = text(f, "ctaLabel", 30);
-  const ctaHref = text(f, "ctaHref", 300) || "/quote/auto";
-  if (bad || (ctaLabel && !linkOk(ctaHref))) {
-    back("navigation", { error: `Check the link "${bad || ctaLabel}": use a page path like /blog or a full https:// address.` });
-  }
-  await saveSetting("navigation", { links, showPhone: f.get("showPhone") === "on", ctaLabel, ctaHref });
-  await audit(me.email, "content_updated", "setting", "navigation", { section: "navigation" });
-  back("navigation", { saved: "Navigation saved. It's live on the website." });
-}

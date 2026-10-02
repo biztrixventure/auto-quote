@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic"; // uses SITE_URL from the running server
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/api/", "/quote/results/", "/blog/preview/"] }],
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/api/", "/quote/results/", "/blog/preview/", "/preview/"] }],
     sitemap: `${site.url}/sitemap.xml`,
     host: site.url,
   };

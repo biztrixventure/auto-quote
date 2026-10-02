@@ -33,12 +33,19 @@ export type ContentSettings = {
   };
 };
 
-export type NavLink = { label: string; href: string };
+/** One menu entry. Header items may have one level of children (a dropdown). */
+export type MenuItem = { id: string; label: string; href: string; newTab?: boolean; description?: string; children?: MenuItem[] };
+/** @deprecated kept for older saved settings */
+export type NavLink = MenuItem;
+export type FooterColumn = { id: string; title: string; links: MenuItem[] };
 export type NavigationSettings = {
-  links: NavLink[]; // shown in the header, left to right
+  links: MenuItem[]; // header menu, left to right
   showPhone: boolean;
   ctaLabel: string; // yellow button; empty = hidden
   ctaHref: string;
+  sticky: boolean; // header stays at the top while scrolling
+  announcement: { enabled: boolean; text: string; linkLabel: string; href: string };
+  footerColumns: FooterColumn[];
 };
 
 export type BlogSettings = {
@@ -95,14 +102,38 @@ export const DEFAULTS = {
   notifications: { emailTo: "", smsTo: "", webhookUrl: "", onNewLead: true, onNoQuotes: true } as NotificationSettings,
   navigation: {
     links: [
-      { label: "Repair costs", href: "/#repair-costs" },
-      { label: "Why us", href: "/#why-choose" },
-      { label: "FAQ", href: "/#faq" },
-      { label: "Blog", href: "/blog" },
+      { id: "repair-costs", label: "Repair costs", href: "/repair-costs" },
+      { id: "why-us", label: "Why us", href: "/why-us" },
+      { id: "faq", label: "FAQ", href: "/faq" },
+      { id: "blog", label: "Blog", href: "/blog" },
     ],
     showPhone: true,
     ctaLabel: "Get a quote",
     ctaHref: "/quote/auto",
+    sticky: true,
+    announcement: { enabled: false, text: "", linkLabel: "", href: "" },
+    footerColumns: [
+      {
+        id: "get-covered",
+        title: "Get covered",
+        links: [
+          { id: "f-quote", label: "Get a free quote", href: "/quote/auto" },
+          { id: "f-repair", label: "Repair costs", href: "/repair-costs" },
+          { id: "f-why", label: "Why choose us", href: "/why-us" },
+          { id: "f-faq", label: "FAQ", href: "/faq" },
+          { id: "f-blog", label: "Blog", href: "/blog" },
+        ],
+      },
+      {
+        id: "policies",
+        title: "Policies",
+        links: [
+          { id: "f-privacy", label: "Privacy Policy", href: "/privacy" },
+          { id: "f-terms", label: "Terms of Use", href: "/terms" },
+          { id: "f-dns", label: "Do not sell or share my personal information", href: "/privacy#do-not-sell" },
+        ],
+      },
+    ],
   } as NavigationSettings,
   blog: {
     title: "The {company} Blog",
@@ -188,7 +219,35 @@ export async function getSettings(): Promise<Settings> {
       Object.assign(out[key], JSON.parse(row.value));
     } catch {}
   }
+  out.navigation = normalizeNavigation(out.navigation);
   return out;
+}
+
+// Section links from before the site had separate pages now point at those pages.
+const OLD_ANCHORS: Record<string, string> = { "/#repair-costs": "/repair-costs", "/#why-choose": "/why-us", "/#faq": "/faq" };
+
+/** Fills in ids and missing fields for menus saved by older versions. */
+function normalizeNavigation(nav: NavigationSettings): NavigationSettings {
+  let n = 0;
+  const item = (raw: Partial<MenuItem>, depth: number): MenuItem => ({
+    id: raw.id || `m${++n}`,
+    label: String(raw.label ?? ""),
+    href: OLD_ANCHORS[String(raw.href)] ?? String(raw.href ?? "/"),
+    ...(raw.newTab ? { newTab: true } : {}),
+    ...(raw.description ? { description: String(raw.description) } : {}),
+    ...(depth === 0 && raw.children?.length ? { children: raw.children.map((c) => item(c, 1)) } : {}),
+  });
+  return {
+    ...nav,
+    links: (nav.links ?? []).map((l) => item(l, 0)),
+    sticky: nav.sticky ?? true,
+    announcement: { ...DEFAULTS.navigation.announcement, ...(nav.announcement ?? {}) },
+    footerColumns: (nav.footerColumns ?? DEFAULTS.navigation.footerColumns).map((c, i) => ({
+      id: c.id || `c${i}`,
+      title: String(c.title ?? ""),
+      links: (c.links ?? []).map((l) => item(l, 1)),
+    })),
+  };
 }
 
 export async function saveSetting<K extends SettingKey>(key: K, value: Settings[K]) {

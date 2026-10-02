@@ -1,36 +1,20 @@
 import Link from "next/link";
-import { getSite } from "@/lib/settings";
+import { getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
+const COLS: Record<number, string> = { 1: "sm:grid-cols-2", 2: "sm:grid-cols-3", 3: "sm:grid-cols-4", 4: "sm:grid-cols-3 lg:grid-cols-5" };
 
-
+// Link columns come from /admin/menus; the Contact column is added from the business details.
 export async function SiteFooter() {
-  const s = await getSite();
+  const [s, { navigation: nav }] = await Promise.all([getSite(), getSettings()]);
   const columns = [
+    ...nav.footerColumns.map((c) => ({ id: c.id, heading: c.title, links: c.links })),
     {
-      heading: "Get covered",
-      links: [
-        { label: "Get a free quote", href: "/quote/auto" },
-        { label: "Repair costs", href: "/#repair-costs" },
-        { label: "Why choose us", href: "/#why-choose" },
-        { label: "FAQ", href: "/#faq" },
-        { label: "Blog", href: "/blog" },
-      ],
-    },
-    {
+      id: "contact",
       heading: "Contact",
-      className: "col-span-2 sm:col-span-1",
       links: [
-        { label: s.phone, href: s.phoneHref },
-        { label: s.email, href: `mailto:${s.email}` },
-      ],
-    },
-    {
-      heading: "Policies",
-      links: [
-        { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms of Use", href: "/terms" },
-        { label: "Do not sell or share my personal information", href: "/privacy#do-not-sell" },
+        { id: "phone", label: s.phone, href: s.phoneHref },
+        { id: "email", label: s.email, href: `mailto:${s.email}` },
       ],
     },
   ];
@@ -48,18 +32,21 @@ export async function SiteFooter() {
           </p>
         </div>
 
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
+        <nav aria-label="Footer" className={`grid grid-cols-2 gap-x-8 gap-y-10 ${COLS[Math.min(4, nav.footerColumns.length)] ?? "sm:grid-cols-2"}`}>
           {columns.map((col) => (
-            <div key={col.heading} className={"className" in col ? col.className : undefined}>
+            <div key={col.id}>
               <p className="text-xs font-medium uppercase tracking-[0.08em] text-road/70">{col.heading}</p>
               <ul className="mt-3 space-y-2 text-[15px]">
-                {col.links.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="transition hover:text-sky">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
+                {col.links.map((l) => {
+                  const ext = /^https?:\/\//.test(l.href) || ("newTab" in l && l.newTab);
+                  return (
+                    <li key={l.id}>
+                      <Link href={l.href} {...(ext ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="break-words transition hover:text-sky">
+                        {l.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

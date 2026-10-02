@@ -34,12 +34,19 @@ export const NAV: { group: string; items: Item[] }[] = [
     ],
   },
   {
+    group: "Website",
+    items: [
+      { href: "/admin/pages", label: "Pages", min: "admin", icon: icon("M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5") },
+      { href: "/admin/menus", label: "Menus", min: "admin", icon: icon("M3 6h18M3 12h18M3 18h12") },
+      { href: "/admin/content", label: "Content", min: "admin", icon: icon("M4 4h16v16H4zM8 8h8M8 12h8M8 16h5") },
+    ],
+  },
+  {
     group: "Business",
     items: [
       { href: "/admin/partners", label: "Partners", min: "admin", icon: icon("M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 10h.01M15 10h.01") },
       { href: "/admin/pricing", label: "Pricing", min: "admin", icon: icon("M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6") },
       { href: "/admin/buyers", label: "Lead buyers", min: "admin", icon: icon("M7 10l5-5 5 5M12 5v12M5 21h14") },
-      { href: "/admin/content", label: "Content", min: "admin", icon: icon("M4 4h16v16H4zM8 8h8M8 12h8M8 16h5") },
     ],
   },
   {

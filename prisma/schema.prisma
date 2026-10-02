@@ -286,6 +286,28 @@ model Media {
   @@index([createdAt])
 }
 
+// Pages built in /admin/pages (About us, Contact, landing pages…), served at /<slug>.
+model Page {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  title          String
+  slug           String   @unique
+  intro          String   @default("") // line under the page title
+  content        String   @default("") // sanitized HTML from the editor
+  status         String   @default("draft") // draft | published
+  layout         String   @default("standard") // standard (reading width) | wide
+  showQuoteCta   Boolean  @default(true)
+  coverImageId   String?
+  coverAlt       String   @default("")
+  seoTitle       String   @default("")
+  seoDescription String   @default("")
+  noindex        Boolean  @default(false)
+  updatedById    String?
+
+  @@index([status])
+}
+
 // Browser sessions. Only a SHA-256 hash of the cookie token is stored.
 model AdminSession {
   id         String    @id @default(cuid())

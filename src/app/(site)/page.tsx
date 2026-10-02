@@ -1,10 +1,8 @@
 import { CustomerReviews } from "@/components/CustomerReviews";
 import { DeferredImg } from "@/components/DeferredImg";
-import { RepairCostDiagram } from "@/components/RepairCostDiagram";
 import { Reveal } from "@/components/Reveal";
-import { WhyChooseCarousel } from "@/components/WhyChooseCarousel";
+import { FaqSection, QuoteBanner, RepairCostsSection, WhyChooseSection } from "@/components/sections";
 import { ZipStart } from "@/components/ZipStart";
-import { jsonLd } from "@/lib/security";
 import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
@@ -13,11 +11,6 @@ export default async function Home() {
   // Editable in /admin/content. "{company}" becomes the business name.
   const faqs = content.faqs.map((f, i) => ({ q: fillCompany(f.q), a: fillCompany(f.a), call: i === 0 }));
   const reasons = content.reasons.map((r) => ({ title: fillCompany(r.title), body: fillCompany(r.body) }));
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-  };
 
   return (
     <>
@@ -73,26 +66,7 @@ export default async function Home() {
         <div aria-hidden className="lane h-2.5 w-full" />
       </section>
 
-      <section id="repair-costs" className="scroll-mt-6 bg-white text-asphalt">
-        <div className="mx-auto max-w-6xl px-5 py-14 text-center md:py-16">
-          <div className="mx-auto max-w-3xl">
-            <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">
-              What Would Your Next Repair Cost?
-            </h2>
-            <p className="mt-4 text-lg leading-relaxed text-road">
-              Select any part of the car below to see what a typical repair costs without coverage.
-            </p>
-          </div>
-          <RepairCostDiagram costs={content.repairCosts} />
-          <p className="mx-auto mt-6 max-w-4xl text-xs leading-relaxed text-road/80 sm:text-sm">
-            Estimated auto repair costs based on ConsumerAffairs data (
-            <a href="https://www.consumeraffairs.com/" target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-sky">
-              www.consumeraffairs.com
-            </a>
-            ). Costs shown are estimates only and may vary by vehicle, location, and repair facility. Coverage and benefits are subject to plan terms, conditions, and exclusions.
-          </p>
-        </div>
-      </section>
+      <RepairCostsSection costs={content.repairCosts} />
 
       <section className="bg-white">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-5 py-14 text-center md:grid-cols-[1fr_1.15fr] md:gap-12 md:py-16 md:text-left">
@@ -173,82 +147,13 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="why-choose" className="scroll-mt-6 bg-white">
-        <div className="mx-auto max-w-6xl px-5 py-14 md:py-20">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">Why Choose {site.name}</h2>
-            <p className="mt-5 text-lg leading-relaxed text-road">
-              {fillCompany(content.whyIntro)}
-            </p>
-          </Reveal>
-          <WhyChooseCarousel reasons={reasons} />
-        </div>
-      </section>
+      <WhyChooseSection intro={content.whyIntro} reasons={reasons} />
 
       <CustomerReviews />
 
-      <section id="faq" className="scroll-mt-6 bg-white">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-4 md:grid-cols-[1fr_1.4fr] md:pb-20 md:pt-6">
-          <div>
-            <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">Frequently Asked Questions</h2>
-            <p className="mt-3 max-w-sm leading-relaxed text-road">
-              Still unsure? Call <a href={biz.phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{biz.phone}</a> and a licensed agent will help.
-            </p>
-            <a href="/quote/auto" className="btn-primary mt-6 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
-              Get a free quote
-            </a>
-          </div>
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }} />
-          <div className="divide-y divide-rail border-y border-rail">
-            {faqs.map((f) => (
-              <details key={f.q} className="group py-4">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-semibold">
-                  {f.q}
-                  <span aria-hidden className="text-xl text-road transition-transform group-open:rotate-45">+</span>
-                </summary>
-                <p className="mt-2 max-w-prose leading-relaxed text-road">
-                  {f.a}
-                  {f.call && (
-                    <>
-                      {" "}
-                      Call <a href={biz.phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{biz.phone}</a> for more details.
-                    </>
-                  )}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FaqSection faqs={faqs} phone={biz.phone} phoneHref={biz.phoneHref} />
 
-      <section className="mx-auto max-w-6xl px-5 pt-4">
-        <Reveal className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(120deg,#0B2F5B_0%,#1F5FAD_55%,#3D8FDB_100%)] px-6 pb-14 pt-10 text-white sm:px-12 md:pb-16 md:pt-14">
-          <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(255,255,255,0.18),transparent_45%)]" />
-          <div className="relative grid items-center gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-[0.14em] text-line">Free · No obligation</p>
-              <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">See what you could pay for car insurance today.</h2>
-              <p className="mt-4 max-w-md text-lg leading-relaxed text-white/85">
-                Compare prices from several insurance companies with one quick form, or call a licensed agent for help.
-              </p>
-            </div>
-            <div>
-              <ZipStart dark />
-              <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-white/90">
-                {["Takes about 5 minutes", "Free to compare", "Licensed in all 50 states"].map((t) => (
-                  <li key={t} className="flex items-center gap-2">
-                    <span aria-hidden className="grid h-5 w-5 place-items-center rounded-full bg-white/15 text-line">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>
-                    </span>
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div aria-hidden className="lane absolute inset-x-0 bottom-0 h-2" />
-        </Reveal>
-      </section>
+      <QuoteBanner />
     </>
   );
 }

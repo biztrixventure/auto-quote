@@ -25,6 +25,7 @@ const SIMPLE: Record<string, string> = {
   dnc_list_added: "Added to do-not-contact list",
   dnc_list_removed: "Removed from do-not-contact list",
   media_deleted: "Deleted an image",
+  menus_updated: "Updated the website menus",
   profile_updated: "Updated their author profile",
 };
 
@@ -101,6 +102,14 @@ export function describe(action: string, detail: string | null): { text: string;
       const verb = { post_created: "Started blog post", post_updated: "Edited blog post", post_published: "Published blog post", post_submitted: "Sent for review:", post_unpublished: "Unpublished blog post", post_deleted: "Deleted blog post" }[action];
       return { text: `${verb} “${str("title") ?? "untitled"}”` };
     }
+    case "page_created":
+    case "page_updated":
+    case "page_published":
+    case "page_unpublished":
+    case "page_deleted": {
+      const verb = { page_created: "Created page", page_updated: "Edited page", page_published: "Published page", page_unpublished: "Unpublished page", page_deleted: "Deleted page" }[action];
+      return { text: `${verb} “${str("title") ?? "untitled"}”` };
+    }
     case "category_created":
     case "category_updated":
     case "category_deleted":
@@ -128,9 +137,11 @@ export function entityLink(entity: string, id: string) {
   if (entity === "user") return "/admin/users";
   if (entity === "post" && id !== "*") return `/admin/blog/${id}`;
   if (entity === "category") return "/admin/blog/settings";
+  if (entity === "page" && id !== "*") return `/admin/pages/${id}`;
   if (entity === "media") return "/admin/blog/media";
   if (entity === "setting") {
-    if (id === "content" || id === "navigation") return "/admin/content";
+    if (id === "navigation") return "/admin/menus";
+    if (id === "content") return "/admin/content";
     if (id === "blog") return "/admin/blog/settings";
     return id === "pricing" ? "/admin/pricing" : "/admin/settings";
   }

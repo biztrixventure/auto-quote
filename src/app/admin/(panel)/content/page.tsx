@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { getSettings } from "@/lib/settings";
 import { FormField, Notice, SectionFooter, inputCls } from "@/components/admin/forms";
 import { Card, PageHeader, btnPrimary } from "@/components/admin/ui";
-import { saveFaqs, saveHero, saveNavigation, saveRepairCosts, saveReviews, saveWhy } from "./actions";
+import { saveFaqs, saveHero, saveRepairCosts, saveReviews, saveWhy } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -22,8 +22,7 @@ function Section({ id, title, view, children }: { id: string; title: string; vie
 
 export default async function ContentPage({ searchParams }: { searchParams: Promise<{ saved?: string; error?: string }> }) {
   await requireAdmin("admin");
-  const [{ saved, error }, { content: c, navigation: nav }] = await Promise.all([searchParams, getSettings()]);
-  const navRows = [...nav.links, ...Array(EXTRA_ROWS).fill({ label: "", href: "" })];
+  const [{ saved, error }, { content: c }] = await Promise.all([searchParams, getSettings()]);
   const theme = c.reviews.theme ?? "trustpilot";
   const reasonRows = [...c.reasons, ...Array(EXTRA_ROWS).fill({ title: "", body: "" })];
   const faqRows = [...c.faqs, ...Array(EXTRA_ROWS).fill({ q: "", a: "" })];
@@ -37,38 +36,16 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
       />
       <Notice saved={saved} error={error} />
       <nav className="mb-6 flex flex-wrap gap-2 text-sm">
-        {[["navigation", "Navigation"], ["hero", "Homepage hero"], ["why", "Why choose us"], ["faqs", "FAQs"], ["repair", "Repair prices"], ["reviews", "Reviews"]].map(([id, l]) => (
+        {[["hero", "Homepage hero"], ["why", "Why choose us"], ["faqs", "FAQs"], ["repair", "Repair prices"], ["reviews", "Reviews"]].map(([id, l]) => (
           <a key={id} href={`#${id}`} className="rounded-lg border border-[#E4E7EC] bg-white px-3 py-1.5 font-medium hover:border-sky hover:text-sky">{l}</a>
         ))}
       </nav>
 
       <div className="space-y-6">
-        <Section id="navigation" title="Navigation bar" view="/">
-          <form action={saveNavigation} className="space-y-4">
-            <p className="text-sm text-road">
-              Links in the header, left to right. Use a page path like <code className="text-asphalt">/blog</code>, a section like <code className="text-asphalt">/#faq</code>, or a full <code className="text-asphalt">https://</code> address. Clear both boxes to remove a link.
-            </p>
-            {navRows.map((l, i) => (
-              <div key={i} className="grid gap-2 sm:grid-cols-[1fr_2fr]">
-                <input name={`nav_label_${i}`} defaultValue={l.label} maxLength={30} placeholder="Label, e.g. Blog" aria-label={`Link ${i + 1} label`} className={inputCls} />
-                <input name={`nav_href_${i}`} defaultValue={l.href} maxLength={300} placeholder="/blog" aria-label={`Link ${i + 1} address`} className={inputCls} />
-              </div>
-            ))}
-            <div className="grid gap-3 border-t border-[#EEF0F3] pt-4 sm:grid-cols-[1fr_2fr]">
-              <FormField label="Button text" htmlFor="ctaLabel" hint="The yellow button on the right. Leave empty to hide it.">
-                <input id="ctaLabel" name="ctaLabel" defaultValue={nav.ctaLabel} maxLength={30} className={inputCls} />
-              </FormField>
-              <FormField label="Button link" htmlFor="ctaHref">
-                <input id="ctaHref" name="ctaHref" defaultValue={nav.ctaHref} maxLength={300} className={inputCls} />
-              </FormField>
-            </div>
-            <label className="flex items-center gap-2.5 text-sm font-medium">
-              <input type="checkbox" name="showPhone" defaultChecked={nav.showPhone} className="h-4 w-4 accent-sky" />
-              Show the phone number in the header
-            </label>
-            <SectionFooter><button className={btnPrimary}>Save navigation</button></SectionFooter>
-          </form>
-        </Section>
+        <Link href="/admin/menus" className="flex items-center justify-between rounded-xl border border-[#E4E7EC] bg-white px-5 py-4 text-sm shadow-[0_1px_2px_rgba(16,24,40,0.04)] hover:border-sky">
+          <span><strong className="text-asphalt">Header and footer menus</strong> <span className="text-road">are edited on the Menus page.</span></span>
+          <span className="font-semibold text-sky">Open Menus →</span>
+        </Link>
 
         <Section id="hero" title="Homepage hero" view="/">
           <form action={saveHero} className="space-y-4">
