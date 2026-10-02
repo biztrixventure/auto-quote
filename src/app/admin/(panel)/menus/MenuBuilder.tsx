@@ -5,7 +5,7 @@ import type { LinkGroup } from "@/lib/menus";
 import type { FooterColumn, MenuItem, NavigationSettings } from "@/lib/settings";
 import { saveMenus } from "./actions";
 
-const LIMITS = { topItems: 10, children: 12, footerColumns: 4, footerLinks: 12 }; // keep in sync with src/lib/menus.ts
+const LIMITS = { topItems: 10, children: 12, footerColumns: 4, footerLinks: 12, label: 60 }; // keep in sync with src/lib/menus.ts
 const input = "block h-9 w-full rounded-lg border border-[#D0D5DD] bg-white px-3 text-sm shadow-[0_1px_2px_rgba(16,24,40,0.05)] placeholder:text-road/45 focus:border-sky focus:outline-none focus:ring-4 focus:ring-sky/15";
 const newId = () => Math.random().toString(36).slice(2, 10);
 const swap = <T,>(arr: T[], i: number, j: number) => {
@@ -72,7 +72,7 @@ function ItemEditor({ item, onChange, options, showDescription }: { item: MenuIt
     <div className="grid gap-3 border-t border-[#EEF0F3] bg-[#FCFCFD] p-3 sm:grid-cols-2">
       <label className="block text-xs font-semibold text-road">
         Label
-        <input value={item.label} maxLength={40} onChange={(e) => onChange({ ...item, label: e.target.value })} className={`${input} mt-1`} />
+        <input value={item.label} maxLength={60} onChange={(e) => onChange({ ...item, label: e.target.value })} className={`${input} mt-1`} />
       </label>
       <div className="text-xs font-semibold text-road">
         Link to
@@ -139,7 +139,7 @@ function AddLink({ options, onAdd, disabled, label = "Add link" }: { options: Li
   return (
     <div className="mt-3 grid gap-2 rounded-lg border border-dashed border-[#D0D5DD] p-3 sm:grid-cols-[1.3fr_1fr_auto]">
       <LinkInput value={href} options={options} onChange={(h, l) => { setHref(h); if (l) setText(l); }} />
-      <input value={text} onChange={(e) => setText(e.target.value)} maxLength={40} placeholder="Label" aria-label="Label" className={input} />
+      <input value={text} onChange={(e) => setText(e.target.value)} maxLength={60} placeholder="Label" aria-label="Label" className={input} />
       <button
         type="button"
         disabled={disabled || !href || !text.trim()}
