@@ -4,7 +4,6 @@ import { after } from "next/server";
 import { audit } from "@/lib/audit";
 import { requireAdmin } from "@/lib/admin-guard";
 import { submitToIndexNow } from "@/lib/indexnow";
-import { submitSitemapToGoogle } from "@/lib/search-console";
 import { sanitizePostHtml, slugify } from "@/lib/blog";
 import { db } from "@/lib/db";
 import { RESERVED_SLUGS } from "@/lib/menus";
@@ -71,7 +70,7 @@ export async function savePage(input: PageInput): Promise<PageSaveResult> {
   const action = !existing ? "page_created" : status === "published" && existing.status !== "published" ? "page_published" : status === "draft" && existing.status === "published" ? "page_unpublished" : "page_updated";
   await audit(me.email, action, "page", page.id, { title });
   if (status === "published" || existing?.status === "published") {
-    after(() => Promise.all([submitToIndexNow([`/${page.slug}`], me.email), submitSitemapToGoogle(me.email, { minIntervalMs: 30 * 60_000 })]));
+    after(() => submitToIndexNow([`/${page.slug}`], me.email));
   }
   const message = status === "published" ? (existing?.status === "published" ? "Saved. Changes are live." : `Published at /${page.slug}. Add it to a menu so visitors can find it.`) : "Draft saved.";
   return { ok: true, id: page.id, slug: page.slug, status: page.status, message };

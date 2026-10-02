@@ -4,8 +4,7 @@ import { getSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
 import { Checkbox, FormField, Notice, SectionFooter, inputCls } from "@/components/admin/forms";
 import { Card, PageHeader, btnPrimary, btnSecondary } from "@/components/admin/ui";
-import { googleConnected, googleSitemapStatus, serviceAccountEmail } from "@/lib/search-console";
-import { saveBusiness, saveIndexNow, saveNotifications, saveResults, saveSearchConsole, saveSeo, saveTracking, saveVerification, submitAllToIndexNow, testAlerts } from "./actions";
+import { saveBusiness, saveIndexNow, saveNotifications, saveResults, saveSeo, saveTracking, saveVerification, submitAllToIndexNow, testAlerts } from "./actions";
 import { channelStatus } from "@/lib/notify";
 
 export const dynamic = "force-dynamic";
@@ -44,9 +43,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
     image: sp.og_image ?? "/images/parts/transmission.webp",
   };
   const previewSrc = ogUrl(og);
-  const { tracking, verification, seo, results, business, notifications, indexnow, searchConsole } = s;
-  const google = { connected: googleConnected(), email: serviceAccountEmail() };
-  const googleStatus = google.connected && searchConsole.property ? await googleSitemapStatus() : null;
+  const { tracking, verification, seo, results, business, notifications, indexnow } = s;
   const channels = channelStatus();
 
   return (
@@ -160,70 +157,30 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
             <SectionFooter><button className={btnPrimary}>Save codes</button></SectionFooter>
           </form>
 
-          <div className="-mx-5 -mb-5 mt-5 space-y-5 border-t border-[#EEF0F3] bg-[#FCFCFD] px-5 py-5">
-            <div>
-              <p className="text-sm font-semibold">Automatic indexing</p>
-              <p className="mt-1 text-xs leading-relaxed text-road">
-                When you publish or update a blog post or page, the site tells the search engines by itself. Use the button below after launch or a big update.
-              </p>
-            </div>
-
-            {/* Bing, Yandex & co. */}
-            <div className="rounded-lg border border-[#EEF0F3] bg-white p-3.5">
-              <p className="text-sm font-semibold">Bing, Yandex and others <span className="font-normal text-road">· IndexNow</span></p>
-              <form action={saveIndexNow} className="mt-2 flex flex-wrap items-center gap-3">
-                <label className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" name="enabled" defaultChecked={indexnow.enabled} className="h-4 w-4 accent-sky" />
-                  Send new and updated pages automatically
-                </label>
-                <button className={btnSecondary}>Save</button>
-              </form>
-              {indexnow.lastSubmitted && <p className="mt-2 text-xs text-road">Last sent {new Date(indexnow.lastSubmitted).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}: {indexnow.lastResult}</p>}
-            </div>
-
-            {/* Google */}
-            <div className="rounded-lg border border-[#EEF0F3] bg-white p-3.5">
-              <p className="flex flex-wrap items-center gap-2 text-sm font-semibold">
-                Google <span className="font-normal text-road">· Search Console API</span>
-                <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${google.connected && searchConsole.property ? "bg-emerald-50 text-emerald-700" : "bg-[#F2F4F7] text-road"}`}>
-                  {google.connected && searchConsole.property ? "Connected" : google.connected ? "Key installed, add property" : "Not connected"}
-                </span>
-              </p>
-              {!google.connected ? (
-                <p className="mt-2 text-xs leading-relaxed text-road">
-                  Add a Google service-account key as <code className="text-asphalt">GOOGLE_SERVICE_ACCOUNT_JSON</code> in Coolify, then restart. Steps are in DEPLOY.md under “Google Search Console API”.
-                </p>
-              ) : (
-                <>
-                  <p className="mt-2 text-xs leading-relaxed text-road">
-                    In Search Console → Settings → Users and permissions → Add user, add{" "}
-                    <code className="select-all break-all font-semibold text-asphalt">{google.email}</code> with <strong>Owner</strong> permission.
-                  </p>
-                  <form action={saveSearchConsole} className="mt-3 flex flex-wrap items-end gap-2">
-                    <label className="min-w-[240px] flex-1 text-xs font-medium">
-                      Search Console property
-                      <input name="property" defaultValue={searchConsole.property} placeholder="sc-domain:vertexautocare.com" className={`${inputCls} mt-1`} autoComplete="off" />
-                    </label>
-                    <button className={btnSecondary}>Save & test</button>
-                  </form>
-                  {googleStatus && (
-                    <p className="mt-2 text-xs text-road">
-                      Google last read your sitemap {googleStatus.lastDownloaded ? new Date(googleStatus.lastDownloaded).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) : "not yet"}
-                      {googleStatus.isPending && " (a new read is queued)"} · {googleStatus.submitted} pages listed
-                      {(googleStatus.errors > 0 || googleStatus.warnings > 0) && <span className="text-red-700"> · {googleStatus.errors} errors, {googleStatus.warnings} warnings: check Search Console</span>}
-                    </p>
-                  )}
-                  {searchConsole.lastSubmitted && <p className="mt-1 text-xs text-road">Last sent {new Date(searchConsole.lastSubmitted).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}: {searchConsole.lastResult}</p>}
-                </>
-              )}
-              <p className="mt-2 text-[11px] leading-relaxed text-road/80">Google allows websites to submit sitemaps automatically, not to force indexing. To push one important page, use URL Inspection → Request indexing in Search Console.</p>
-            </div>
-
-            <form action={submitAllToIndexNow} className="flex flex-wrap items-center justify-between gap-3">
-              <span className="text-xs text-road">Sends every page in your sitemap to Bing and Yandex and resubmits the sitemap to Google.</span>
-              <button className={btnPrimary} disabled={!indexnow.enabled && !(google.connected && searchConsole.property)}>Notify all search engines now</button>
+          <div className="-mx-5 -mb-5 mt-5 border-t border-[#EEF0F3] bg-[#FCFCFD] px-5 py-4">
+            <p className="text-sm font-semibold">IndexNow: instant indexing for Bing and Yandex</p>
+            <p className="mt-1 text-xs leading-relaxed text-road">
+              When you publish or update a blog post or page, Bing, Yandex and other IndexNow engines are told right away, so new content can appear in hours instead of weeks. Google finds updates through your sitemap.
+            </p>
+            <form action={saveIndexNow} className="mt-3 flex flex-wrap items-center gap-3">
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <input type="checkbox" name="enabled" defaultChecked={indexnow.enabled} className="h-4 w-4 accent-sky" />
+                Send new and updated pages automatically
+              </label>
+              <button className={btnSecondary}>Save</button>
             </form>
-            {!site.url.startsWith("https://") && <p className="text-xs text-amber-700">Submissions only run once the site is on its real https:// address (SITE_URL).</p>}
+            {indexnow.enabled && (
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-road">
+                <span>
+                  Key file: <code className="text-asphalt">{site.url}/indexnow.txt</code>
+                  {indexnow.lastSubmitted && <> · Last sent {new Date(indexnow.lastSubmitted).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}: {indexnow.lastResult}</>}
+                </span>
+                <form action={submitAllToIndexNow}>
+                  <button className={btnSecondary}>Submit all pages now</button>
+                </form>
+              </div>
+            )}
+            {!site.url.startsWith("https://") && <p className="mt-2 text-xs text-amber-700">IndexNow only sends once the site runs on its real https:// address (SITE_URL).</p>}
           </div>
         </Card>
 
