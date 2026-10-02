@@ -15,7 +15,7 @@ import { site } from "@/lib/site";
 type Crumb = { name: string; href: string };
 
 /** Top of an inner page: breadcrumbs, H1 and intro. Adds breadcrumb data for Google. */
-export function PageHero({ eyebrow, title, intro, crumbs = [], children }: { eyebrow?: string; title: string; intro?: ReactNode; crumbs?: Crumb[]; children?: ReactNode }) {
+export function PageHero({ eyebrow, title, intro, crumbs = [], children, media }: { eyebrow?: string; title: string; intro?: ReactNode; crumbs?: Crumb[]; children?: ReactNode; media?: ReactNode }) {
   const trail = [{ name: "Home", href: "/" }, ...crumbs];
   const schema = {
     "@context": "https://schema.org",
@@ -25,7 +25,8 @@ export function PageHero({ eyebrow, title, intro, crumbs = [], children }: { eye
   return (
     <section className="border-b border-rail bg-[linear-gradient(180deg,#F7F8FA_0%,#FFFFFF_100%)]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />
-      <div className="mx-auto max-w-6xl px-5 pb-12 pt-10 md:pb-14 md:pt-14">
+      <div className={`mx-auto max-w-6xl px-5 pb-12 pt-10 md:pb-14 md:pt-14 ${media ? "grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14" : ""}`}>
+        <div>
         <nav aria-label="Breadcrumb" className="text-sm text-road">
           <ol className="flex flex-wrap items-center gap-1.5">
             {trail.map((c, i) => (
@@ -40,6 +41,8 @@ export function PageHero({ eyebrow, title, intro, crumbs = [], children }: { eye
         <h1 className={`${eyebrow ? "mt-2" : "mt-6"} max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-asphalt sm:text-5xl`}>{title}</h1>
         {intro && <p className="mt-4 max-w-2xl text-lg leading-relaxed text-road">{intro}</p>}
         {children}
+        </div>
+        {media}
       </div>
     </section>
   );
