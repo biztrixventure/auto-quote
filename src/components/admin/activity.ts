@@ -2,7 +2,7 @@ import { money } from "./ui";
 import { STATUS_LABELS } from "./statuses";
 
 /** Events that mean something went wrong; shown in red and in "errors only". */
-export const ERROR_ACTIONS = ["rater_error", "distribution_error", "routing_failed", "notification_failed", "sign_in_failed", "2fa_failed"];
+export const ERROR_ACTIONS = ["rater_error", "distribution_error", "routing_failed", "notification_failed", "indexnow_failed", "sign_in_failed", "2fa_failed"];
 
 const SIMPLE: Record<string, string> = {
   duplicate_submission: "Submitted the form again (duplicate)",
@@ -27,6 +27,7 @@ const SIMPLE: Record<string, string> = {
   media_deleted: "Deleted an image",
   menus_updated: "Updated the website menus",
   legal_updated: "Updated legal pages or privacy settings",
+  indexnow_submitted: "Sent pages to Bing and Yandex (IndexNow)",
   privacy_request_updated: "Updated a privacy request",
   profile_updated: "Updated their author profile",
 };
@@ -126,6 +127,8 @@ export function describe(action: string, detail: string | null): { text: string;
       return { text: `Lead distribution failed${err}`, error: true };
     case "routing_failed":
       return { text: `Routing failed${err}`, error: true };
+    case "indexnow_failed":
+      return { text: `IndexNow submission failed${err}`, error: true };
     case "notification_failed":
       return { text: `Alert failed${str("channel") ? ` (${str("channel")})` : ""}${err}`, error: true };
     default:

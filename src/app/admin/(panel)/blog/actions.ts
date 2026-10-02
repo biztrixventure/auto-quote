@@ -1,7 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { audit } from "@/lib/audit";
+import { submitToIndexNow } from "@/lib/indexnow";
 import { isEditor } from "@/lib/auth";
 import { requireAdmin, requireBlogAccess } from "@/lib/admin-guard";
 import { autoExcerpt, parseTags, postState, readingMinutes, sanitizePostHtml, slugify, uniquePostSlug } from "@/lib/blog";
@@ -131,6 +133,10 @@ export async function savePost(input: PostInput): Promise<SaveResult> {
   const state = postState(post);
   const action = !existing ? "post_created" : input.intent === "publish" ? (existing.status === "published" ? "post_updated" : "post_published") : input.intent === "review" ? "post_submitted" : input.intent === "unpublish" ? "post_unpublished" : "post_updated";
   await audit(me.email, action, "post", post.id, { title });
+  // Tell Bing, Yandex & co. about live (or just unpublished) posts, after the save finishes.
+  if (state === "published" || existing?.status === "published") {
+    after(() => submitToIndexNow([`/blog/${post.slug}`, "/blog"], me.email));
+  }
 
   const message =
     state === "published" ? (input.intent === "publish" && existing?.status !== "published" ? "Published. It's live on the blog." : "Saved. Changes are live.")

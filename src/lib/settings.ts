@@ -4,7 +4,9 @@ import { DEFAULT_PRIVACY_HTML, DEFAULT_TERMS_HTML } from "./legal-templates";
 import { site } from "./site";
 
 export type TrackingSettings = { ga4Id: string; gtmId: string; metaPixelId: string };
-export type VerificationSettings = { google: string; bing: string; meta: string };
+export type VerificationSettings = { google: string; bing: string; yandex: string; meta: string };
+/** IndexNow tells Bing, Yandex and other engines about new or changed pages right away. */
+export type IndexNowSettings = { enabled: boolean; key: string; lastSubmitted: string; lastResult: string };
 export type SeoSettings = { title: string; description: string };
 export type ResultsSettings = { disclaimer: string };
 
@@ -101,7 +103,8 @@ export type PricingRules = {
 // Defaults match the original built-in demo formula.
 export const DEFAULTS = {
   tracking: { ga4Id: "", gtmId: "", metaPixelId: "" } as TrackingSettings,
-  verification: { google: "", bing: "", meta: "" } as VerificationSettings,
+  verification: { google: "", bing: "", yandex: "", meta: "" } as VerificationSettings,
+  indexnow: { enabled: false, key: "", lastSubmitted: "", lastResult: "" } as IndexNowSettings,
   seo: { title: "", description: "" } as SeoSettings,
   results: {
     disclaimer:

@@ -3,8 +3,8 @@ import { ogUrl } from "@/lib/og";
 import { getSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
 import { Checkbox, FormField, Notice, SectionFooter, inputCls } from "@/components/admin/forms";
-import { Card, PageHeader, btnPrimary } from "@/components/admin/ui";
-import { saveBusiness, saveNotifications, saveResults, saveSeo, saveTracking, saveVerification, testAlerts } from "./actions";
+import { Card, PageHeader, btnPrimary, btnSecondary } from "@/components/admin/ui";
+import { saveBusiness, saveIndexNow, saveNotifications, saveResults, saveSeo, saveTracking, saveVerification, submitAllToIndexNow, testAlerts } from "./actions";
 import { channelStatus } from "@/lib/notify";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
     image: sp.og_image ?? "/images/parts/transmission.webp",
   };
   const previewSrc = ogUrl(og);
-  const { tracking, verification, seo, results, business, notifications } = s;
+  const { tracking, verification, seo, results, business, notifications, indexnow } = s;
   const channels = channelStatus();
 
   return (
@@ -129,23 +129,59 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           </form>
         </Card>
 
-        <Card title="Search engine verification" action={<Status on={!!(verification.google || verification.bing || verification.meta)} />}>
-          <form action={saveVerification} className="space-y-4">
-            <FormField label="Google Search Console" htmlFor="google" hint="Search Console → Add property → URL prefix → HTML tag. Paste the code or the whole tag.">
-              <input id="google" name="google" defaultValue={verification.google} placeholder='<meta name="google-site-verification" content="…" />' className={inputCls} autoComplete="off" />
-            </FormField>
-            <FormField label="Bing Webmaster Tools" htmlFor="bing" hint="Bing Webmaster → Add site → HTML meta tag (msvalidate.01).">
-              <input id="bing" name="bing" defaultValue={verification.bing} placeholder='<meta name="msvalidate.01" content="…" />' className={inputCls} autoComplete="off" />
-            </FormField>
-            <FormField label="Meta domain verification" htmlFor="meta" hint="Meta Business Settings → Brand safety → Domains → Meta-tag verification.">
-              <input id="meta" name="meta" defaultValue={verification.meta} placeholder='<meta name="facebook-domain-verification" content="…" />' className={inputCls} autoComplete="off" />
-            </FormField>
-            <p className="rounded-lg bg-[#F9FAFB] px-3 py-2.5 text-xs leading-relaxed text-road">
-              After saving, go back to each tool and click <strong>Verify</strong>. Your sitemap for Search Console is{" "}
-              <code className="font-semibold text-asphalt">{site.url}/sitemap.xml</code>
-            </p>
-            <SectionFooter><button className={btnPrimary}>Save verification</button></SectionFooter>
+        <Card title="Search engines" action={<Status on={!!(verification.google || verification.bing || verification.yandex)} />}>
+          <form action={saveVerification} className="space-y-5">
+            <div className="rounded-lg bg-[#F9FAFB] px-3 py-2.5 text-xs leading-relaxed text-road">
+              <p className="font-semibold text-asphalt">Your sitemap (submit it in every tool below)</p>
+              <code className="mt-1 block select-all break-all text-[13px] font-semibold text-sky">{site.url}/sitemap.xml</code>
+              <p className="mt-1">It lists every page, blog post and category and updates itself.</p>
+            </div>
+            {([
+              ["google", "Google Search Console", "https://search.google.com/search-console", "Add property → URL prefix → enter your site address → HTML tag. Copy the tag, paste it here, Save, then click Verify in Google. Then open Sitemaps and submit the sitemap above.", '<meta name="google-site-verification" content="…" />'],
+              ["bing", "Bing Webmaster Tools", "https://www.bing.com/webmasters", "Quickest: “Import from Google Search Console”, which needs no code. Or add your site → HTML meta tag → paste it here. Bing also powers DuckDuckGo and Yahoo results.", '<meta name="msvalidate.01" content="…" />'],
+              ["yandex", "Yandex Webmaster", "https://webmaster.yandex.com", "Add site → Meta tag. Paste it here, Save, then click Check in Yandex. Then go to Indexing → Sitemap files and add the sitemap above.", '<meta name="yandex-verification" content="…" />'],
+              ["meta", "Meta (Facebook) domain", "https://business.facebook.com/settings", "Business Settings → Brand safety → Domains → Add → Meta-tag verification. Needed to run Facebook and Instagram ads with your domain.", '<meta name="facebook-domain-verification" content="…" />'],
+            ] as const).map(([key, label, url, hint, placeholder]) => (
+              <FormField
+                key={key}
+                label={label}
+                htmlFor={key}
+                hint={<>{hint} <a href={url} target="_blank" rel="noreferrer" className="font-semibold text-sky hover:underline">Open ↗</a></>}
+              >
+                <div className="flex items-center gap-2">
+                  <input id={key} name={key} defaultValue={verification[key]} placeholder={placeholder} className={inputCls} autoComplete="off" />
+                  {verification[key] && <span title="Code saved" className="shrink-0 rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">Saved</span>}
+                </div>
+              </FormField>
+            ))}
+            <SectionFooter><button className={btnPrimary}>Save codes</button></SectionFooter>
           </form>
+
+          <div className="-mx-5 -mb-5 mt-5 border-t border-[#EEF0F3] bg-[#FCFCFD] px-5 py-4">
+            <p className="text-sm font-semibold">IndexNow: instant indexing for Bing and Yandex</p>
+            <p className="mt-1 text-xs leading-relaxed text-road">
+              When you publish or update a blog post or page, Bing, Yandex and other IndexNow engines are told right away, so new content can appear in hours instead of weeks. Google finds updates through your sitemap.
+            </p>
+            <form action={saveIndexNow} className="mt-3 flex flex-wrap items-center gap-3">
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <input type="checkbox" name="enabled" defaultChecked={indexnow.enabled} className="h-4 w-4 accent-sky" />
+                Send new and updated pages automatically
+              </label>
+              <button className={btnSecondary}>Save</button>
+            </form>
+            {indexnow.enabled && (
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-road">
+                <span>
+                  Key file: <code className="text-asphalt">{site.url}/indexnow.txt</code>
+                  {indexnow.lastSubmitted && <> · Last sent {new Date(indexnow.lastSubmitted).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}: {indexnow.lastResult}</>}
+                </span>
+                <form action={submitAllToIndexNow}>
+                  <button className={btnSecondary}>Submit all pages now</button>
+                </form>
+              </div>
+            )}
+            {!site.url.startsWith("https://") && <p className="mt-2 text-xs text-amber-700">IndexNow only sends once the site runs on its real https:// address (SITE_URL).</p>}
+          </div>
         </Card>
 
         <Card title="SEO for the homepage">

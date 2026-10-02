@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       follow: true,
       googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
     },
-    verification: { google: verification.google || undefined, other },
+    verification: { google: verification.google || undefined, yandex: verification.yandex || undefined, other },
     formatDetection: { telephone: false, email: false, address: false },
     category: "insurance",
   };

@@ -10,7 +10,7 @@ const title = "Do Not Sell or Share My Personal Information";
 const description = `Opt out of the sale or sharing of your personal information, stop calls and texts, or ask ${site.name} to access, delete or correct your data.`;
 
 export const metadata: Metadata = {
-  title: "Your Privacy Choices: Do Not Sell or Share My Personal Information",
+  title,
   description,
   alternates: { canonical: "/do-not-sell" },
   ...ogMetadata({ eyebrow: "Your privacy choices", title, subtitle: description }, { url: "/do-not-sell", title: `${title} | ${site.name}`, description }),

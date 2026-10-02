@@ -146,9 +146,11 @@ export default async function HealthPage() {
           fix: { href: "/admin/settings", text: "Settings" },
         },
         {
-          label: "Search verification",
-          level: verification.google ? "ok" : "info",
-          detail: [verification.google && "Google", verification.bing && "Bing", verification.meta && "Meta"].filter(Boolean).join(", ") || "Not verified with Google Search Console yet.",
+          label: "Search engines",
+          level: verification.google && verification.bing ? "ok" : verification.google ? "info" : "warn",
+          detail:
+            ([verification.google && "Google", verification.bing && "Bing", verification.yandex && "Yandex", verification.meta && "Meta"].filter(Boolean).join(", ") || "Not connected to Google Search Console yet") +
+            (settings.indexnow.enabled ? " · IndexNow on" : " · IndexNow off"),
           fix: { href: "/admin/settings", text: "Settings" },
         },
       ],

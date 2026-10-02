@@ -6,6 +6,8 @@ import { audit } from "@/lib/audit";
 import { getSettings, saveSetting } from "@/lib/settings";
 import { assertPublicHttpsUrl } from "@/lib/outbound";
 import { sendTestAlert } from "@/lib/notify";
+import { newIndexNowKey, submitToIndexNow } from "@/lib/indexnow";
+import sitemap from "@/app/sitemap";
 
 const back = (q: Record<string, string>) => redirect(`/admin/settings?${new URLSearchParams(q)}`);
 const val = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
@@ -41,14 +43,34 @@ export async function saveVerification(f: FormData) {
     const value = {
       google: check(token(val(f, "google")), re, "That Google verification code doesn't look right. Paste the code or the whole meta tag."),
       bing: check(token(val(f, "bing")), re, "That Bing verification code doesn't look right. Paste the code or the whole meta tag."),
+      yandex: check(token(val(f, "yandex")), re, "That Yandex verification code doesn't look right. Paste the code or the whole meta tag."),
       meta: check(token(val(f, "meta")), re, "That Meta verification code doesn't look right. Paste the code or the whole meta tag."),
     };
     await saveSetting("verification", value);
-    await audit(me.email, "settings_updated", "setting", "verification", { google: !!value.google, bing: !!value.bing, meta: !!value.meta });
+    await audit(me.email, "settings_updated", "setting", "verification", { google: !!value.google, bing: !!value.bing, yandex: !!value.yandex, meta: !!value.meta });
   } catch (e) {
     back({ error: (e as Error).message });
   }
   back({ saved: "Verification codes saved. You can now click Verify in each tool." });
+}
+
+/** Turns IndexNow on or off. A key is created the first time it's turned on. */
+export async function saveIndexNow(f: FormData) {
+  const me = await requireAdmin("admin");
+  const { indexnow } = await getSettings();
+  const enabled = f.get("enabled") === "on";
+  await saveSetting("indexnow", { ...indexnow, enabled, key: indexnow.key || newIndexNowKey() });
+  await audit(me.email, "settings_updated", "setting", "indexnow", { enabled });
+  back({ saved: enabled ? "IndexNow is on. New and updated pages are sent to Bing and Yandex automatically." : "IndexNow is off." });
+}
+
+/** Sends every page in the sitemap to IndexNow (use after launch or a big update). */
+export async function submitAllToIndexNow() {
+  const me = await requireAdmin("admin");
+  const urls = (await sitemap()).map((e) => e.url);
+  const r = await submitToIndexNow(urls, me.email);
+  await audit(me.email, "indexnow_submitted", "setting", "indexnow", { pages: urls.length, result: r.message });
+  back(r.ok ? { saved: `${r.message} to Bing, Yandex and other IndexNow search engines.` } : { error: r.message });
 }
 
 export async function saveSeo(f: FormData) {
