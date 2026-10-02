@@ -7,7 +7,7 @@ export const linkOk = (v: string) => (v.startsWith("/") && !v.startsWith("//") &
 
 /** Addresses custom pages can't use because the site already has something there. */
 export const RESERVED_SLUGS = new Set([
-  "admin", "api", "blog", "quote", "media", "privacy", "terms", "faq", "why-us", "repair-costs", "preview", "page", "pages",
+  "admin", "api", "blog", "quote", "media", "privacy", "terms", "do-not-sell", "faq", "why-us", "repair-costs", "preview", "page", "pages",
   "sitemap.xml", "robots.txt", "manifest.webmanifest", "opengraph-image", "twitter-image", "icon.png", "apple-icon.png", "favicon.ico", "_next", "search", "login",
 ]);
 
@@ -74,6 +74,7 @@ export async function linkOptions(): Promise<LinkGroup[]> {
         { label: "Blog", href: "/blog" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms of Use", href: "/terms" },
+        { label: "Do Not Sell or Share My Personal Information", href: "/do-not-sell" },
       ],
     },
     { group: "Your pages", items: pages.map((p) => ({ label: p.status === "published" ? p.title : `${p.title} (draft)`, href: `/${p.slug}` })) },

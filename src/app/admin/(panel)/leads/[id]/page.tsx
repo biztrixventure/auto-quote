@@ -92,6 +92,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
               </h1>
               <StatusBadge status={lead.status} />
               {lead.doNotContact && <span className="rounded-full bg-red-600 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">Do not contact</span>}
+              {lead.doNotSell && <span title="Opted out of sale/sharing: never sent to lead buyers" className="rounded-full bg-sky px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">Do not sell</span>}
             </div>
             <p className="mt-1 text-sm text-road">
               {lead.city}, {lead.state} {lead.zip} · Received {timeAgo(lead.createdAt)} ({dateTime(lead.createdAt)})

@@ -1,4 +1,5 @@
 import { Analytics } from "@/components/Analytics";
+import { visitorOptedOut } from "@/lib/legal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TrackingCapture } from "@/components/TrackingCapture";
@@ -40,10 +41,11 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   };
 
   // Public website chrome. The admin area has its own layout.
-  const { tracking } = await getSettings();
+  const { tracking, legal } = await getSettings();
+  const optedOut = await visitorOptedOut(legal.honorGpc);
   return (
     <>
-      <Analytics {...tracking} />
+      <Analytics {...tracking} optedOut={optedOut} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }} />
       <TrackingCapture />
       <SiteHeader />

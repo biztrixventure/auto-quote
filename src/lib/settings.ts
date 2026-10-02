@@ -1,5 +1,6 @@
 import { unstable_cache, revalidateTag } from "next/cache";
 import { db } from "./db";
+import { DEFAULT_PRIVACY_HTML, DEFAULT_TERMS_HTML } from "./legal-templates";
 import { site } from "./site";
 
 export type TrackingSettings = { ga4Id: string; gtmId: string; metaPixelId: string };
@@ -46,6 +47,21 @@ export type NavigationSettings = {
   sticky: boolean; // header stays at the top while scrolling
   announcement: { enabled: boolean; text: string; linkLabel: string; href: string };
   footerColumns: FooterColumn[];
+};
+
+export type LegalSettings = {
+  privacyHtml: string;
+  termsHtml: string;
+  privacyUpdated: string; // YYYY-MM-DD, set automatically when the text changes
+  termsUpdated: string;
+  privacyEmail: string; // empty = business email
+  privacyPhone: string; // empty = business phone
+  mailingAddress: string;
+  governingState: string;
+  honorGpc: boolean; // treat the browser's Global Privacy Control signal as an opt-out
+  responseDays: number; // deadline for access/delete/correct requests
+  confirmByEmail: boolean; // email people a confirmation of their request (needs email alerts set up)
+  reviewed: boolean; // an attorney has approved both documents
 };
 
 export type BlogSettings = {
@@ -130,11 +146,25 @@ export const DEFAULTS = {
         links: [
           { id: "f-privacy", label: "Privacy Policy", href: "/privacy" },
           { id: "f-terms", label: "Terms of Use", href: "/terms" },
-          { id: "f-dns", label: "Do not sell or share my personal information", href: "/privacy#do-not-sell" },
+          { id: "f-dns", label: "Do Not Sell or Share My Personal Information", href: "/do-not-sell" },
         ],
       },
     ],
   } as NavigationSettings,
+  legal: {
+    privacyHtml: DEFAULT_PRIVACY_HTML,
+    termsHtml: DEFAULT_TERMS_HTML,
+    privacyUpdated: "2026-10-02",
+    termsUpdated: "2026-10-02",
+    privacyEmail: "",
+    privacyPhone: "",
+    mailingAddress: "",
+    governingState: "",
+    honorGpc: true,
+    responseDays: 45,
+    confirmByEmail: true,
+    reviewed: false,
+  } as LegalSettings,
   blog: {
     title: "The {company} Blog",
     intro: "Practical guides on car insurance, extended warranties and keeping repair costs down.",
@@ -224,7 +254,7 @@ export async function getSettings(): Promise<Settings> {
 }
 
 // Section links from before the site had separate pages now point at those pages.
-const OLD_ANCHORS: Record<string, string> = { "/#repair-costs": "/repair-costs", "/#why-choose": "/why-us", "/#faq": "/faq" };
+const OLD_ANCHORS: Record<string, string> = { "/#repair-costs": "/repair-costs", "/#why-choose": "/why-us", "/#faq": "/faq", "/privacy#do-not-sell": "/do-not-sell" };
 
 /** Fills in ids and missing fields for menus saved by older versions. */
 function normalizeNavigation(nav: NavigationSettings): NavigationSettings {

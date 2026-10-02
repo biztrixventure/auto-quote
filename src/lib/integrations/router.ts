@@ -43,8 +43,8 @@ export async function routeLead(leadId: string) {
     return { outcome: "quoted" as const };
   }
 
-  // Do-not-contact leads are never sold.
-  const distributor = lead.doNotContact ? null : await getDistributor();
+  // Do-not-contact and do-not-sell (opted out of sale/sharing) leads are never sold.
+  const distributor = lead.doNotContact || lead.doNotSell ? null : await getDistributor();
   if (distributor) {
     try {
       const result = await distributor.postLead(lead);

@@ -1,7 +1,8 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/audit";
-import { getSite } from "@/lib/settings";
+import { visitorOptedOut } from "@/lib/legal";
+import { getSettings, getSite } from "@/lib/settings";
 import { digitsOnly, leadSubmissionSchema } from "@/lib/validation";
 import { routeLead } from "@/lib/integrations/router";
 import { notifyLead } from "@/lib/notify";
@@ -78,8 +79,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ id: existing.id, duplicate: true });
   }
 
-  // People on the do-not-contact list can still submit, but the lead is flagged.
-  const suppressed = await db.suppression.findFirst({ where: { OR: [{ email }, { phone }] }, select: { id: true } });
+  // People on the do-not-contact or do-not-sell lists can still submit, but the lead is flagged.
+  // A Global Privacy Control signal or our opt-out cookie also counts as a do-not-sell request.
+  const [lists, { legal }] = await Promise.all([
+    db.suppression.findMany({ where: { OR: [{ email }, { phone }] }, select: { type: true } }),
+    getSettings(),
+  ]);
+  const suppressed = lists.some((s) => s.type === "dnc");
+  const doNotSell = lists.some((s) => s.type === "do_not_sell") || (await visitorOptedOut(legal.honorGpc));
 
   const lead = await db.lead.create({
     data: {
@@ -97,7 +104,8 @@ export async function POST(req: NextRequest) {
       ...tracking,
       ipAddress,
       userAgent,
-      doNotContact: !!suppressed,
+      doNotContact: suppressed,
+      doNotSell,
       trustedFormCertUrl: trustedFormCertUrl || null,
       drivers: {
         create: {

@@ -26,6 +26,8 @@ const SIMPLE: Record<string, string> = {
   dnc_list_removed: "Removed from do-not-contact list",
   media_deleted: "Deleted an image",
   menus_updated: "Updated the website menus",
+  legal_updated: "Updated legal pages or privacy settings",
+  privacy_request_updated: "Updated a privacy request",
   profile_updated: "Updated their author profile",
 };
 
@@ -110,6 +112,10 @@ export function describe(action: string, detail: string | null): { text: string;
       const verb = { page_created: "Created page", page_updated: "Edited page", page_published: "Published page", page_unpublished: "Unpublished page", page_deleted: "Deleted page" }[action];
       return { text: `${verb} “${str("title") ?? "untitled"}”` };
     }
+    case "privacy_request": {
+      const t = { opt_out_sale: "opt out of sale/sharing", opt_out_contact: "stop contact", access: "access their data", delete: "delete their data", correct: "correct their data" }[str("type") ?? ""] ?? "a privacy request";
+      return { text: `Website visitor asked to ${t}${d.instant ? " (applied automatically)" : ""}` };
+    }
     case "category_created":
     case "category_updated":
     case "category_deleted":
@@ -138,11 +144,13 @@ export function entityLink(entity: string, id: string) {
   if (entity === "post" && id !== "*") return `/admin/blog/${id}`;
   if (entity === "category") return "/admin/blog/settings";
   if (entity === "page" && id !== "*") return `/admin/pages/${id}`;
+  if (entity === "privacy_request") return "/admin/privacy#requests";
   if (entity === "media") return "/admin/blog/media";
   if (entity === "setting") {
     if (id === "navigation") return "/admin/menus";
     if (id === "content") return "/admin/content";
     if (id === "blog") return "/admin/blog/settings";
+    if (id === "legal") return "/admin/legal";
     return id === "pricing" ? "/admin/pricing" : "/admin/settings";
   }
   return null;

@@ -30,5 +30,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     { url: `${site.url}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${site.url}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${site.url}/do-not-sell`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 }

@@ -30,13 +30,31 @@ export async function addSuppression(f: FormData) {
   const { email, phone } = normalizeIdentity(String(f.get("email") ?? ""), String(f.get("phone") ?? ""));
   if (!email && !phone) back({ error: "Enter a valid email or 10-digit phone number to block." });
   const reason = String(f.get("reason") ?? "").trim().slice(0, 120) || null;
-  await db.suppression.create({ data: { email: email || null, phone: phone || null, reason } });
+  const type = f.get("type") === "do_not_sell" ? "do_not_sell" : "dnc";
+  await db.suppression.create({ data: { email: email || null, phone: phone || null, reason, type } });
   const flagged = await db.lead.updateMany({
     where: { OR: [...(email ? [{ email }] : []), ...(phone ? [{ phone }] : [])] },
-    data: { doNotContact: true },
+    data: type === "do_not_sell" ? { doNotSell: true } : { doNotContact: true },
   });
-  await audit(me.email, "dnc_list_added", "person", mask(email, phone), { existingLeadsFlagged: flagged.count });
-  back({ saved: `Added to the do-not-contact list. ${flagged.count} existing lead${flagged.count === 1 ? "" : "s"} flagged.` });
+  await audit(me.email, "dnc_list_added", "person", mask(email, phone), { type, existingLeadsFlagged: flagged.count });
+  back({ saved: `Added to the ${type === "do_not_sell" ? "do-not-sell" : "do-not-contact"} list. ${flagged.count} existing lead${flagged.count === 1 ? "" : "s"} flagged.` });
+}
+
+/** Moves a privacy request along (in progress, completed, closed) with an internal note. */
+export async function updatePrivacyRequest(f: FormData) {
+  const me = await requireAdmin("admin");
+  const id = String(f.get("id") ?? "");
+  const status = String(f.get("status") ?? "");
+  if (!["new", "in_progress", "completed", "denied"].includes(status)) back({ error: "Choose a status." });
+  const r = await db.privacyRequest.findUnique({ where: { id }, select: { status: true } });
+  if (!r) back({ error: "That request no longer exists." });
+  const closed = status === "completed" || status === "denied";
+  await db.privacyRequest.update({
+    where: { id },
+    data: { status, staffNote: String(f.get("note") ?? "").trim().slice(0, 1000), completedAt: closed ? new Date() : null },
+  });
+  await audit(me.email, "privacy_request_updated", "privacy_request", id, { from: r!.status, to: status });
+  back({ saved: "Request updated." });
 }
 
 export async function removeSuppression(f: FormData) {

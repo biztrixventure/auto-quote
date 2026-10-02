@@ -34,8 +34,12 @@ export default async function HealthPage() {
     db.auditLog.findMany({ where: { action: { in: ERROR_ACTIONS } }, orderBy: { createdAt: "desc" }, take: 10 }),
   ]);
   const dbMs = Date.now() - t0;
+  const [overdueRequests, openRequests] = await Promise.all([
+    db.privacyRequest.count({ where: { status: { in: ["new", "in_progress"] }, dueAt: { lt: new Date() } } }),
+    db.privacyRequest.count({ where: { status: { in: ["new", "in_progress"] } } }),
+  ]);
   const errs = (a: string) => errors24.find((e) => e.action === a)?._count ?? 0;
-  const { business: b, tracking, verification, notifications: n } = settings;
+  const { business: b, tracking, verification, notifications: n, legal } = settings;
   const ch = channelStatus();
   const no2fa = admins.filter((u) => u.role !== "agent" && !u.totpEnabled);
   const placeholders = [
@@ -114,6 +118,26 @@ export default async function HealthPage() {
           level: placeholders.length ? "warn" : "ok",
           detail: placeholders.length ? `Still using placeholder ${placeholders.join(", ")}.` : "Phone, email, license and consent are filled in.",
           fix: { href: "/admin/settings", text: "Settings" },
+        },
+        {
+          label: "Privacy Policy and Terms",
+          level: legal.reviewed && legal.mailingAddress ? "ok" : "warn",
+          detail: !legal.reviewed
+            ? "Using the built-in template. Have an attorney review it, then tick “Reviewed by our attorney”."
+            : !legal.mailingAddress
+              ? "Add your mailing address to the privacy contact details."
+              : "Reviewed by your attorney.",
+          fix: { href: "/admin/legal", text: "Legal" },
+        },
+        {
+          label: "Privacy requests",
+          level: overdueRequests ? "fail" : openRequests ? "warn" : "ok",
+          detail: overdueRequests
+            ? `${overdueRequests} request${overdueRequests === 1 ? " is" : "s are"} past the legal deadline. Answer ${overdueRequests === 1 ? "it" : "them"} today.`
+            : openRequests
+              ? `${openRequests} open request${openRequests === 1 ? "" : "s"}, all within the deadline.`
+              : `None open. Opt-outs are applied automatically${legal.honorGpc ? ", and Global Privacy Control is honored" : ""}.`,
+          fix: { href: "/admin/privacy#requests", text: "Privacy" },
         },
         {
           label: "Analytics",

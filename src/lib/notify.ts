@@ -111,6 +111,45 @@ export async function notifyLead(leadId: string) {
   }
 }
 
+/** Tells staff about a new privacy request. Safe to call after the response has been sent. */
+export async function notifyPrivacyRequest(requestId: string, typeLabel: string) {
+  try {
+    const r = await db.privacyRequest.findUnique({ where: { id: requestId } });
+    if (!r) return;
+    const due = r.status === "completed" ? "Already applied automatically." : `Respond by ${r.dueAt.toLocaleDateString("en-US", { dateStyle: "medium" })}.`;
+    await broadcast(
+      { subject: `Privacy request: ${typeLabel}`, lines: [`${r.firstName} ${r.lastName} (${r.state || "state not given"})`, due], link: `${site.url}/admin/privacy#requests` },
+      `privacy:${requestId}`,
+    );
+  } catch (err) {
+    await audit("system", "notification_failed", "privacy_request", requestId, { error: String(err).slice(0, 200) });
+  }
+}
+
+/** Confirmation email to the person who made a privacy request (only when email is set up). */
+export async function emailRequester(to: string, subject: string, lines: string[]) {
+  if (!channelStatus().email) return false;
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: process.env.NOTIFY_FROM,
+        to: [to],
+        subject,
+        text: lines.join("\n\n"),
+        html: lines.map((l) => `<p>${escapeHtml(l)}</p>`).join(""),
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) throw new Error(`Resend ${res.status}`);
+    return true;
+  } catch (err) {
+    await audit("system", "notification_failed", "privacy_request", "*", { channel: "email", error: String(err).slice(0, 200) });
+    return false;
+  }
+}
+
 export async function sendTestAlert(by: string) {
   return broadcast({ subject: `Test alert from ${site.name}`, lines: [`${by} sent this test from the admin. New-lead alerts will look like this.`], link: `${site.url}/admin` }, "test");
 }

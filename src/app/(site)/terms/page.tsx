@@ -1,19 +1,19 @@
+import type { Metadata } from "next";
+import { LegalDoc } from "@/components/LegalDoc";
+import { fillLegal, getLegal } from "@/lib/legal";
 import { ogMetadata } from "@/lib/og";
 import { site } from "@/lib/site";
-export const metadata = {
+
+const description = `The terms that apply when you use ${site.name} to compare car insurance quotes and extended vehicle protection, and talk with a licensed agent.`;
+
+export const metadata: Metadata = {
   title: "Terms of Use",
-  description: `The terms that apply when you use the ${site.name} website to compare car insurance quotes and request help from a licensed agent.`,
+  description,
   alternates: { canonical: "/terms" },
-  ...ogMetadata({ eyebrow: "Legal", title: "Terms of Use", subtitle: "The terms that apply when you use our website to compare car insurance quotes." }, { url: "/terms", title: `Terms of Use | ${site.name}` }),
+  ...ogMetadata({ eyebrow: "Legal", title: "Terms of Use", subtitle: "The terms that apply when you use our website to compare car insurance quotes." }, { url: "/terms", title: `Terms of Use | ${site.name}`, description }),
 };
 
-export default function Terms() {
-  return (
-    <article className="mx-auto max-w-3xl px-5 py-14">
-      <h1 className="text-3xl font-bold">Terms of use</h1>
-      <p className="mt-4 rounded-md border-l-4 border-line bg-mist p-4 text-road">
-        Placeholder. Replace with the terms of use provided by the agency&apos;s attorney.
-      </p>
-    </article>
-  );
+export default async function TermsPage() {
+  const { legal, vars } = await getLegal();
+  return <LegalDoc title="Terms of Use" path="/terms" html={fillLegal(legal.termsHtml, vars)} updated={legal.termsUpdated} description={description} />;
 }

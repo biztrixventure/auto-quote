@@ -57,6 +57,7 @@ model Lead {
   assignedToId String?
   assignedTo   AdminUser? @relation("AssignedLeads", fields: [assignedToId], references: [id], onDelete: SetNull)
   doNotContact Boolean    @default(false)
+  doNotSell    Boolean    @default(false) // opted out of sale/sharing (form, Global Privacy Control or list): never sent to lead buyers
   notes        LeadNote[]
   tasks        LeadTask[]
 
@@ -371,9 +372,36 @@ model Suppression {
   email     String?
   phone     String?
   reason    String?
+  type      String   @default("dnc") // dnc = no calls/texts/emails | do_not_sell = don't sell or share
 
   @@index([email])
   @@index([phone])
+}
+
+// Requests from the public privacy form (/do-not-sell). Opt-outs are applied at once;
+// access, deletion and correction requests are handled by staff before dueAt.
+model PrivacyRequest {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  type        String // opt_out_sale | opt_out_contact | access | delete | correct
+  status      String    @default("new") // new | in_progress | completed | denied
+  firstName   String
+  lastName    String
+  email       String
+  phone       String    @default("")
+  state       String    @default("")
+  details     String    @default("")
+  viaAgent    Boolean   @default(false) // submitted by an authorized agent
+  dueAt       DateTime
+  completedAt DateTime?
+  staffNote   String    @default("")
+  leadsFound  Int       @default(0)
+  ipAddress   String?
+  userAgent   String?
+
+  @@index([status, dueAt])
+  @@index([email])
 }
 
 // Anonymous quote-form progress, for the drop-off report. No personal data.
