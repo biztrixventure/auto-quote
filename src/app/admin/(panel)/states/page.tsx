@@ -5,7 +5,7 @@ import { ensureStateGuides, guidePath, limitsShort } from "@/lib/state-guides";
 import { Notice } from "@/components/admin/forms";
 import { PageHeader, btnPrimary, btnSecondary } from "@/components/admin/ui";
 import { STATE_RESEARCH } from "@/lib/state-guide-research";
-import { fillFromResearch, publishAllChecked, setStatePublished } from "./actions";
+import { checkConfirmedStates, fillFromResearch, publishAllChecked, setStatePublished } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "State guides" };
@@ -33,6 +33,9 @@ export default async function StatesAdminPage({ searchParams }: { searchParams: 
             <a href="/car-insurance" target="_blank" rel="noreferrer" className={btnSecondary}>View on site ↗</a>
             <form action={fillFromResearch}>
               <button className={btnSecondary} disabled={counts.todo === 0} title="Fills unchecked states only; checked states are never changed">Fill in researched data</button>
+            </form>
+            <form action={checkConfirmedStates}>
+              <button className={btnSecondary} disabled={counts.todo === 0} title="Refreshes unchecked states from the officially confirmed data and ticks Facts checked. Doesn't publish.">Tick all confirmed states ({counts.todo})</button>
             </form>
             <form action={publishAllChecked}>
               <button className={btnPrimary} disabled={counts.checked === 0}>Publish all checked ({counts.checked})</button>

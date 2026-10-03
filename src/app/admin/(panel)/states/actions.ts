@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { sanitizePostHtml } from "@/lib/blog";
 import { db } from "@/lib/db";
 import { submitToIndexNow } from "@/lib/indexnow";
-import { researchFields } from "@/lib/state-guide-research";
+import { STATE_RESEARCH, researchFields } from "@/lib/state-guide-research";
 import { ensureStateGuides, guidePath, publishProblem } from "@/lib/state-guides";
 
 const text = (f: FormData, k: string, max: number) => String(f.get(k) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -104,6 +104,26 @@ export async function fillFromResearch() {
   }
   await audit(me.email, "state_guide_updated", "state_guide", "*", { filledFromResearch: filled });
   redirect(`/admin/states?${new URLSearchParams({ saved: `Filled ${filled} unchecked state${filled === 1 ? "" : "s"} with the researched starting data. Check each one against its source before publishing.` })}`);
+}
+
+/**
+ * Refreshes every UNCHECKED state from the confirmed research and ticks "Facts checked".
+ * Nothing is published. Already-checked states and unconfirmed research are never touched.
+ */
+export async function checkConfirmedStates() {
+  const me = await requireAdmin("admin");
+  await ensureStateGuides();
+  const unchecked = await db.stateGuide.findMany({ where: { verifiedAt: null }, select: { code: true } });
+  const now = new Date();
+  let checked = 0;
+  for (const { code } of unchecked) {
+    const fields = researchFields(code);
+    if (!fields || STATE_RESEARCH[code]?.confidence !== "high") continue;
+    await db.stateGuide.update({ where: { code }, data: { ...fields, verifiedAt: now, published: false } });
+    checked++;
+  }
+  await audit(me.email, "state_guide_updated", "state_guide", "*", { checkedFromResearch: checked });
+  redirect(`/admin/states?${new URLSearchParams({ saved: `Ticked ${checked} confirmed state${checked === 1 ? "" : "s"} as checked. Click "Publish all checked" to put them live.` })}`);
 }
 
 /** Publishes every guide whose facts have been checked. */
