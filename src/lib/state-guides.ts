@@ -1,5 +1,6 @@
 import type { Prisma, StateGuide } from "@prisma/client";
 import { db } from "./db";
+import { researchFields } from "./state-guide-research";
 import { STATES } from "./states";
 
 // State-by-state car insurance guides (/car-insurance/<slug>). The page text is built from
@@ -14,7 +15,7 @@ export const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
 
 /** "30/60/25" (thousands), or "" when no bodily injury minimum is set. */
 export function limitsShort(g: Pick<StateGuide, "biPerPerson" | "biPerAccident" | "pd">) {
-  if (!g.biPerPerson && !g.biPerAccident && !g.pd) return "";
+  if (!g.biPerPerson) return ""; // e.g. Florida: no bodily injury requirement, so no "x/y/z"
   return `${k(g.biPerPerson)}/${k(g.biPerAccident)}/${k(g.pd)}`;
 }
 
@@ -36,25 +37,32 @@ export const NEIGHBORS: Record<string, string[]> = {
   WI: ["IA", "IL", "MI", "MN"], WY: ["CO", "ID", "MT", "NE", "SD", "UT"],
 };
 
-/** Creates any missing state rows (unpublished, unverified). Safe to call repeatedly. */
+/**
+ * Creates any missing state rows, pre-filled from the researched starting data. They start
+ * unpublished and unchecked. Safe to call repeatedly.
+ */
 export async function ensureStateGuides() {
   const count = await db.stateGuide.count();
   if (count >= STATES.length) return;
   await db.stateGuide.createMany({
-    data: STATES.map((s) => ({ code: s.code, name: s.name, slug: stateSlug(s.name) })),
+    data: STATES.map((s) => ({ code: s.code, name: s.name, slug: stateSlug(s.name), ...(researchFields(s.code) ?? {}) })),
     skipDuplicates: true,
   });
 }
 
 export type GuideFacts = Pick<
   StateGuide,
-  "name" | "biPerPerson" | "biPerAccident" | "pd" | "noFault" | "pipRequired" | "pipMinimum" | "umRequired" | "uimRequired" | "medPayRequired" | "requirementNote"
+  "name" | "biPerPerson" | "biPerAccident" | "pd" | "noFault" | "pipRequired" | "pipMinimum" | "umRequired" | "uimRequired" | "medPayRequired" | "insuranceOptional" | "requirementNote"
 >;
 
 /** One-paragraph plain answer: used in the "Quick answer" box, meta descriptions and llms.txt. */
 export function quickAnswer(g: GuideFacts) {
   const parts: string[] = [];
   const short = limitsShort(g);
+  if (g.insuranceOptional) {
+    parts.push(`${g.name} doesn't require car insurance, but drivers must be able to pay for damage they cause${short ? ` (${short} financial responsibility)` : ""}. Most drivers buy a policy to meet this.`);
+    return parts.join(" ");
+  }
   if (g.biPerPerson) {
     parts.push(`${g.name} requires at least ${usd(g.biPerPerson)} of bodily injury liability per person, ${usd(g.biPerAccident)} per accident and ${usd(g.pd)} of property damage liability (${short}).`);
   } else if (g.pd) {
@@ -73,7 +81,12 @@ export type Faq = { q: string; a: string };
 export function stateFaqs(g: GuideFacts): Faq[] {
   const short = limitsShort(g);
   const faqs: Faq[] = [];
-  if (g.biPerPerson || g.pd) {
+  if (g.insuranceOptional) {
+    faqs.push({
+      q: `Is car insurance required in ${g.name}?`,
+      a: `No, ${g.name} doesn't require car insurance. But if you cause a crash, you must show you can pay for the damage${short ? ` (at least ${short})` : ""}, or you can lose your license and registration. That's why most drivers carry a policy.`,
+    });
+  } else if (g.biPerPerson || g.pd) {
     faqs.push({
       q: `What is the minimum car insurance required in ${g.name}?`,
       a: g.biPerPerson
@@ -99,7 +112,7 @@ export function stateFaqs(g: GuideFacts): Faq[] {
       a: `Usually not. A serious crash can easily cost more than ${usd(g.biPerAccident)} in medical bills, and you're personally responsible for anything above your limits. Many drivers choose 100/300/100 liability for much stronger protection, often for a modest extra cost.`,
     });
   }
-  faqs.push({
+  if (!g.insuranceOptional) faqs.push({
     q: `What happens if I drive without insurance in ${g.name}?`,
     a: `Driving without the required coverage in ${g.name} can lead to fines, a suspended license or registration, and having to file proof of insurance (such as an SR-22) before you can drive again. Penalties increase for repeat offences.`,
   });

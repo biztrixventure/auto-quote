@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { ensureStateGuides, guidePath, limitsShort, quickAnswer } from "@/lib/state-guides";
 import { Checkbox, FormField, Notice, SectionFooter, inputCls } from "@/components/admin/forms";
 import { Card, PageHeader, btnPrimary, btnSecondary } from "@/components/admin/ui";
+import { RESEARCHED_ON, STATE_RESEARCH } from "@/lib/state-guide-research";
 import { saveStateGuide } from "../actions";
 import { ContentField } from "./ContentField";
 
@@ -18,6 +19,7 @@ export default async function EditStatePage({ params, searchParams }: { params: 
   const [{ code }, sp] = await Promise.all([params, searchParams]);
   const g = await db.stateGuide.findUnique({ where: { code: code.toUpperCase() } });
   if (!g) notFound();
+  const research = STATE_RESEARCH[g.code];
 
   return (
     <>
@@ -51,6 +53,7 @@ export default async function EditStatePage({ params, searchParams }: { params: 
               <Checkbox name="umRequired" label="Uninsured motorist required" defaultChecked={g.umRequired} />
               <Checkbox name="uimRequired" label="Underinsured motorist required" defaultChecked={g.uimRequired} />
               <Checkbox name="medPayRequired" label="Medical payments required" defaultChecked={g.medPayRequired} />
+              <Checkbox name="insuranceOptional" label="Insurance not required (financial responsibility instead)" defaultChecked={g.insuranceOptional} hint="e.g. New Hampshire" />
             </div>
             <div className="mt-4 grid gap-4 sm:grid-cols-[200px_1fr]">
               <FormField label="Minimum PIP ($)" htmlFor="pipMinimum"><input id="pipMinimum" name="pipMinimum" defaultValue={money(g.pipMinimum)} inputMode="numeric" className={inputCls} /></FormField>
@@ -85,6 +88,21 @@ export default async function EditStatePage({ params, searchParams }: { params: 
             </div>
             <SectionFooter><button className={btnPrimary}>Save</button></SectionFooter>
           </Card>
+
+          {research && (
+            <Card title="Research notes">
+              <div className="space-y-2 text-sm">
+                <p>
+                  Confidence:{" "}
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${research.confidence === "high" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}`}>{research.confidence}</span>
+                  <span className="ml-2 text-xs text-road">researched {RESEARCHED_ON}</span>
+                </p>
+                <p className="text-xs text-road">{research.confidence === "high" ? "Confirmed on an official state source." : "The official site couldn't be read automatically; confirmed on a reputable secondary source. Check the official page yourself."}</p>
+                {research.caveat && <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900"><strong>Check this:</strong> {research.caveat}</p>}
+                <a href={research.sourceUrl} target="_blank" rel="noopener noreferrer" className="block break-all text-xs font-semibold text-sky hover:underline">Open the source used ↗</a>
+              </div>
+            </Card>
+          )}
 
           <Card title="Preview of the quick answer">
             <p className="text-sm leading-relaxed text-road">{limitsShort(g) || g.pd ? quickAnswer(g) : "Enter the minimum amounts to see the answer shown at the top of the page."}</p>

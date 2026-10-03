@@ -4,7 +4,8 @@ import { db } from "@/lib/db";
 import { ensureStateGuides, guidePath, limitsShort } from "@/lib/state-guides";
 import { Notice } from "@/components/admin/forms";
 import { PageHeader, btnPrimary, btnSecondary } from "@/components/admin/ui";
-import { publishAllChecked, setStatePublished } from "./actions";
+import { STATE_RESEARCH } from "@/lib/state-guide-research";
+import { fillFromResearch, publishAllChecked, setStatePublished } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "State guides" };
@@ -30,6 +31,9 @@ export default async function StatesAdminPage({ searchParams }: { searchParams: 
         actions={
           <>
             <a href="/car-insurance" target="_blank" rel="noreferrer" className={btnSecondary}>View on site ↗</a>
+            <form action={fillFromResearch}>
+              <button className={btnSecondary} disabled={counts.todo === 0} title="Fills unchecked states only; checked states are never changed">Fill in researched data</button>
+            </form>
             <form action={publishAllChecked}>
               <button className={btnPrimary} disabled={counts.checked === 0}>Publish all checked ({counts.checked})</button>
             </form>
@@ -49,14 +53,21 @@ export default async function StatesAdminPage({ searchParams }: { searchParams: 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="bg-[#F9FAFB] text-xs uppercase tracking-wide text-road">
-              <tr>{["State", "Minimum", "Fault", "Facts checked", "Status", ""].map((h) => <th key={h} scope="col" className="px-4 py-2.5 font-semibold">{h}</th>)}</tr>
+              <tr>{["State", "Minimum", "Fault", "Research", "Facts checked", "Status", ""].map((h) => <th key={h} scope="col" className="px-4 py-2.5 font-semibold">{h}</th>)}</tr>
             </thead>
             <tbody className="divide-y divide-[#EEF0F3]">
               {rows.map((g) => (
                 <tr key={g.code} className="hover:bg-[#FCFCFD]">
                   <td className="px-4 py-3"><Link href={`/admin/states/${g.code.toLowerCase()}`} className="font-semibold text-asphalt hover:text-sky">{g.name}</Link></td>
                   <td className="px-4 py-3 tabular-nums">{limitsShort(g) || <span className="text-road">—</span>}{g.pipRequired && <span className="ml-1 text-xs text-road">+PIP</span>}</td>
-                  <td className="px-4 py-3 text-road">{g.noFault ? "No-fault" : "At-fault"}</td>
+                  <td className="px-4 py-3 text-road">{g.noFault ? "No-fault" : "At-fault"}{g.insuranceOptional && <span className="ml-1 text-xs">(optional)</span>}</td>
+                  <td className="px-4 py-3 text-xs">
+                    {STATE_RESEARCH[g.code] && (
+                      <span className={`rounded-full px-2 py-0.5 font-semibold ${STATE_RESEARCH[g.code].confidence === "high" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}`} title={STATE_RESEARCH[g.code].caveat ?? ""}>
+                        {STATE_RESEARCH[g.code].confidence}{STATE_RESEARCH[g.code].caveat ? " ⚠" : ""}
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">{g.verifiedAt ? g.verifiedAt.toLocaleDateString("en-US", { dateStyle: "medium" }) : <span className="font-semibold text-amber-700">Not yet</span>}</td>
                   <td className="px-4 py-3">
                     <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${g.published ? "bg-emerald-50 text-emerald-700" : "bg-[#F2F4F7] text-road"}`}>{g.published ? "Published" : "Draft"}</span>

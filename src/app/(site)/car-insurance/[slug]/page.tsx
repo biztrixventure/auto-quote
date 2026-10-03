@@ -175,7 +175,8 @@ export default async function StateGuidePage({ params }: { params: Promise<{ slu
           <section className="rounded-2xl bg-[#F7F9FC] p-6">
             <h2 className="text-lg font-bold text-asphalt">{g.name} at a glance</h2>
             <dl className="mt-3 text-sm">
-              {short && <Fact label="Minimum liability" value={short} />}
+              {g.insuranceOptional && <Fact label="Insurance required" value="No (proof of payment ability)" />}
+              {short && <Fact label={g.insuranceOptional ? "Financial responsibility" : "Minimum liability"} value={short} />}
               {g.biPerPerson > 0 && <Fact label="Bodily injury, per person" value={usd(g.biPerPerson)} />}
               {g.biPerAccident > 0 && <Fact label="Bodily injury, per accident" value={usd(g.biPerAccident)} />}
               {g.pd > 0 && <Fact label="Property damage" value={usd(g.pd)} />}

@@ -431,6 +431,7 @@ model StateGuide {
   umRequired       Boolean   @default(false)
   uimRequired      Boolean   @default(false)
   medPayRequired   Boolean   @default(false)
+  insuranceOptional Boolean  @default(false) // e.g. New Hampshire: proof of financial responsibility instead
   requirementNote  String    @default("")
   sourceUrl        String    @default("")
   verifiedAt       DateTime?

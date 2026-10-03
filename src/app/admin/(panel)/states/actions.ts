@@ -7,7 +7,8 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { sanitizePostHtml } from "@/lib/blog";
 import { db } from "@/lib/db";
 import { submitToIndexNow } from "@/lib/indexnow";
-import { guidePath, publishProblem } from "@/lib/state-guides";
+import { researchFields } from "@/lib/state-guide-research";
+import { ensureStateGuides, guidePath, publishProblem } from "@/lib/state-guides";
 
 const text = (f: FormData, k: string, max: number) => String(f.get(k) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
 /** "30,000" or "$30000" → 30000; empty → 0. */
@@ -37,6 +38,7 @@ export async function saveStateGuide(f: FormData) {
     umRequired: on(f, "umRequired"),
     uimRequired: on(f, "uimRequired"),
     medPayRequired: on(f, "medPayRequired"),
+    insuranceOptional: on(f, "insuranceOptional"),
     requirementNote: text(f, "requirementNote", 600),
   };
   if (facts.biPerPerson > facts.biPerAccident && facts.biPerAccident > 0) back({ error: "Bodily injury per person can't be more than per accident." });
@@ -86,6 +88,22 @@ export async function setStatePublished(f: FormData) {
   await audit(me.email, publish ? "state_guide_published" : "state_guide_unpublished", "state_guide", code, { name: g!.name });
   after(() => submitToIndexNow([guidePath(g!), "/car-insurance"], me.email));
   redirect(`/admin/states?${new URLSearchParams({ saved: `${g!.name} ${publish ? "published" : "unpublished"}.` })}`);
+}
+
+/** Fills every UNCHECKED state with the researched starting data. Checked states are never touched. */
+export async function fillFromResearch() {
+  const me = await requireAdmin("admin");
+  await ensureStateGuides();
+  const unchecked = await db.stateGuide.findMany({ where: { verifiedAt: null }, select: { code: true } });
+  let filled = 0;
+  for (const { code } of unchecked) {
+    const fields = researchFields(code);
+    if (!fields) continue;
+    await db.stateGuide.update({ where: { code }, data: { ...fields, published: false } });
+    filled++;
+  }
+  await audit(me.email, "state_guide_updated", "state_guide", "*", { filledFromResearch: filled });
+  redirect(`/admin/states?${new URLSearchParams({ saved: `Filled ${filled} unchecked state${filled === 1 ? "" : "s"} with the researched starting data. Check each one against its source before publishing.` })}`);
 }
 
 /** Publishes every guide whose facts have been checked. */
