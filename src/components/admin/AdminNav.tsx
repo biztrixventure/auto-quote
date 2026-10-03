@@ -56,6 +56,7 @@ export const NAV: { group: string; items: Item[] }[] = [
     items: [
       { href: "/admin/settings", label: "Settings", min: "admin", icon: icon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 12h2m12 0h2M12 4v2m0 12v2M6.3 6.3l1.4 1.4m8.6 8.6 1.4 1.4m0-11.4-1.4 1.4M7.7 16.3l-1.4 1.4") },
       { href: "/admin/privacy", label: "Privacy", min: "admin", icon: icon("M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6l-8-3z") },
+      { href: "/admin/api-keys", label: "API keys", min: "admin", icon: icon("M15 7a4 4 0 1 1-3.4 6.1L3 21.6V18h3v-3h3l2.6-2.6A4 4 0 0 1 15 7zM17 9h.01") },
       { href: "/admin/activity", label: "Activity", min: "admin", icon: icon("M22 12h-4l-3 9L9 3l-3 9H2") },
       { href: "/admin/health", label: "System health", min: "admin", icon: icon("M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z") },
       { href: "/admin/users", label: "Users", min: "owner", icon: icon("M16 11a4 4 0 1 0-8 0M12 15c-4 0-7 2-7 4v2h14v-2c0-2-3-4-7-4") },

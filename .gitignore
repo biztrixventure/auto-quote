@@ -8,3 +8,10 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 backups
 *.bak
+
+# Keyword research exports (local only)
+/semrush/
+
+# Blog publishing API key (local only)
+.env.blog
+/blog-drafts/

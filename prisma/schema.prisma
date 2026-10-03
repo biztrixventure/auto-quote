@@ -205,6 +205,7 @@ model AdminUser {
   tasks        LeadTask[]
   posts        Post[]     @relation("PostAuthor")
   revisions    PostRevision[]
+  apiKeys      ApiKey[]
 }
 
 // ── Blog ───────────────────────────────────────────────────────
@@ -447,4 +448,21 @@ model StateGuide {
   updatedAt        DateTime  @updatedAt
 
   @@index([published])
+}
+
+// Keys for the blog publishing API (/api/blog-api/v1). Only a SHA-256 hash of the key is stored;
+// the key itself is shown once when created. Requests act as the admin user who created the key.
+model ApiKey {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  name       String
+  prefix     String // first characters of the key, to recognise it in the list
+  tokenHash  String    @unique
+  userId     String
+  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  canPublish Boolean   @default(false) // false = drafts only; an admin publishes them
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+
+  @@index([userId])
 }

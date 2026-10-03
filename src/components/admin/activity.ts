@@ -124,6 +124,12 @@ export function describe(action: string, detail: string | null): { text: string;
     case "category_updated":
     case "category_deleted":
       return { text: `${capital(action.split("_")[1])} blog category ${str("name") ?? ""}`.trim() };
+    case "api_key_created":
+      return { text: `Created API key “${str("name") ?? ""}”${d.canPublish ? " (can publish)" : " (drafts only)"}` };
+    case "api_key_revoked":
+      return { text: `Revoked API key “${str("name") ?? ""}”` };
+    case "media_uploaded":
+      return { text: `Uploaded image ${str("name") ?? ""}`.trim() };
     case "rater_error":
       return { text: `Quoting failed${err}`, error: true };
     case "distribution_error":
