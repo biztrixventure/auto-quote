@@ -4,7 +4,7 @@ import { getSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
 import { Checkbox, FormField, Notice, SectionFooter, inputCls } from "@/components/admin/forms";
 import { Card, PageHeader, btnPrimary, btnSecondary } from "@/components/admin/ui";
-import { saveBusiness, saveIndexNow, saveNotifications, saveResults, saveSeo, saveTracking, saveVerification, submitAllToIndexNow, testAlerts } from "./actions";
+import { saveAiSettings, saveBusiness, saveIndexNow, saveNotifications, saveResults, saveSeo, saveTracking, saveVerification, submitAllToIndexNow, testAlerts } from "./actions";
 import { channelStatus } from "@/lib/notify";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
     image: sp.og_image ?? "/images/parts/transmission.webp",
   };
   const previewSrc = ogUrl(og);
-  const { tracking, verification, seo, results, business, notifications, indexnow } = s;
+  const { tracking, verification, seo, results, business, notifications, indexnow, ai } = s;
   const channels = channelStatus();
 
   return (
@@ -182,6 +182,22 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
             )}
             {!site.url.startsWith("https://") && <p className="mt-2 text-xs text-amber-700">IndexNow only sends once the site runs on its real https:// address (SITE_URL).</p>}
           </div>
+        </Card>
+
+        <Card title="AI search (ChatGPT, Perplexity, Claude, Google AI)">
+          <form action={saveAiSettings} className="space-y-4">
+            <p className="text-sm leading-relaxed text-road">
+              More people ask AI assistants instead of searching. These settings help them read and quote your site.
+            </p>
+            <Checkbox name="allowSearchBots" defaultChecked={ai.allowSearchBots} label="Let AI assistants read the site to answer questions" hint="ChatGPT search, Perplexity, Claude and others visit pages to answer and link to them. Keep this on: it brings visitors." />
+            <Checkbox name="allowTrainingBots" defaultChecked={ai.allowTrainingBots} label="Allow AI training crawlers" hint="GPTBot, ClaudeBot, Google-Extended and others collect pages to train AI models. Turning this off doesn't affect Google or Bing search results." />
+            <Checkbox name="llmsTxt" defaultChecked={ai.llmsTxt} label="Publish /llms.txt" hint="A plain summary of your site, every state guide and your latest posts, written for AI tools. It updates itself." />
+            <p className="rounded-lg bg-[#F9FAFB] px-3 py-2.5 text-xs leading-relaxed text-road">
+              Check them: <a href="/llms.txt" target="_blank" rel="noreferrer" className="font-semibold text-sky hover:underline">/llms.txt</a> ·{" "}
+              <a href="/robots.txt" target="_blank" rel="noreferrer" className="font-semibold text-sky hover:underline">/robots.txt</a>. Clear answers, FAQs and the &ldquo;Quick answer&rdquo; boxes on state guides are what AI tools quote most.
+            </p>
+            <SectionFooter><button className={btnPrimary}>Save AI settings</button></SectionFooter>
+          </form>
         </Card>
 
         <Card title="SEO for the homepage">

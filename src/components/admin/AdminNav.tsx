@@ -37,6 +37,7 @@ export const NAV: { group: string; items: Item[] }[] = [
     group: "Website",
     items: [
       { href: "/admin/pages", label: "Pages", min: "admin", icon: icon("M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5") },
+      { href: "/admin/states", label: "State guides", min: "admin", icon: icon("M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z") },
       { href: "/admin/menus", label: "Menus", min: "admin", icon: icon("M3 6h18M3 12h18M3 18h12") },
       { href: "/admin/content", label: "Content", min: "admin", icon: icon("M4 4h16v16H4zM8 8h8M8 12h8M8 16h5") },
       { href: "/admin/legal", label: "Legal & privacy", min: "admin", icon: icon("M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM8 21h8") },

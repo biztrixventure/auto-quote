@@ -28,6 +28,9 @@ const SIMPLE: Record<string, string> = {
   menus_updated: "Updated the website menus",
   legal_updated: "Updated legal pages or privacy settings",
   indexnow_submitted: "Sent pages to Bing and Yandex (IndexNow)",
+  state_guide_published: "Published state guide(s)",
+  state_guide_unpublished: "Unpublished a state guide",
+  state_guide_updated: "Edited a state guide",
   privacy_request_updated: "Updated a privacy request",
   profile_updated: "Updated their author profile",
 };

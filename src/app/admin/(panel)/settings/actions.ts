@@ -55,6 +55,15 @@ export async function saveVerification(f: FormData) {
 }
 
 /** Turns IndexNow on or off. A key is created the first time it's turned on. */
+/** Which AI crawlers may read the site, and whether /llms.txt is published. */
+export async function saveAiSettings(f: FormData) {
+  const me = await requireAdmin("admin");
+  const value = { allowSearchBots: f.get("allowSearchBots") === "on", allowTrainingBots: f.get("allowTrainingBots") === "on", llmsTxt: f.get("llmsTxt") === "on" };
+  await saveSetting("ai", value);
+  await audit(me.email, "settings_updated", "setting", "ai", value);
+  back({ saved: "AI search settings saved. robots.txt and llms.txt are updated." });
+}
+
 export async function saveIndexNow(f: FormData) {
   const me = await requireAdmin("admin");
   const { indexnow } = await getSettings();

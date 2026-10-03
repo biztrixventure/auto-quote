@@ -7,6 +7,8 @@ export type TrackingSettings = { ga4Id: string; gtmId: string; metaPixelId: stri
 export type VerificationSettings = { google: string; bing: string; yandex: string; meta: string };
 /** IndexNow tells Bing, Yandex and other engines about new or changed pages right away. */
 export type IndexNowSettings = { enabled: boolean; key: string; lastSubmitted: string; lastResult: string };
+/** AI search: which AI crawlers may read the site, and the /llms.txt summary. */
+export type AiSettings = { allowSearchBots: boolean; allowTrainingBots: boolean; llmsTxt: boolean };
 export type SeoSettings = { title: string; description: string };
 export type ResultsSettings = { disclaimer: string };
 
@@ -105,6 +107,7 @@ export const DEFAULTS = {
   tracking: { ga4Id: "", gtmId: "", metaPixelId: "" } as TrackingSettings,
   verification: { google: "", bing: "", yandex: "", meta: "" } as VerificationSettings,
   indexnow: { enabled: false, key: "", lastSubmitted: "", lastResult: "" } as IndexNowSettings,
+  ai: { allowSearchBots: true, allowTrainingBots: true, llmsTxt: true } as AiSettings,
   seo: { title: "", description: "" } as SeoSettings,
   results: {
     disclaimer:

@@ -414,3 +414,34 @@ model FunnelEvent {
   @@index([createdAt])
   @@unique([sessionId, step])
 }
+
+// One guide page per state at /car-insurance/<slug>. Requirement facts are checked in admin
+// (verifiedAt) before a page can be published.
+model StateGuide {
+  code             String    @id // "TX", "DC"
+  slug             String    @unique // "texas"
+  name             String
+  published        Boolean   @default(false)
+  biPerPerson      Int       @default(0) // bodily injury liability per person, dollars
+  biPerAccident    Int       @default(0)
+  pd               Int       @default(0) // property damage liability
+  noFault          Boolean   @default(false)
+  pipRequired      Boolean   @default(false)
+  pipMinimum       Int?
+  umRequired       Boolean   @default(false)
+  uimRequired      Boolean   @default(false)
+  medPayRequired   Boolean   @default(false)
+  requirementNote  String    @default("")
+  sourceUrl        String    @default("")
+  verifiedAt       DateTime?
+  intro            String    @default("") // optional custom opening paragraph
+  contentHtml      String    @default("") // optional extra section from the rich editor
+  avgAnnualPremium Int? // optional; only with a source
+  premiumSource    String    @default("")
+  seoTitle         String    @default("")
+  seoDescription   String    @default("")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([published])
+}
