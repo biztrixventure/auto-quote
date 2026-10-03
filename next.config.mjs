@@ -28,6 +28,12 @@ const nextConfig = {
   async rewrites() {
     return { beforeFiles: [{ source: "/:key([a-f0-9]{32})\\.txt", destination: "/indexnow.txt/:key" }] };
   },
+  // One address per page: www.<domain> permanently redirects to <domain>, keeping the path and query.
+  async redirects() {
+    return [
+      { source: "/:path*", has: [{ type: "host", value: "www\\.(?<domain>.+)" }], destination: "https://:domain/:path*", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {
