@@ -1,3 +1,4 @@
+import { productLabel } from "./products";
 import { audit } from "./audit";
 import { db } from "./db";
 import { postJson } from "./outbound";
@@ -93,14 +94,16 @@ export async function notifyLead(leadId: string) {
     const urgent = lead.status === "agent_followup";
     if (!n.onNewLead && !(urgent && n.onNoQuotes)) return;
     const v = lead.vehicles[0];
+    const product = productLabel(lead.line);
     await broadcast(
       {
-        subject: `${urgent ? "⚠ Call now: " : ""}New lead — ${lead.firstName} ${lead.lastName} (${lead.state})`,
+        subject: `${urgent ? "⚠ Call now: " : ""}New ${product.toLowerCase()} lead — ${lead.firstName} ${lead.lastName} (${lead.state})`,
         lines: [
           `${lead.firstName} ${lead.lastName} ${STATUS_TEXT[lead.status] ?? `is ${lead.status}`}.`,
+          `Product: ${product}`,
           `Phone: ${lead.phone}${lead.doNotContact ? " (DO NOT CONTACT)" : ""}`,
-          `Location: ${lead.city}, ${lead.state} ${lead.zip}`,
-          v ? `Vehicle: ${v.year} ${v.make} ${v.model}` : "",
+          `Location: ${[lead.city, lead.state].filter(Boolean).join(", ")} ${lead.zip}`,
+          v ? `Vehicle: ${v.year} ${v.make} ${v.model}${v.mileage ? `, ${v.mileage.toLocaleString("en-US")} miles` : ""}` : "",
         ].filter(Boolean),
         link: `${site.url}/admin/leads/${lead.id}`,
       },

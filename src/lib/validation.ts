@@ -91,6 +91,27 @@ export const leadSubmissionSchema = z.object({
   website: z.string().max(200).optional(), // honeypot, must stay empty
 });
 
+// Vehicle service contract quote request: the car, its mileage and how to reach the person.
+// No driving or insurance questions: a service contract isn't priced on the driver.
+export const VSC_MILEAGE = ["25000", "50000", "75000", "100000", "125000", "150000", "200000"] as const;
+export const vscFormSchema = z.object({
+  zip: quoteFormSchema.shape.zip,
+  state: quoteFormSchema.shape.state,
+  vehicleYear: quoteFormSchema.shape.vehicleYear,
+  vehicleMake: quoteFormSchema.shape.vehicleMake,
+  vehicleModel: quoteFormSchema.shape.vehicleModel,
+  mileage: z.enum(VSC_MILEAGE, { message: "Choose the mileage" }),
+  firstName: quoteFormSchema.shape.firstName,
+  lastName: quoteFormSchema.shape.lastName,
+  email: quoteFormSchema.shape.email,
+  phone: quoteFormSchema.shape.phone,
+  consent: quoteFormSchema.shape.consent,
+});
+
+export type VscFormValues = z.infer<typeof vscFormSchema>;
+
+export const vscSubmissionSchema = leadSubmissionSchema.extend({ form: vscFormSchema });
+
 // Which fields belong to which step (used to validate one step at a time).
 export const STEP_FIELDS = {
   location: ["zip", "state"],

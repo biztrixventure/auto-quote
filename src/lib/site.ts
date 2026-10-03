@@ -6,7 +6,7 @@ export const site = {
   // server starts, so changing the domain needs a restart, not a rebuild.
   url: (process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   description:
-    "Compare car insurance quotes from multiple companies with one quick form, and protect your budget from costly repairs. Licensed agents in all 50 states.",
+    "Compare car insurance quotes from several companies, or get a quote on a vehicle service contract for costly repairs. Two separate products, explained clearly.",
   phone: "(800) 555-0142",
   phoneHref: "tel:+18005550142",
   email: "quotes@example.com",
@@ -38,4 +38,9 @@ export const site = {
   consentVersion: "2026-10-01-draft",
   consentText:
     "By clicking “See my quotes”, I agree that Vertex AutoCare and its licensed agents may contact me about insurance at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
+  // Separate consent for the vehicle service contract form: it names that product, not insurance.
+  // Also a placeholder for the lawyer, versioned the same way.
+  vscConsentVersion: "2026-10-03-draft",
+  vscConsentText:
+    "By clicking “Get my quote”, I agree that Vertex AutoCare and the vehicle service contract providers it works with may contact me about vehicle service contracts at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
 };

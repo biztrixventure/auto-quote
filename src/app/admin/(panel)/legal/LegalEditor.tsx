@@ -81,7 +81,7 @@ export function LegalEditor({ initial, templates, defaults }: { initial: LegalSe
       )}
       {!s.reviewed && (
         <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          <strong>Have an attorney review these documents.</strong> They are a solid starting template for a car insurance and warranty lead website, but the law depends on your licenses, states and partners. When your attorney approves them, tick &ldquo;Reviewed by our attorney&rdquo; in Privacy settings.
+          <strong>Have an attorney review these documents.</strong> They are a solid starting template for a car insurance and vehicle service contract lead website, but the law depends on your licenses, states and partners. When your attorney approves them, tick &ldquo;Reviewed by our attorney&rdquo; in Privacy settings.
         </div>
       )}
 

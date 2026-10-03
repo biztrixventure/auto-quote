@@ -1,3 +1,5 @@
+import { ProductBadge } from "@/components/admin/ProductBadge";
+import { productLabel, productOf } from "@/lib/products";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
@@ -71,6 +73,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
   const d = lead.drivers.find((x) => x.isPrimary) ?? lead.drivers[0];
   const v = lead.vehicles[0];
   const driverAge = d ? age(d.dateOfBirth) : null;
+  const isVsc = productOf(lead.line) === "vsc";
 
   return (
     <>
@@ -91,11 +94,12 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
                 {lead.firstName} {lead.lastName}
               </h1>
               <StatusBadge status={lead.status} />
+              <ProductBadge line={lead.line} />
               {lead.doNotContact && <span className="rounded-full bg-red-600 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">Do not contact</span>}
               {lead.doNotSell && <span title="Opted out of sale/sharing: never sent to lead buyers" className="rounded-full bg-sky px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">Do not sell</span>}
             </div>
             <p className="mt-1 text-sm text-road">
-              {lead.city}, {lead.state} {lead.zip} · Received {timeAgo(lead.createdAt)} ({dateTime(lead.createdAt)})
+              {[lead.city, lead.state].filter(Boolean).join(", ")} {lead.zip} · Received {timeAgo(lead.createdAt)} ({dateTime(lead.createdAt)})
             </p>
           </div>
         </div>
@@ -191,13 +195,14 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
               <dl className="-my-2.5 divide-y divide-[#EEF0F3]">
                 <Field label="Phone"><a className="text-sky hover:underline" href={`tel:${lead.phone}`}>{lead.phone}</a></Field>
                 <Field label="Email"><a className="text-sky hover:underline" href={`mailto:${lead.email}`}>{lead.email}</a></Field>
-                <Field label="Address">{`${lead.address}, ${lead.city}, ${lead.state} ${lead.zip}`}</Field>
-                <Field label="Insured now">{lead.currentlyInsured ? `Yes${lead.currentCarrier ? ` · ${lead.currentCarrier}` : ""}` : "No"}</Field>
-                <Field label="Coverage wanted">{label(lead.coverageLevel)}</Field>
+                <Field label="Address">{[lead.address, lead.city, `${lead.state} ${lead.zip}`].filter(Boolean).join(", ")}</Field>
+                {!isVsc && <Field label="Insured now">{lead.currentlyInsured ? `Yes${lead.currentCarrier ? ` · ${lead.currentCarrier}` : ""}` : "No"}</Field>}
+                {!isVsc && <Field label="Coverage wanted">{label(lead.coverageLevel)}</Field>}
+                <Field label="Product">{productLabel(lead.line)}</Field>
               </dl>
             </Card>
 
-            <Card title="Driver and vehicle">
+            <Card title={isVsc ? "Vehicle" : "Driver and vehicle"}>
               <dl className="-my-2.5 divide-y divide-[#EEF0F3]">
                 {d && <Field label="Driver">{`${d.firstName} ${d.lastName}${driverAge !== null ? `, ${driverAge}` : ""}`}</Field>}
                 {d && <Field label="Details">{[label(d.gender), label(d.maritalStatus), `born ${d.dateOfBirth}`].filter(Boolean).join(" · ")}</Field>}
@@ -208,12 +213,13 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
                   </Field>
                 )}
                 {v && <Field label="Vehicle">{`${v.year} ${v.make} ${v.model}`}</Field>}
-                {v && <Field label="Use">{`${label(v.ownership)} · ${label(v.primaryUse)} · ${v.annualMiles.toLocaleString()} mi/yr`}</Field>}
+                {v && !isVsc && <Field label="Use">{`${label(v.ownership)} · ${label(v.primaryUse)} · ${v.annualMiles.toLocaleString()} mi/yr`}</Field>}
+                {v?.mileage ? <Field label="Mileage">{`${v.mileage.toLocaleString()} miles`}</Field> : null}
               </dl>
             </Card>
           </div>
 
-          <Card title={`Quotes (${lead.quotes.length})`}>
+          {!isVsc && <Card title={`Quotes (${lead.quotes.length})`}>
             {lead.quotes.length === 0 ? (
               <p className="text-sm text-road">No quotes returned for this lead.</p>
             ) : (
@@ -242,7 +248,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
                 </table>
               </div>
             )}
-          </Card>
+          </Card>}
 
           <div className="grid gap-6 lg:grid-cols-2">
             <Card title="Consent record">

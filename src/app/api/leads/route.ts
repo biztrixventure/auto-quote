@@ -1,51 +1,19 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/audit";
-import { visitorOptedOut } from "@/lib/legal";
+import { contactFlags, readLeadRequest, recentDuplicate } from "@/lib/lead-intake";
 import { getSettings, getSite } from "@/lib/settings";
 import { digitsOnly, leadSubmissionSchema } from "@/lib/validation";
 import { routeLead } from "@/lib/integrations/router";
 import { notifyLead } from "@/lib/notify";
-import { rateLimit } from "@/lib/rate-limit";
-import { clientIp } from "@/lib/security";
 
 export const runtime = "nodejs";
 
-const MAX_BODY_BYTES = 32 * 1024;
-
+// Car insurance quote requests. Service contract requests go to /api/vsc-leads.
 export async function POST(req: NextRequest) {
-  // Only accept submissions sent by this website's own pages.
-  const origin = req.headers.get("origin");
-  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
-  if (origin) {
-    let originHost = "";
-    try {
-      originHost = new URL(origin).host;
-    } catch {}
-    if (!host || originHost !== host) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
-  if (!req.headers.get("content-type")?.includes("application/json")) {
-    return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
-  }
-
-  const ip = clientIp(req.headers);
-  const burst = rateLimit(`lead:10m:${ip}`, 5, 10 * 60 * 1000);
-  const daily = rateLimit(`lead:day:${ip}`, 20, 24 * 60 * 60 * 1000);
-  if (!burst.ok || !daily.ok) {
-    return NextResponse.json(
-      { error: "Too many submissions. Please wait a few minutes or call us." },
-      { status: 429, headers: { "Retry-After": String(burst.ok ? daily.retryAfter : burst.retryAfter) } },
-    );
-  }
-
-  const raw = await req.text();
-  if (raw.length > MAX_BODY_BYTES) return NextResponse.json({ error: "Request too large" }, { status: 413 });
-  let body: unknown;
-  try {
-    body = JSON.parse(raw);
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const request = await readLeadRequest(req);
+  if (request instanceof NextResponse) return request;
+  const { body, ip } = request;
 
   const parsed = leadSubmissionSchema.safeParse(body);
   if (!parsed.success) {
@@ -69,27 +37,18 @@ export async function POST(req: NextRequest) {
   const email = form.email.toLowerCase();
 
   // Simple duplicate protection: same phone or email in the last 24 hours.
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const existing = await db.lead.findFirst({
-    where: { createdAt: { gte: since }, OR: [{ phone }, { email }] },
-    select: { id: true },
-  });
+  const existing = await recentDuplicate("auto", phone, email);
   if (existing) {
-    await audit("api", "duplicate_submission", "lead", existing.id);
-    return NextResponse.json({ id: existing.id, duplicate: true });
+    await audit("api", "duplicate_submission", "lead", existing);
+    return NextResponse.json({ id: existing, duplicate: true });
   }
 
-  // People on the do-not-contact or do-not-sell lists can still submit, but the lead is flagged.
-  // A Global Privacy Control signal or our opt-out cookie also counts as a do-not-sell request.
-  const [lists, { legal }] = await Promise.all([
-    db.suppression.findMany({ where: { OR: [{ email }, { phone }] }, select: { type: true } }),
-    getSettings(),
-  ]);
-  const suppressed = lists.some((s) => s.type === "dnc");
-  const doNotSell = lists.some((s) => s.type === "do_not_sell") || (await visitorOptedOut(legal.honorGpc));
+  const { legal } = await getSettings();
+  const { doNotContact, doNotSell } = await contactFlags(email, phone, legal.honorGpc);
 
   const lead = await db.lead.create({
     data: {
+      line: "auto",
       firstName: form.firstName,
       lastName: form.lastName,
       email,
@@ -104,7 +63,7 @@ export async function POST(req: NextRequest) {
       ...tracking,
       ipAddress,
       userAgent,
-      doNotContact: suppressed,
+      doNotContact,
       doNotSell,
       trustedFormCertUrl: trustedFormCertUrl || null,
       drivers: {

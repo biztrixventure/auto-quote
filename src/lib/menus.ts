@@ -109,7 +109,9 @@ export async function linkOptions(): Promise<LinkGroup[]> {
       group: "Main pages",
       items: [
         { label: "Home", href: "/" },
-        { label: "Get a quote", href: "/quote/auto" },
+        { label: "Get a quote (choose product)", href: "/quote" },
+        { label: "Car insurance quote", href: "/quote/auto" },
+        { label: "Service contract quote", href: "/quote/vehicle-protection" },
         { label: "Repair costs", href: "/repair-costs" },
         { label: "Why us", href: "/why-us" },
         { label: "FAQ", href: "/faq" },

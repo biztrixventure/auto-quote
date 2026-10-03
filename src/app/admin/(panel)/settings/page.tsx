@@ -65,11 +65,18 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
               <textarea id="b-license" name="licenseNote" defaultValue={business.licenseNote} maxLength={400} rows={2} className={`${inputCls} h-auto py-2.5`} />
             </FormField>
             <FormField
-              label="Consent text shown above “See my quotes”"
+              label="Car insurance consent (shown above “See my quotes”)"
               htmlFor="b-consent"
               hint={<>Current version: <strong className="text-asphalt">{business.consentVersion}</strong>. Changing the wording creates a new version automatically, so every lead records exactly what it agreed to. Have your lawyer approve this text.</>}
             >
               <textarea id="b-consent" name="consentText" defaultValue={business.consentText} maxLength={2000} rows={6} required className={`${inputCls} h-auto py-2.5`} />
+            </FormField>
+            <FormField
+              label="Service contract consent (shown above “Get my quote” on the vehicle service contract form)"
+              htmlFor="b-vsc-consent"
+              hint={<>Current version: <strong className="text-asphalt">{business.vscConsentVersion}</strong>. Must name vehicle service contracts, not insurance. Have your lawyer approve this text too.</>}
+            >
+              <textarea id="b-vsc-consent" name="vscConsentText" defaultValue={business.vscConsentText} maxLength={2000} rows={6} required className={`${inputCls} h-auto py-2.5`} />
             </FormField>
             <SectionFooter><button className={btnPrimary}>Save business details</button></SectionFooter>
           </form>

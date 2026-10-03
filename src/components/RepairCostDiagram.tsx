@@ -89,7 +89,7 @@ export function RepairCostDiagram({ costs = {} }: { costs?: Record<string, strin
         <div className="mx-auto mt-5 grid h-40 place-items-center">
           <img src={part.image} alt={part.name} loading="lazy" decoding="async" className="max-h-40 w-auto max-w-full object-contain" />
         </div>
-        <p className="mt-5 text-lg text-road">Average Out of Pocket Cost without Coverage</p>
+        <p className="mt-5 text-lg text-road">Average Out-of-Pocket Repair Cost</p>
         <p className="mt-1 text-3xl font-bold sm:text-4xl">{priceOf(part)}</p>
       </div>
       {/* Warm the other part photos once the diagram is near, so switching parts is instant. */}

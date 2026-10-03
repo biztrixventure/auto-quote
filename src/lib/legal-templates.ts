@@ -95,7 +95,7 @@ export const DEFAULT_TERMS_HTML = `
 <p>These Terms of Use apply to your use of {site_url} and any services offered on it by {legal_name} (“{company}”, “we”, “us”). By using this website you agree to these terms. If you do not agree, please do not use the website.</p>
 
 <h2>Our service</h2>
-<p>{company} helps drivers compare car insurance quotes and vehicle protection options and connects them with licensed agents, insurance companies and service-contract providers. We are not an insurance company. Prices shown on this website are estimates based on the information you provide. Your final price, coverage and eligibility are decided by the insurance company or provider after it reviews your application, driving record and other details.</p>
+<p>{company} offers two separate services: it helps drivers compare car insurance quotes and connects them with licensed agents and insurance companies, and it provides quotes for vehicle service contracts from service-contract providers. We are not an insurance company. Prices shown on this website are estimates based on the information you provide. For car insurance, your final price, coverage and eligibility are decided by the insurance company after it reviews your application, driving record and other details. For a vehicle service contract, the price, what is included and eligibility are set by the provider.</p>
 
 <h2>Eligibility</h2>
 <p>You must be at least 18 years old and live in the United States to use our services.</p>
@@ -107,7 +107,7 @@ export const DEFAULT_TERMS_HTML = `
 <p>Quotes, plans and offers come from third parties. We do not guarantee that you will receive a quote, that a quote will be the lowest available, or that any company will offer you coverage. Your relationship with an insurance company or provider is governed by its own policy, contract and terms.</p>
 
 <h2>Vehicle service contracts</h2>
-<p>Extended vehicle protection plans (vehicle service contracts) are not insurance. Coverage, exclusions, deductibles, waiting periods and cancellation rights are set by the contract you sign with the provider. Please read it carefully.</p>
+<p>Vehicle service contracts (sometimes called extended car warranties) are not insurance. What a contract includes, its exclusions, deductibles, waiting periods and cancellation rights are set by the contract you sign with the provider. Please read it carefully.</p>
 
 <h2>Acceptable use</h2>
 <ul>

@@ -26,18 +26,19 @@ export async function GET() {
     `> ${line(biz.description)}`,
     "",
     line(
-      `${biz.name} helps US drivers compare car insurance quotes from several companies with one form, and offers extended vehicle protection (vehicle service contracts) for repair costs. ` +
-        `Licensed agents are available at ${biz.phone}. ${biz.licenseNote}`,
+      `${biz.name} offers two separate products to US drivers. Car insurance: compare quotes from several insurance companies with one form (${biz.licenseNote}). ` +
+        `Vehicle service contracts (often called extended car warranties): optional contracts that pay for repairs to listed parts; they are not insurance. Phone: ${biz.phone}.`,
     ),
     "",
     "## Main pages",
     `- [Get a free car insurance quote](${u("/quote/auto")}): one short form to compare prices from several insurance companies.`,
-    `- [Car repair costs](${u("/repair-costs")}): typical costs of common car repairs without coverage.`,
+    `- [Get a vehicle service contract quote](${u("/quote/vehicle-protection")}): plan options and prices for help with repair bills.`,
+    `- [Car repair costs](${u("/repair-costs")}): typical out-of-pocket costs of common car repairs.`,
     `- [Why choose ${biz.name}](${u("/why-us")}): ${line(fillCompany(content.whyIntro)).slice(0, 200)}`,
-    `- [Frequently asked questions](${u("/faq")}): extended car warranties and car insurance explained.`,
+    `- [Vehicle service contract FAQ](${u("/faq")}): what a service contract includes and how it differs from car insurance.`,
   ];
   if (guides.length) out.push(`- [Car insurance requirements by state](${u("/car-insurance")}): minimum coverage and no-fault rules for each state.`);
-  out.push(`- [Blog](${u("/blog")}): guides on car insurance, extended warranties and repair costs.`);
+  out.push(`- [Blog](${u("/blog")}): guides on car insurance, vehicle service contracts and repair costs.`);
 
   if (guides.length) {
     out.push("", "## Car insurance requirements by state");

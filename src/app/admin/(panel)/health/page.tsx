@@ -46,7 +46,8 @@ export default async function HealthPage() {
     /555-01\d\d/.test(b.phone) && "phone number",
     /example\.com$/i.test(b.email) && "email",
     /0000000/.test(b.licenseNote) && "license number",
-    /draft/i.test(b.consentVersion) && "consent text (draft)",
+    /draft/i.test(b.consentVersion) && "car insurance consent text (draft)",
+    /draft/i.test(b.vscConsentVersion) && "service contract consent text (draft)",
   ].filter(Boolean) as string[];
   const alertsOn = !!(n.webhookUrl || (ch.email && n.emailTo) || (ch.sms && n.smsTo));
   const distMode = process.env.LEAD_DISTRIBUTION === "off" ? "nothing (off)" : process.env.LEAD_DISTRIBUTION === "webhook" ? "the .env webhook" : "demo mode";

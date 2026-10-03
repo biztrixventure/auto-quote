@@ -4,6 +4,7 @@ import { RepairCostDiagram } from "@/components/RepairCostDiagram";
 import { Reveal } from "@/components/Reveal";
 import { WhyChooseCarousel } from "@/components/WhyChooseCarousel";
 import { ZipStart } from "@/components/ZipStart";
+import { PRODUCTS, VSC_DISCLOSURE, type ProductLine } from "@/lib/products";
 import { jsonLd } from "@/lib/security";
 import { fillCompany, type ContentSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
@@ -54,8 +55,9 @@ export function RepairCostsSection({ costs, bare = false }: { costs: ContentSett
       <div className="mx-auto max-w-6xl px-5 py-14 text-center md:py-16">
         {!bare && (
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">What Would Your Next Repair Cost?</h2>
-            <p className="mt-4 text-lg leading-relaxed text-road">Select any part of the car below to see what a typical repair costs without coverage.</p>
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">{PRODUCTS.vsc.label}</p>
+            <h2 className="mt-2 text-3xl font-extrabold leading-tight sm:text-4xl">What Would Your Next Repair Cost?</h2>
+            <p className="mt-4 text-lg leading-relaxed text-road">Select any part of the car below to see what a typical repair costs out of pocket, without a service contract.</p>
           </div>
         )}
         <RepairCostDiagram costs={costs} />
@@ -64,7 +66,7 @@ export function RepairCostsSection({ costs, bare = false }: { costs: ContentSett
           <a href="https://www.consumeraffairs.com/" target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-sky">
             www.consumeraffairs.com
           </a>
-          ). Costs shown are estimates only and may vary by vehicle, location, and repair facility. Coverage and benefits are subject to plan terms, conditions, and exclusions.
+          ). Costs shown are estimates only and may vary by vehicle, location, and repair facility. {VSC_DISCLOSURE}
         </p>
       </div>
     </section>
@@ -77,7 +79,8 @@ export function WhyChooseSection({ intro, reasons, bare = false }: { intro: stri
       <div className="mx-auto max-w-6xl px-5 py-14 md:py-20">
         {!bare && (
           <Reveal className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">Why Choose {site.name}</h2>
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">{PRODUCTS.vsc.label}s</p>
+            <h2 className="mt-2 text-3xl font-extrabold leading-tight sm:text-4xl">Why Choose {site.name}</h2>
             <p className="mt-5 text-lg leading-relaxed text-road">{fillCompany(intro)}</p>
           </Reveal>
         )}
@@ -89,8 +92,11 @@ export function WhyChooseSection({ intro, reasons, bare = false }: { intro: stri
 
 export type Faq = { q: string; a: string; call?: boolean };
 
-/** FAQ list. `withSchema` adds FAQ data for Google; use it on one page only (/faq). */
-export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = false }: { faqs: Faq[]; phone: string; phoneHref: string; bare?: boolean; withSchema?: boolean }) {
+/**
+ * FAQ list (the editable FAQs are about vehicle service contracts, so the call to action is that
+ * quote). `withSchema` adds FAQ data for Google; use it on one page only (/faq).
+ */
+export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = false, title = "Vehicle Service Contract FAQ" }: { faqs: Faq[]; phone: string; phoneHref: string; bare?: boolean; withSchema?: boolean; title?: string }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -127,19 +133,19 @@ export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = 
             <aside className="h-fit rounded-2xl border border-rail p-6">
               <p className="text-lg font-bold">Still have a question?</p>
               <p className="mt-2 leading-relaxed text-road">
-                Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and a licensed agent will help.
+                Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and our team will help.
               </p>
-              <Link href="/quote/auto" className="btn-primary mt-5 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get a free quote</Link>
+              <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-5 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</Link>
             </aside>
           </>
         ) : (
           <>
             <div>
-              <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">Frequently Asked Questions</h2>
+              <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">{title}</h2>
               <p className="mt-3 max-w-sm leading-relaxed text-road">
-                Still unsure? Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and a licensed agent will help.
+                Still unsure? Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and our team will help.
               </p>
-              <a href="/quote/auto" className="btn-primary mt-6 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get a free quote</a>
+              <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-6 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</a>
             </div>
             {list}
           </>
@@ -149,24 +155,36 @@ export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = 
   );
 }
 
-/** Blue quote box with the ZIP start, used at the bottom of most pages. */
-export function QuoteBanner() {
+/**
+ * Blue quote box at the bottom of most pages. `product` picks which quote it offers: car insurance
+ * (ZIP start) or a vehicle service contract. Pages about repairs use "vsc".
+ */
+export function QuoteBanner({ product = "auto" }: { product?: ProductLine }) {
+  const vsc = product === "vsc";
   return (
     <section className="mx-auto max-w-6xl px-5 pt-4">
       <Reveal className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(120deg,#0B2F5B_0%,#1F5FAD_55%,#3D8FDB_100%)] px-6 pb-14 pt-10 text-white sm:px-12 md:pb-16 md:pt-14">
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(255,255,255,0.18),transparent_45%)]" />
         <div className="relative grid items-center gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.14em] text-line">Free · No obligation</p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">See what you could pay for car insurance today.</h2>
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-line">{PRODUCTS[product].label} · Free · No obligation</p>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">
+              {vsc ? "Get a price on help with repair bills." : "See what you could pay for car insurance today."}
+            </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-white/85">
-              Compare prices from several insurance companies with one quick form, or call a licensed agent for help.
+              {vsc
+                ? "Tell us about your car and we'll contact you with vehicle service contract options and prices."
+                : "Compare prices from several insurance companies with one quick form, or call a licensed agent for help."}
             </p>
           </div>
           <div>
-            <ZipStart dark />
+            {vsc ? (
+              <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary inline-flex bg-line text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</Link>
+            ) : (
+              <ZipStart dark />
+            )}
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-white/90">
-              {["Takes about 5 minutes", "Free to compare", "Licensed in all 50 states"].map((t) => (
+              {(vsc ? ["Free quote", "Any ASE-certified shop", "Not insurance"] : ["Takes about 5 minutes", "Free to compare", "Licensed in all 50 states"]).map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <span aria-hidden className="grid h-5 w-5 place-items-center rounded-full bg-white/15 text-line">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>

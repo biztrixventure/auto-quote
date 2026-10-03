@@ -3,7 +3,7 @@ export const STATUS_LABELS: Record<string, string> = {
   quoted: "Quoted",
   agent_followup: "Needs agent",
   sold_lead: "Lead sold",
-  bound: "Policy sold",
+  bound: "Sold",
   unsold: "Closed, not sold",
 };
 

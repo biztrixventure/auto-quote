@@ -4,15 +4,16 @@ import type { ReactNode } from "react";
 import { CustomerReviews } from "@/components/CustomerReviews";
 import { Reveal } from "@/components/Reveal";
 import { PageHero, QuoteBanner } from "@/components/sections";
+import { PRODUCTS } from "@/lib/products";
 import { ogMetadata } from "@/lib/og";
 import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 const title = `Why Choose ${site.name}`;
-const description = `Why drivers trust ${site.name} for car repair coverage: any ASE-certified shop, flexible plans, licensed agents and a 30-day money-back guarantee.`;
+const description = `Why drivers choose a ${site.name} vehicle service contract: any ASE-certified shop, flexible plans, real people on the phone and a 30-day money-back guarantee.`;
 
 export const metadata: Metadata = {
-  title: "Why Choose Us for Car Repair Coverage",
+  title: "Why Choose Our Vehicle Service Contracts",
   description,
   alternates: { canonical: "/why-us" },
   ...ogMetadata({ eyebrow: "Why us", title, subtitle: description, image: "/images/why-us/car-warranty-agent-1024.webp" }, { url: "/why-us", title: `${title} | ${site.name}`, description }),
@@ -31,9 +32,9 @@ const REASON_ICONS = [
 
 const STEPS = [
   { title: "Tell us about your car", body: "Year, make, model and mileage. It takes about two minutes." },
-  { title: "Compare your options", body: "See plans side by side, from essential to complete coverage." },
+  { title: "Compare your options", body: "See plan levels side by side, from essential to most complete." },
   { title: "Get your price", body: "A clear monthly price with the deductible shown up front." },
-  { title: "Drive protected", body: "Covered repairs are handled with the shop, not by you." },
+  { title: "Drive protected", body: "Repairs to listed parts are handled with the shop, not by you." },
 ];
 
 const COVERED = ["Engine", "Transmission", "Cooling system", "Brakes", "Electrical", "Drive axle", "A/C", "Roadside help", "Trip interruption"];
@@ -65,7 +66,7 @@ export default async function WhyUsPage() {
               <source type="image/webp" srcSet="/images/why-us/car-warranty-agent-640.webp 640w, /images/why-us/car-warranty-agent-1024.webp 1024w, /images/why-us/car-warranty-agent-1600.webp 1600w" sizes="(min-width: 1024px) 560px, 100vw" />
               <img
                 src="/images/why-us/car-warranty-agent-1024.webp"
-                alt={`${site.name} agent explaining car repair coverage options to a couple at a car dealership`}
+                alt={`${site.name} agent explaining vehicle service contract options to a couple at a car dealership`}
                 width={1600}
                 height={1067}
                 fetchPriority="high"
@@ -75,7 +76,7 @@ export default async function WhyUsPage() {
             </picture>
             <span className="absolute -left-2 top-6 flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-asphalt shadow-[0_12px_30px_rgba(16,24,40,0.14)] sm:-left-5">
               <span aria-hidden className="grid h-7 w-7 place-items-center rounded-full bg-line text-asphalt">{icon("M20 6 9 17l-5-5")}</span>
-              Licensed agents
+              Real people on the phone
             </span>
             <span className="absolute -right-2 bottom-6 flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-asphalt shadow-[0_12px_30px_rgba(16,24,40,0.14)] sm:-right-5">
               <span aria-hidden className="grid h-7 w-7 place-items-center rounded-full bg-asphalt text-line">{icon("M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z")}</span>
@@ -85,7 +86,7 @@ export default async function WhyUsPage() {
         }
       >
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/quote/auto" className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">Get a free quote</Link>
+          <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</Link>
           <a href={biz.phoneHref} className="btn-secondary">Call {biz.phone}</a>
         </div>
       </PageHero>
@@ -150,7 +151,7 @@ export default async function WhyUsPage() {
                 </div>
                 <p className="mt-6 text-3xl font-extrabold leading-tight text-asphalt">The parts that cost the most to fix</p>
                 <p className="mt-3 leading-relaxed text-road">
-                  A vehicle service contract pays for covered mechanical and electrical failures after your factory warranty ends. Choose the level of coverage that fits your car and your budget.
+                  A vehicle service contract pays for mechanical and electrical failures of the parts it lists after your factory warranty ends. Choose the plan level that fits your car and your budget.
                 </p>
                 <ul className="mt-6 flex flex-wrap gap-2">
                   {COVERED.map((c) => (
@@ -169,10 +170,10 @@ export default async function WhyUsPage() {
                   <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></svg>
                 </span>
                 <h2 className="mt-6 text-xl font-bold text-asphalt">Real people, real answers</h2>
-                <p className="mt-2 leading-relaxed text-road">Talk to a licensed agent who explains your options in plain English. No pressure, no obligation.</p>
+                <p className="mt-2 leading-relaxed text-road">Talk to our team, who explain your options in plain English. No pressure, no obligation.</p>
                 <a href={biz.phoneHref} className="mt-6 text-2xl font-extrabold tracking-tight text-asphalt hover:text-sky">{biz.phone}</a>
                 <div className="mt-auto w-full pt-6">
-                  <Link href="/quote/auto" className="btn-primary w-full bg-line text-asphalt hover:bg-[#E3B21F]">Get my free quote</Link>
+                  <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary w-full bg-line text-asphalt hover:bg-[#E3B21F]">Get my free quote</Link>
                 </div>
               </Panel>
             </Tile>
@@ -184,14 +185,14 @@ export default async function WhyUsPage() {
       <section className="bg-[#F7F9FC]">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-2 md:gap-14 md:py-20">
           <Reveal>
-            <h2 className="text-3xl font-extrabold leading-tight text-asphalt sm:text-4xl">Extended car warranty or car insurance: what&apos;s the difference?</h2>
+            <h2 className="text-3xl font-extrabold leading-tight text-asphalt sm:text-4xl">Vehicle service contract or car insurance: what&apos;s the difference?</h2>
           </Reveal>
           <Reveal delay={100} className="space-y-4 text-[17px] leading-relaxed text-road">
             <p>
-              <strong className="text-asphalt">Car insurance</strong> pays after an accident, theft or weather damage, and most states require it. An <strong className="text-asphalt">extended car warranty</strong>, also called a vehicle service contract, pays when a covered part breaks down on its own, such as an engine, transmission or A/C failure.
+              <strong className="text-asphalt">Car insurance</strong> pays after an accident, theft or weather damage, and most states require it. A <strong className="text-asphalt">vehicle service contract</strong>, often called an extended car warranty, is not insurance: it pays when a part listed in the contract breaks down on its own, such as an engine, transmission or A/C failure.
             </p>
             <p>
-              Many drivers carry both: insurance for the unexpected on the road, and repair coverage for the bills that come with age and mileage. {site.name} helps you compare options for each in one place.
+              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. {site.name} offers a separate quote for each.
             </p>
             <p>
               Have questions? Read our <Link href="/faq" className="font-semibold text-sky underline-offset-2 hover:underline">frequently asked questions</Link>, check <Link href="/repair-costs" className="font-semibold text-sky underline-offset-2 hover:underline">what common repairs cost</Link>, or browse helpful guides on the <Link href="/blog" className="font-semibold text-sky underline-offset-2 hover:underline">{site.name} blog</Link>.
@@ -201,7 +202,7 @@ export default async function WhyUsPage() {
       </section>
 
       <CustomerReviews />
-      <QuoteBanner />
+      <QuoteBanner product="vsc" />
     </>
   );
 }

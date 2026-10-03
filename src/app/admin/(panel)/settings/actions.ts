@@ -110,15 +110,19 @@ export async function saveBusiness(f: FormData) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) back({ error: "Enter a valid email address." });
   const consentText = String(f.get("consentText") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 2000);
   if (consentText.length < 40) back({ error: "The consent text looks too short. Paste the full wording from your lawyer." });
+  const vscConsentText = String(f.get("vscConsentText") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 2000);
+  if (vscConsentText.length < 40) back({ error: "The service contract consent text looks too short. Paste the full wording from your lawyer." });
 
   const { business: current } = await getSettings();
-  let consentVersion = current.consentVersion;
   // Any change to the consent wording gets a new version, so each lead records exactly what it agreed to.
-  if (consentText !== current.consentText) {
+  const nextVersion = (text: string, oldText: string, oldVersion: string) => {
+    if (text === oldText) return oldVersion;
     const today = new Date().toISOString().slice(0, 10);
-    const n = current.consentVersion.startsWith(today) ? Number(current.consentVersion.split("-v")[1] ?? 1) + 1 : 1;
-    consentVersion = `${today}-v${n}`;
-  }
+    const n = oldVersion.startsWith(today) ? Number(oldVersion.split("-v")[1] ?? 1) + 1 : 1;
+    return `${today}-v${n}`;
+  };
+  const consentVersion = nextVersion(consentText, current.consentText, current.consentVersion);
+  const vscConsentVersion = nextVersion(vscConsentText, current.vscConsentText, current.vscConsentVersion);
   const value = {
     phone: `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`,
     email,
@@ -126,10 +130,17 @@ export async function saveBusiness(f: FormData) {
     licenseNote: val(f, "licenseNote").slice(0, 400),
     consentText,
     consentVersion,
+    vscConsentText,
+    vscConsentVersion,
   };
   await saveSetting("business", value);
-  await audit(me.email, "settings_updated", "setting", "business", { ...value, consentText: consentText === current.consentText ? "(unchanged)" : "(changed)" });
-  back({ saved: consentVersion !== current.consentVersion ? `Business details saved. Consent text is now version ${consentVersion}.` : "Business details saved." });
+  await audit(me.email, "settings_updated", "setting", "business", {
+    ...value,
+    consentText: consentText === current.consentText ? "(unchanged)" : "(changed)",
+    vscConsentText: vscConsentText === current.vscConsentText ? "(unchanged)" : "(changed)",
+  });
+  const changed = [consentVersion !== current.consentVersion && `car insurance consent is now version ${consentVersion}`, vscConsentVersion !== current.vscConsentVersion && `service contract consent is now version ${vscConsentVersion}`].filter(Boolean);
+  back({ saved: changed.length ? `Business details saved; ${changed.join(" and ")}.` : "Business details saved." });
 }
 
 export async function saveNotifications(f: FormData) {

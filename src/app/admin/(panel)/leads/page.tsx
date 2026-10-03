@@ -4,11 +4,13 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { hasRole } from "@/lib/auth";
 import { PAGE_SIZE, leadWhere } from "@/lib/admin-leads";
 import { STATUS_LABELS } from "@/components/admin/statuses";
+import { ProductBadge } from "@/components/admin/ProductBadge";
+import { PRODUCTS } from "@/lib/products";
 import { PageHeader, StatusBadge, btnPrimary, btnSecondary, dateTime, money, timeAgo } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
 
-type Search = { q?: string; status?: string; page?: string; assigned?: string };
+type Search = { q?: string; status?: string; page?: string; assigned?: string; product?: string };
 
 export default async function LeadsPage({ searchParams }: { searchParams: Promise<Search> }) {
   const me = await requireAdmin();
@@ -18,8 +20,9 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
   const assignedTo = assigned === "me" ? me.id : assigned === "none" ? null : undefined;
   const q = sp.q?.trim() || undefined;
   const status = sp.status && sp.status in STATUS_LABELS ? sp.status : undefined;
+  const product = sp.product === "auto" || sp.product === "vsc" ? sp.product : undefined;
   const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
-  const where = leadWhere({ q, status, assignedTo });
+  const where = leadWhere({ q, status, assignedTo, product });
 
   const [total, leads, statusCounts, allCount] = await Promise.all([
     db.lead.count({ where }),
@@ -30,14 +33,14 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
       take: PAGE_SIZE,
       include: { quotes: { select: { monthlyPremium: true } }, vehicles: { take: 1 }, assignedTo: { select: { name: true } } },
     }),
-    db.lead.groupBy({ by: ["status"], where: leadWhere({ q, assignedTo }), _count: true }),
-    db.lead.count({ where: leadWhere({ q, assignedTo }) }),
+    db.lead.groupBy({ by: ["status"], where: leadWhere({ q, assignedTo, product }), _count: true }),
+    db.lead.count({ where: leadWhere({ q, assignedTo, product }) }),
   ]);
 
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const query = (over: Partial<Search>) => {
     const p = new URLSearchParams();
-    const merged: Search = { q, status, assigned, page: undefined, ...over };
+    const merged: Search = { q, status, assigned, product, page: undefined, ...over };
     for (const [k, v] of Object.entries(merged)) if (v) p.set(k, v);
     return p.toString();
   };
@@ -70,6 +73,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
           <form action="/admin/leads" className="flex gap-2" role="search">
             {status && <input type="hidden" name="status" value={status} />}
             {assigned && <input type="hidden" name="assigned" value={assigned} />}
+            {product && <input type="hidden" name="product" value={product} />}
             <label htmlFor="lead-search" className="sr-only">Search leads</label>
             <div className="relative flex-1 sm:max-w-md">
               <svg aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-road/60" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
@@ -84,6 +88,18 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
             <button className={btnPrimary}>Search</button>
             {q && <Link href={href({ q: undefined })} className={btnSecondary}>Clear</Link>}
           </form>
+          <nav aria-label="Filter by product" className="flex flex-wrap gap-1 text-sm">
+            {([[undefined, "All products"], ["auto", PRODUCTS.auto.label], ["vsc", PRODUCTS.vsc.label]] as const).map(([k, label]) => (
+              <Link
+                key={label}
+                href={href({ product: k })}
+                aria-current={product === k ? "page" : undefined}
+                className={`rounded-lg border px-3 py-1.5 font-medium ${product === k ? "border-sky bg-sky/5 text-sky" : "border-[#E4E7EC] text-road hover:bg-[#F9FAFB]"}`}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
           <nav aria-label="Filter by owner" className="flex gap-1 text-sm">
             {([[undefined, "Everyone"], ["me", "My leads"], ["none", "Unassigned"]] as const).map(([k, label]) => (
               <Link
@@ -120,7 +136,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
           <table className="w-full min-w-[900px] text-left text-sm">
             <thead className="bg-[#F9FAFB] text-xs uppercase tracking-wide text-road">
               <tr>
-                {["Lead", "Phone", "Location", "Vehicle", "Source", "Status", "Assigned", "Lowest quote", "Received"].map((h) => (
+                {["Lead", "Product", "Phone", "Location", "Vehicle", "Source", "Status", "Assigned", "Lowest quote", "Received"].map((h) => (
                   <th key={h} scope="col" className="whitespace-nowrap px-4 py-3 font-semibold">{h}</th>
                 ))}
               </tr>
@@ -128,7 +144,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
             <tbody className="divide-y divide-[#EEF0F3]">
               {leads.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-16 text-center">
+                  <td colSpan={10} className="px-4 py-16 text-center">
                     <p className="font-semibold">No leads found</p>
                     <p className="mt-1 text-sm text-road">
                       {q || status ? "Try a different search or status." : "Leads will appear here when someone submits the quote form."}
@@ -148,13 +164,14 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
                       </Link>
                       <span className="block text-xs text-road">{l.email}</span>
                     </td>
+                    <td className="whitespace-nowrap px-4 py-3"><ProductBadge line={l.line} /></td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <a href={`tel:${l.phone}`} className="hover:text-sky">{l.phone}</a>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
-                      {l.city}, {l.state} {l.zip}
+                      {[l.city, l.state].filter(Boolean).join(", ")} {l.zip}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3">{v ? `${v.year} ${v.make} ${v.model}` : "—"}</td>
+                    <td className="whitespace-nowrap px-4 py-3">{v ? `${v.year} ${v.make} ${v.model}${v.mileage ? ` · ${(v.mileage / 1000).toFixed(0)}k mi` : ""}` : "—"}</td>
                     <td className="px-4 py-3">{l.utmSource ?? <span className="text-road/70">Direct</span>}</td>
                     <td className="px-4 py-3"><StatusBadge status={l.status} /></td>
                     <td className="whitespace-nowrap px-4 py-3">{l.assignedTo?.name ?? <span className="text-road/60">—</span>}</td>

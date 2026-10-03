@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { VSC_DISCLOSURE } from "@/lib/products";
 import { getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
@@ -26,7 +27,8 @@ export async function SiteFooter() {
             <img src="/brand/logo.webp" alt={site.name} width={720} height={169} loading="lazy" decoding="async" className="h-11 w-auto" />
           </Link>
           <p>{s.licenseNote}</p>
-          <p>Quotes are estimates until the insurance company completes underwriting.</p>
+          <p>Car insurance quotes are estimates until the insurance company completes underwriting.</p>
+          <p>{VSC_DISCLOSURE}</p>
           <p>
             © {new Date().getFullYear()} {s.agencyLegalName}. All rights reserved.
           </p>

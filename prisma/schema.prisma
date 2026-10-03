@@ -20,7 +20,7 @@ model Lead {
 
   // new | quoted | agent_followup | sold_lead | bound | unsold
   status String @default("new")
-  line   String @default("auto")
+  line   String @default("auto") // product: auto = car insurance, vsc = vehicle service contract (src/lib/products.ts)
 
   firstName String
   lastName  String
@@ -31,9 +31,10 @@ model Lead {
   state     String
   zip       String
 
-  currentlyInsured Boolean
+  // Car insurance only (empty for service contract leads)
+  currentlyInsured Boolean @default(false)
   currentCarrier   String?
-  coverageLevel    String // state_minimum | standard | premium
+  coverageLevel    String  @default("") // state_minimum | standard | premium
 
   // Marketing attribution
   utmSource   String?
@@ -99,6 +100,7 @@ model Vehicle {
   ownership   String // own | finance | lease
   primaryUse  String // commute | pleasure | business
   annualMiles Int
+  mileage     Int? // odometer reading (service contract leads)
 }
 
 // Proof of TCPA consent. Never delete or edit these rows.

@@ -2,7 +2,7 @@ import { CustomerReviews } from "@/components/CustomerReviews";
 import { DeferredImg } from "@/components/DeferredImg";
 import { Reveal } from "@/components/Reveal";
 import { FaqSection, QuoteBanner, RepairCostsSection, WhyChooseSection } from "@/components/sections";
-import { ZipStart } from "@/components/ZipStart";
+import { PRODUCTS, VSC_DISCLOSURE } from "@/lib/products";
 import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
@@ -53,13 +53,22 @@ export default async function Home() {
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/85">
               {fillCompany(content.hero.subtitle)}
             </p>
-            <div className="mt-8 max-w-md">
-              <ZipStart dark />
-              <p className="mt-3 text-sm text-white/75">Free to compare. No obligation to buy.</p>
+            {/* Two separate products, two separate paths. */}
+            <div className="mt-8 grid max-w-2xl gap-4 sm:grid-cols-2">
+              {[
+                { p: PRODUCTS.auto, text: "Pays after an accident. Compare prices from several companies.", cta: "Compare car insurance" },
+                { p: PRODUCTS.vsc, text: "Helps pay for repairs when a listed part breaks down. Not insurance.", cta: "Get a service contract quote" },
+              ].map(({ p, text, cta }) => (
+                <div key={p.quoteHref} className="flex flex-col rounded-2xl bg-white/10 p-5 ring-1 ring-white/20 backdrop-blur-sm">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-line">{p.label}</p>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-white/85">{text}</p>
+                  <a href={p.quoteHref} className="btn-primary mt-4 inline-flex justify-center bg-line text-asphalt hover:bg-[#E3B21F]">{cta}</a>
+                </div>
+              ))}
             </div>
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-white/90">
-              <span>Licensed in all 50 states</span>
-              <span>Secure, private quote request</span>
+              <span>Free quotes, no obligation</span>
+              <span>Secure, private quote requests</span>
             </div>
           </div>
         </div>
@@ -71,15 +80,16 @@ export default async function Home() {
       <section className="bg-white">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-5 py-14 text-center md:grid-cols-[1fr_1.15fr] md:gap-12 md:py-16 md:text-left">
           <Reveal className="md:order-1">
-            <h2 className="mx-auto max-w-md text-3xl font-extrabold leading-tight sm:text-4xl md:mx-0">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">{PRODUCTS.vsc.label}</p>
+            <h2 className="mx-auto mt-2 max-w-md text-3xl font-extrabold leading-tight sm:text-4xl md:mx-0">
               Could You Afford A $3,000 Auto Repair Bill Today?
             </h2>
             <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-road md:mx-0">
-              A vehicle service contract through {site.name} protects you from expensive car repair surprises.
+              A vehicle service contract through {site.name} helps protect your budget from expensive car repair surprises.
             </p>
-            <p className="mt-4 text-sm text-road/80">*A deductible may apply.</p>
-            <a href="/quote/auto" className="btn-primary mt-7 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
-              Get a free quote
+            <p className="mx-auto mt-4 max-w-md text-sm text-road/80 md:mx-0">*A deductible may apply. {VSC_DISCLOSURE}</p>
+            <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-7 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
+              Get a service contract quote
             </a>
           </Reveal>
           <Reveal from="pop" delay={150} className="order-first md:order-2">
@@ -114,7 +124,7 @@ export default async function Home() {
           <Reveal delay={200} className="relative">
             <h2 className="text-3xl font-extrabold leading-tight sm:text-4xl">Our Reputation Speaks for Itself</h2>
             <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-white/85 md:mx-0">
-              Drivers choose {site.name} for honest answers, fair prices and licensed agents who actually pick up the phone.
+              Drivers choose {site.name} for honest answers, fair prices and people who actually pick up the phone.
             </p>
             {site.reviewSources.length > 0 && (
               <ul className="mt-8 flex flex-wrap justify-center gap-x-10 gap-y-6 md:justify-start">
@@ -140,7 +150,7 @@ export default async function Home() {
                 })}
               </ul>
             )}
-            <a href="/quote/auto" className="btn-primary mt-8 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
+            <a href="/quote" className="btn-primary mt-8 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
               Get a free quote
             </a>
           </Reveal>
@@ -153,7 +163,22 @@ export default async function Home() {
 
       <FaqSection faqs={faqs} phone={biz.phone} phoneHref={biz.phoneHref} />
 
-      <QuoteBanner />
+      {/* Car insurance: a separate product with its own section and quote form. */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-5 pb-6 pt-14 md:pt-20">
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">{PRODUCTS.auto.label}</p>
+            <h2 className="mt-2 text-3xl font-extrabold leading-tight sm:text-4xl">Compare Car Insurance Quotes</h2>
+            <p className="mt-5 text-lg leading-relaxed text-road">
+              Car insurance pays for damage and injuries after an accident, and almost every state requires it. Compare prices from several insurance companies
+              with one form, and check exactly what your state requires.
+            </p>
+            <a href="/car-insurance" className="mt-5 inline-block font-semibold text-sky hover:underline">See car insurance requirements by state →</a>
+          </Reveal>
+        </div>
+      </section>
+
+      <QuoteBanner product="auto" />
     </>
   );
 }
