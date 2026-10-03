@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { after } from "next/server";
 import { cache } from "react";
 import { PostArticle } from "@/components/blog/PostArticle";
-import { absoluteUrl, cardSelect, livePosts, mediaUrl, wordCount } from "@/lib/blog";
+import { absoluteUrl, cardSelect, faqFromHtml, livePosts, mediaUrl, wordCount } from "@/lib/blog";
 import { db } from "@/lib/db";
 import { ogMetadata } from "@/lib/og";
 import { jsonLd } from "@/lib/security";
@@ -68,6 +68,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const url = absoluteUrl(`/blog/${post.slug}`);
   const image = post.coverImageId ? absoluteUrl(mediaUrl(post.coverImageId)!) : absoluteUrl("/opengraph-image");
+  const faqs = faqFromHtml(post.content);
+  // A team byline such as "Vertex AutoCare Team" is an organization, not a person.
+  const teamAuthor = /\bteam\b/i.test(post.author.name) || post.author.name.includes(site.name);
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -83,7 +86,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         wordCount: wordCount(post.content),
         articleSection: post.category?.name,
         keywords: post.tags.map((t) => t.name).join(", ") || undefined,
-        author: { "@type": "Person", name: post.author.name },
+        author: teamAuthor ? { "@type": "Organization", name: post.author.name, url: site.url } : { "@type": "Person", name: post.author.name },
         publisher: { "@id": `${site.url}/#organization` },
         isPartOf: { "@type": "Blog", name: fillCompany(blog.title), url: absoluteUrl("/blog") },
       },
@@ -96,6 +99,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           { "@type": "ListItem", position: post.category ? 4 : 3, name: post.title, item: url },
         ],
       },
+      // Only the questions visible in the post's FAQ section.
+      ...(faqs.length >= 2
+        ? [{ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }]
+        : []),
     ],
   };
 

@@ -99,7 +99,35 @@ const textOf = (html: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
-export const wordCount = (html: string) => (textOf(html).match(/\S+/g) ?? []).length;
+/**
+ * Questions and answers from a post's visible FAQ section: the H3s (with the text under them)
+ * after an H2 such as "Frequently asked questions" or "FAQ", up to the next H2 or <hr>. Used for FAQPage structured data,
+ * so it only ever describes content readers can see.
+ */
+export function faqFromHtml(html: string): { q: string; a: string }[] {
+  const h2 = /<h2[^>]*>([\s\S]*?)<\/h2>/gi;
+  let start = -1;
+  for (let m; (m = h2.exec(html)); ) {
+    if (/^(frequently asked questions|faqs?)\b/i.test(textOf(m[1]).trim())) {
+      start = m.index + m[0].length;
+      break;
+    }
+  }
+  if (start < 0) return [];
+  const rest = html.slice(start);
+  // The section ends at the next H2 or a horizontal rule (e.g. before photo credits).
+  const end = rest.search(/<h2[\s>]|<hr[\s/>]/i);
+  const section = end === -1 ? rest : rest.slice(0, end);
+  const out: { q: string; a: string }[] = [];
+  for (const m of section.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h3[\s>]|$)/gi)) {
+    const q = textOf(m[1]).replace(/\s+/g, " ").trim();
+    const a = textOf(m[2]).replace(/\s+/g, " ").trim();
+    if (q && a) out.push({ q, a });
+  }
+  return out;
+}
+
+export const wordCount =(html: string) => (textOf(html).match(/\S+/g) ?? []).length;
 export const readingMinutes = (html: string) => Math.max(1, Math.round(wordCount(html) / 220));
 
 /** First ~160 characters of the text, cut at a word. */
