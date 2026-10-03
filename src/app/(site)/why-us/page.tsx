@@ -10,7 +10,7 @@ import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 const title = `Why Choose ${site.name}`;
-const description = `Why drivers choose a ${site.name} vehicle service contract: any ASE-certified shop, flexible plans, real people on the phone and a 30-day money-back guarantee.`;
+const description = `Why drivers choose a ${site.name} vehicle service contract: any ASE-certified shop, flexible plans, real people to talk to and a 30-day money-back guarantee.`;
 
 export const metadata: Metadata = {
   title: "Why Choose Our Vehicle Service Contracts",

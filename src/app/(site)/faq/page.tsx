@@ -5,7 +5,7 @@ import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 const title = "Vehicle Service Contract FAQ";
-const description = "Answers to common questions about vehicle service contracts (often called extended car warranties): what's included, when you can buy one and how it differs from car insurance.";
+const description = "Vehicle service contract (extended car warranty) questions answered: what's included, when you can buy one and how it differs from car insurance.";
 
 export const metadata: Metadata = {
   title,

@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 import { ogMetadata } from "@/lib/og";
 import { jsonLd } from "@/lib/security";
 import { site } from "@/lib/site";
-import { NEIGHBORS, guidePath, limitsShort, quickAnswer, stateFaqs, usd } from "@/lib/state-guides";
+import { NEIGHBORS, guidePath, limitsShort, metaDescription, quickAnswer, stateFaqs, usd } from "@/lib/state-guides";
 
 const getGuide = cache((slug: string) => (/^[a-z-]{2,40}$/.test(slug) ? db.stateGuide.findFirst({ where: { slug, published: true } }) : null));
 
@@ -18,9 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const g = await getGuide((await params).slug);
   if (!g) return { title: "Page not found", robots: { index: false } };
   const title = g.seoTitle || titleFor(g.name);
-  const short = limitsShort(g);
-  const auto = `${g.name} car insurance minimum: ${short ? `${short} liability` : "see requirements"}${g.pipRequired ? " plus PIP" : ""}. ${g.noFault ? "No-fault state." : "At-fault state."} What's required, what's worth adding and how to save.`;
-  const description = g.seoDescription || (auto.length <= 160 ? auto : auto.slice(0, 157).replace(/\s+\S*$/, "") + "…");
+  const description = g.seoDescription || metaDescription(g);
   const url = guidePath(g);
   return {
     title,

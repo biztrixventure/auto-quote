@@ -75,6 +75,19 @@ export function quickAnswer(g: GuideFacts) {
   return parts.join(" ");
 }
 
+/** Search result description (max 160 characters), stating the state's actual minimums. */
+export function metaDescription(g: GuideFacts) {
+  const short = limitsShort(g);
+  const pip = g.pipRequired && g.pipMinimum ? ` plus ${usd(g.pipMinimum)} PIP` : g.pipRequired ? " plus PIP" : "";
+  const fault = g.noFault ? "No-fault state." : "At-fault state.";
+  const text = g.insuranceOptional
+    ? `${g.name} doesn't require car insurance, but drivers must be able to pay for crash damage${short ? ` (${short})` : ""}. What that means and how to compare quotes.`
+    : short
+      ? `${g.name} requires ${short} liability car insurance${pip}. ${fault} See what's required, what's worth adding and how to save.`
+      : `${g.name} requires ${usd(g.pd)} property damage liability${pip}. ${fault} See what's required, what's worth adding and how to save.`;
+  return text.length <= 160 ? text : text.slice(0, 157).replace(/\s+\S*$/, "") + "…";
+}
+
 export type Faq = { q: string; a: string };
 
 /** Questions people actually search for, answered from the state's facts. */
