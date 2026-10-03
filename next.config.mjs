@@ -23,6 +23,11 @@ const nextConfig = {
   // Self-contained server in .next/standalone for the Docker image (see Dockerfile).
   output: "standalone",
   poweredByHeader: false,
+  // IndexNow key file at the site root (https://site/<key>.txt), where Bing and Yandex look for it.
+  // The route only answers when the name matches the real key.
+  async rewrites() {
+    return { beforeFiles: [{ source: "/:key([a-f0-9]{32})\\.txt", destination: "/indexnow.txt/:key" }] };
+  },
   async headers() {
     return [
       {

@@ -31,7 +31,8 @@ export async function submitToIndexNow(paths: string[], by = "system") {
     const res = await fetch("https://api.indexnow.org/indexnow", {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({ host, key: indexnow.key, keyLocation: `${site.url}${INDEXNOW_KEY_PATH}`, urlList }),
+      // Key file at the site root (/<key>.txt), the location Bing and Yandex check by default.
+      body: JSON.stringify({ host, key: indexnow.key, keyLocation: `${site.url}/${indexnow.key}.txt`, urlList }),
       signal: AbortSignal.timeout(10000),
     });
     ok = res.status === 200 || res.status === 202;
