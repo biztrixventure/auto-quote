@@ -23,7 +23,7 @@ const parts: Part[] = [
 ];
 
 export function RepairCostDiagram({ costs = {} }: { costs?: Record<string, string> }) {
-  const [selected, setSelected] = useState(4);
+  const [selected, setSelected] = useState(5); // Transmission: the repair most people search for
   // Prices are editable in /admin/content; the built-in values are the fallback.
   const priceOf = (p: Part) => costs[p.name] || p.cost;
   const part = parts[selected];

@@ -20,7 +20,8 @@ export function Analytics({ ga4Id, gtmId, metaPixelId, optedOut = false }: Track
       )}
       {ga4Id && (
         <>
-          <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="afterInteractive" />
+          {/* The 180 KB gtag library loads once the page is idle, so it never competes with the main image or slows taps. */}
+          <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="lazyOnload" />
           <Script id="ga4" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',${JSON.stringify(ga4Id)}${optedOut ? ",{allow_google_signals:false,allow_ad_personalization_signals:false}" : ""});`}
           </Script>

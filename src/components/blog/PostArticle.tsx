@@ -64,7 +64,7 @@ export function PostArticle({ post, related, blog }: { post: ArticleData; relate
 
       {cover && (
         <figure className="mx-auto mt-10 max-w-5xl px-5">
-          <img src={cover} alt={post.coverAlt} fetchPriority="high" className="aspect-[16/9] w-full rounded-2xl object-cover shadow-[0_20px_50px_rgba(38,42,48,0.12)]" />
+          <img src={cover} alt={post.coverAlt} width={1280} height={720} fetchPriority="high" decoding="async" className="aspect-[16/9] w-full rounded-2xl object-cover shadow-[0_20px_50px_rgba(38,42,48,0.12)]" />
         </figure>
       )}
 

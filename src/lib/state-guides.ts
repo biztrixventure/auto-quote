@@ -115,7 +115,9 @@ export function stateFaqs(g: GuideFacts): Faq[] {
   });
   faqs.push({
     q: `Is uninsured motorist coverage required in ${g.name}?`,
-    a: g.umRequired
+    a: g.umRequired && g.insuranceOptional
+      ? `Only if you buy a policy. ${g.name} doesn't require car insurance, but any policy you buy must include uninsured motorist coverage, which pays for your injuries if a driver without insurance hits you.`
+      : g.umRequired
       ? `Yes. ${g.name} requires uninsured motorist coverage, which pays for your injuries if a driver without insurance hits you.${g.uimRequired ? " Underinsured motorist coverage is required too." : ""}`
       : `No, it isn't required in ${g.name}, but it's worth having: it pays for your injuries if you're hit by a driver with no insurance or not enough insurance.`,
   });
@@ -127,7 +129,7 @@ export function stateFaqs(g: GuideFacts): Faq[] {
   }
   if (!g.insuranceOptional) faqs.push({
     q: `What happens if I drive without insurance in ${g.name}?`,
-    a: `Driving without the required coverage in ${g.name} can lead to fines, a suspended license or registration, and having to file proof of insurance (such as an SR-22) before you can drive again. Penalties increase for repeat offences.`,
+    a: `Driving without the required coverage in ${g.name} can lead to fines, a suspended license or registration, and having to file proof of insurance (such as an SR-22) before you can drive again. Penalties increase for repeat offenses.`,
   });
   return faqs;
 }

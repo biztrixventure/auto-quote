@@ -15,12 +15,14 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "InsuranceAgency",
+        // A plain Organization: the business offers car insurance quotes AND vehicle service
+        // contracts, which are not insurance, so a sitewide InsuranceAgency type would be misleading.
+        "@type": "Organization",
         "@id": `${site.url}/#organization`,
         name: site.name,
         legalName: biz.agencyLegalName,
         url: site.url,
-        logo: `${site.url}/brand/logo-512.png`,
+        logo: { "@type": "ImageObject", url: `${site.url}/brand/logo-512.png`, width: 512, height: 512 },
         image: `${site.url}/opengraph-image`,
         description: site.description,
         telephone: phone,

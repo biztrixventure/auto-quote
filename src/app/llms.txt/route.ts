@@ -3,6 +3,9 @@ import { db } from "@/lib/db";
 import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { guidePath, quickAnswer } from "@/lib/state-guides";
 
+/** Cuts at a word boundary instead of mid-word. */
+const shorten = (t: string, max: number) => (t.length <= max ? t : t.slice(0, max).replace(/\s+\S*$/, "") + "…");
+
 export const dynamic = "force-dynamic";
 
 const line = (s: string) => s.replace(/\s+/g, " ").trim();
@@ -34,7 +37,8 @@ export async function GET() {
     `- [Get a free car insurance quote](${u("/quote/auto")}): one short form to compare prices from several insurance companies.`,
     `- [Get a vehicle service contract quote](${u("/quote/vehicle-protection")}): plan options and prices for help with repair bills.`,
     `- [Car repair costs](${u("/repair-costs")}): typical out-of-pocket costs of common car repairs.`,
-    `- [Why choose ${biz.name}](${u("/why-us")}): ${line(fillCompany(content.whyIntro)).slice(0, 200)}`,
+    `- [About ${biz.name}](${u("/about")}): who we are, our two separate services, how we research our guides and how we are paid.`,
+    `- [Why choose ${biz.name}](${u("/why-us")}): ${shorten(line(fillCompany(content.whyIntro)), 200)}`,
     `- [Vehicle service contract FAQ](${u("/faq")}): what a service contract includes and how it differs from car insurance.`,
   ];
   if (guides.length) out.push(`- [Car insurance requirements by state](${u("/car-insurance")}): minimum coverage and no-fault rules for each state.`);

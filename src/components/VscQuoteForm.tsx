@@ -89,7 +89,13 @@ export function VscQuoteForm({ consentText, consentVersion, phone, phoneHref }: 
   }
 
   const err = (k: keyof VscFormValues) => (errors[k] ? <p id={`${k}-error`} className="error">{errors[k]?.message as string}</p> : null);
-  const aria = (k: keyof VscFormValues) => ({ id: k, "aria-invalid": !!errors[k], "aria-describedby": errors[k] ? `${k}-error` : undefined });
+  // All fields are required; the consent box also points to its wording.
+  const aria = (k: keyof VscFormValues) => ({
+    id: k,
+    "aria-invalid": !!errors[k],
+    "aria-required": true,
+    "aria-describedby": [errors[k] && `${k}-error`, k === "consent" && "consent-text"].filter(Boolean).join(" ") || undefined,
+  });
 
   if (done) {
     return (

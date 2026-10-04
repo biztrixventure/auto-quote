@@ -61,9 +61,11 @@ export default async function StateGuidePage({ params }: { params: Promise<{ slu
         "@id": `${url}#article`,
         headline: titleFor(g.name),
         description: answer,
-        mainEntityOfPage: url,
+        mainEntityOfPage: { "@type": "WebPage", "@id": url, ...(g.verifiedAt ? { lastReviewed: g.verifiedAt.toISOString() } : {}) },
+        datePublished: g.createdAt.toISOString(),
         dateModified: g.updatedAt.toISOString(),
-        ...(g.verifiedAt ? { lastReviewed: g.verifiedAt.toISOString() } : {}),
+        author: { "@id": `${site.url}/#organization` },
+        image: `${site.url}/opengraph-image`,
         about: { "@type": "State", name: g.name, containedInPlace: { "@type": "Country", name: "United States" } },
         publisher: { "@id": `${site.url}/#organization` },
         ...(g.sourceUrl ? { citation: g.sourceUrl } : {}),
@@ -105,6 +107,18 @@ export default async function StateGuidePage({ params }: { params: Promise<{ slu
                 <p>These limits pay for <em>other people</em>. They don&apos;t pay to repair your own car or treat your own injuries; that takes optional coverage.</p>
               </>
             )}
+            {/* States with no bodily injury minimum (e.g. Florida) still get a minimum section. */}
+            {!short && g.pd > 0 && (
+              <>
+                <h2>Minimum car insurance in {g.name}</h2>
+                <p>
+                  {g.name} doesn&apos;t set a general bodily injury liability minimum. Instead, drivers must carry at least <strong>{usd(g.pd)}</strong> of property
+                  damage liability, which pays for damage you cause to other people&apos;s cars or property
+                  {g.pipRequired ? <>, plus <strong>{g.pipMinimum ? usd(g.pipMinimum) : "the required amount"}</strong> of personal injury protection (PIP), which pays your own medical bills after a crash</> : ""}.
+                </p>
+                <p>Without bodily injury liability, you could be personally responsible for injuries you cause to others, so most drivers add it even when it isn&apos;t required.</p>
+              </>
+            )}
             {g.requirementNote && <p>{g.requirementNote}</p>}
 
             <h2>Is {g.name} a no-fault state?</h2>
@@ -115,8 +129,9 @@ export default async function StateGuidePage({ params }: { params: Promise<{ slu
               </p>
             ) : (
               <p>
-                No. {g.name} is an at-fault state. The driver who causes an accident is responsible for the other people&apos;s injuries and damage, which is why
-                liability coverage is required. {g.pipRequired ? `${g.name} still requires personal injury protection (PIP)${g.pipMinimum ? ` of at least ${usd(g.pipMinimum)}` : ""}.` : ""}
+                No. {g.name} is an at-fault state. The driver who causes an accident is responsible for the other people&apos;s injuries and damage
+                {g.insuranceOptional ? ", which is why drivers must be able to pay for damage they cause even though insurance isn't required." : ", which is why liability coverage is required."}{" "}
+                {g.pipRequired ? `${g.name} still requires personal injury protection (PIP)${g.pipMinimum ? ` of at least ${usd(g.pipMinimum)}` : ""}.` : ""}
               </p>
             )}
 
@@ -180,7 +195,7 @@ export default async function StateGuidePage({ params }: { params: Promise<{ slu
               {g.pd > 0 && <Fact label="Property damage" value={usd(g.pd)} />}
               <Fact label="Fault system" value={g.noFault ? "No-fault" : "At-fault"} />
               <Fact label="PIP required" value={g.pipRequired ? (g.pipMinimum ? usd(g.pipMinimum) : "Yes") : "No"} />
-              <Fact label="Uninsured motorist" value={g.umRequired ? "Required" : "Optional"} />
+              <Fact label="Uninsured motorist" value={g.umRequired ? (g.insuranceOptional ? "Required if you buy a policy" : "Required") : "Optional"} />
               {g.avgAnnualPremium && <Fact label="Average full coverage" value={`${usd(g.avgAnnualPremium)}/yr`} />}
             </dl>
             {g.avgAnnualPremium && g.premiumSource && <p className="mt-2 text-xs text-road">Average premium source: {g.premiumSource}</p>}

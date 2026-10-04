@@ -25,6 +25,8 @@ export default async function AutoQuotePage({ searchParams }: { searchParams: Pr
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": site.url + "/quote/auto#service",
+    category: "Car insurance",
     name: "Car insurance quote comparison",
     serviceType: "Car insurance",
     description: "Compare car insurance quotes from several insurance companies with one free form.",

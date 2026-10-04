@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getSite } from "@/lib/settings";
 
 // Overrides the site-wide "index, follow" so every robots tag on a 404 says noindex.
-export const metadata = { title: "Page not found", robots: { index: false, follow: true } };
+export const metadata = { title: "Page not found", description: "This page doesn't exist or has moved.", robots: { index: false, follow: true } };
 
 const links = [
   { href: "/#repair-costs", label: "Repair costs", text: "See what common repairs cost." },

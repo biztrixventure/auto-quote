@@ -1,38 +1,42 @@
 import type { MetadataRoute } from "next";
 import { livePosts } from "@/lib/blog";
 import { db } from "@/lib/db";
+import { getSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-dynamic"; // uses SITE_URL from the running server, not the build
 
 // Public pages only. Quote results, previews and admin pages are private and stay out.
+// lastModified is only given where we know the real date of the last change (Google ignores
+// priority and changefreq, and learns to distrust lastmod values that change on every request).
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
-  const [posts, categories, pages, states] = await Promise.all([
-    db.post.findMany({ where: { AND: [livePosts(), { noindex: false }] }, orderBy: { publishedAt: "desc" }, select: { slug: true, updatedAt: true, coverImageId: true } }),
-    db.category.findMany({ where: { posts: { some: livePosts() } }, select: { slug: true } }),
+  const [posts, categories, pages, states, { legal }] = await Promise.all([
+    db.post.findMany({ where: { AND: [livePosts(), { noindex: false }] }, orderBy: { updatedAt: "desc" }, select: { slug: true, updatedAt: true, coverImageId: true } }),
+    db.category.findMany({ where: { posts: { some: livePosts() } }, select: { slug: true, posts: { where: livePosts(), orderBy: { updatedAt: "desc" }, take: 1, select: { updatedAt: true } } } }),
     db.page.findMany({ where: { status: "published", noindex: false }, select: { slug: true, updatedAt: true } }),
-    db.stateGuide.findMany({ where: { published: true }, select: { slug: true, updatedAt: true } }),
+    db.stateGuide.findMany({ where: { published: true }, orderBy: { updatedAt: "desc" }, select: { slug: true, updatedAt: true } }),
+    getSettings(),
   ]);
-  const latest = posts[0]?.updatedAt ?? now;
+  const u = (path: string) => `${site.url}${path}`;
+  const latestPost = posts[0]?.updatedAt;
+  const latestState = states[0]?.updatedAt;
+  const date = (d: string) => (/^\d{4}-\d{2}-\d{2}$/.test(d) ? new Date(`${d}T00:00:00Z`) : undefined);
+
   return [
-    { url: `${site.url}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
-    ...["/quote", "/quote/auto", "/quote/vehicle-protection"].map((p) => ({ url: `${site.url}${p}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 })),
-    ...["/repair-costs", "/why-us", "/faq"].map((p) => ({ url: `${site.url}${p}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 })),
-    ...pages.map((p) => ({ url: `${site.url}/${p.slug}`, lastModified: p.updatedAt, changeFrequency: "monthly" as const, priority: 0.6 })),
-    ...(states.length ? [{ url: `${site.url}/car-insurance`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 }] : []),
-    ...states.map((s) => ({ url: `${site.url}/car-insurance/${s.slug}`, lastModified: s.updatedAt, changeFrequency: "monthly" as const, priority: 0.7 })),
-    { url: `${site.url}/blog`, lastModified: latest, changeFrequency: "daily", priority: 0.8 },
-    ...categories.map((c) => ({ url: `${site.url}/blog/category/${c.slug}`, lastModified: latest, changeFrequency: "weekly" as const, priority: 0.6 })),
+    { url: u("/"), ...(latestPost ? { lastModified: latestPost } : {}) },
+    ...["/quote", "/quote/auto", "/quote/vehicle-protection", "/repair-costs", "/why-us", "/faq", "/about"].map((p) => ({ url: u(p) })),
+    ...pages.map((p) => ({ url: u(`/${p.slug}`), lastModified: p.updatedAt })),
+    ...(states.length ? [{ url: u("/car-insurance"), lastModified: latestState }] : []),
+    ...states.map((s) => ({ url: u(`/car-insurance/${s.slug}`), lastModified: s.updatedAt })),
+    ...(posts.length ? [{ url: u("/blog"), lastModified: latestPost }] : [{ url: u("/blog") }]),
+    ...categories.map((c) => ({ url: u(`/blog/category/${c.slug}`), ...(c.posts[0] ? { lastModified: c.posts[0].updatedAt } : {}) })),
     ...posts.map((p) => ({
-      url: `${site.url}/blog/${p.slug}`,
+      url: u(`/blog/${p.slug}`),
       lastModified: p.updatedAt,
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-      ...(p.coverImageId ? { images: [`${site.url}/media/${p.coverImageId}`] } : {}),
+      ...(p.coverImageId ? { images: [u(`/media/${p.coverImageId}`)] } : {}),
     })),
-    { url: `${site.url}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${site.url}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${site.url}/do-not-sell`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: u("/privacy"), ...(date(legal.privacyUpdated) ? { lastModified: date(legal.privacyUpdated) } : {}) },
+    { url: u("/terms"), ...(date(legal.termsUpdated) ? { lastModified: date(legal.termsUpdated) } : {}) },
+    { url: u("/do-not-sell") },
   ];
 }

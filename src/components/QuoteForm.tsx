@@ -166,10 +166,12 @@ export function QuoteForm({ initialZip, consentText, consentVersion, phone, phon
         {errors[k]?.message as string}
       </p>
     ) : null;
+  // Every field except the current insurer is required; the consent box also points to its wording.
   const aria = (k: keyof QuoteFormValues) => ({
     id: k,
     "aria-invalid": !!errors[k],
-    "aria-describedby": errors[k] ? `${k}-error` : undefined,
+    "aria-required": k !== "currentCarrier",
+    "aria-describedby": [errors[k] && `${k}-error`, k === "consent" && "consent-text"].filter(Boolean).join(" ") || undefined,
   });
 
   if (submitting) {

@@ -119,7 +119,7 @@ export default async function WhyUsPage() {
         </div>
       </section>
 
-      {/* How it works · What a plan can cover · Talk to an agent */}
+      {/* How it works · What a plan can include · Talk to us */}
       <section className="bg-white">
         <div className="mx-auto grid max-w-6xl gap-5 px-5 pb-16 md:pb-20 lg:grid-cols-[1fr_1.25fr_1fr]">
           <Reveal className="h-full">
@@ -146,7 +146,7 @@ export default async function WhyUsPage() {
             <Tile tint="warm">
               <Panel className="flex flex-col">
                 <div className="flex items-center justify-between rounded-2xl bg-asphalt px-5 py-4 text-white">
-                  <h2 className="font-semibold">What a plan can cover</h2>
+                  <h2 className="font-semibold">What a plan can include</h2>
                   <span aria-hidden className="text-line">{icon("M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6l-8-3zM9 12l2 2 4-4")}</span>
                 </div>
                 <p className="mt-6 text-3xl font-extrabold leading-tight text-asphalt">The parts that cost the most to fix</p>
@@ -158,7 +158,7 @@ export default async function WhyUsPage() {
                     <li key={c} className="rounded-full bg-[#F3F6FA] px-4 py-2 text-sm font-medium text-asphalt">{c}</li>
                   ))}
                 </ul>
-                <p className="mt-auto pt-5 text-xs text-road/80">What&apos;s covered depends on the plan you choose. <Link href="/repair-costs" className="font-semibold text-sky hover:underline">See typical repair costs</Link>.</p>
+                <p className="mt-auto pt-5 text-xs text-road/80">What&apos;s included depends on the contract you choose, including its exclusions and deductible. <Link href="/repair-costs" className="font-semibold text-sky hover:underline">See typical repair costs</Link>.</p>
               </Panel>
             </Tile>
           </Reveal>
