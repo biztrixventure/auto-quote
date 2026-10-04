@@ -2,6 +2,7 @@ import { CustomerReviews } from "@/components/CustomerReviews";
 import { DeferredImg } from "@/components/DeferredImg";
 import { Reveal } from "@/components/Reveal";
 import { FaqSection, QuoteBanner, RepairCostsSection, WhyChooseSection } from "@/components/sections";
+import { ZipStart } from "@/components/ZipStart";
 import { PRODUCTS, VSC_DISCLOSURE } from "@/lib/products";
 import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
@@ -53,18 +54,14 @@ export default async function Home() {
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/85">
               {fillCompany(content.hero.subtitle)}
             </p>
-            {/* Two separate products, two separate paths. */}
-            <div className="mt-8 grid max-w-2xl gap-4 sm:grid-cols-2">
-              {[
-                { p: PRODUCTS.auto, text: "Pays after an accident. Compare prices from several companies.", cta: "Compare car insurance" },
-                { p: PRODUCTS.vsc, text: "Helps pay for repairs when a listed part breaks down. Not insurance.", cta: "Get a service contract quote" },
-              ].map(({ p, text, cta }) => (
-                <div key={p.quoteHref} className="flex flex-col rounded-2xl bg-white/10 p-5 ring-1 ring-white/20 backdrop-blur-sm">
-                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-line">{p.label}</p>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-white/85">{text}</p>
-                  <a href={p.quoteHref} className="btn-primary mt-4 inline-flex justify-center bg-line text-asphalt hover:bg-[#E3B21F]">{cta}</a>
-                </div>
-              ))}
+            {/* Car insurance ZIP start first: the quickest way in. Service contracts get a quieter link. */}
+            <div className="mt-8 max-w-md">
+              <ZipStart dark />
+              <p className="mt-3 text-sm text-white/75">Free to compare. No obligation to buy.</p>
+              <p className="mt-4 text-sm text-white/85">
+                Worried about repair bills instead?{" "}
+                <a href={PRODUCTS.vsc.quoteHref} className="font-semibold text-line underline-offset-2 hover:underline">Get a vehicle service contract quote →</a>
+              </p>
             </div>
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-white/90">
               <span>Free quotes, no obligation</span>
