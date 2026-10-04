@@ -35,7 +35,7 @@ export default async function NotFound() {
                 <Link href="/quote" className="btn-secondary">Get a free quote</Link>
               </div>
               <p className="mt-6 text-sm text-road">
-                Need help now? Call a licensed agent at{" "}
+                Need help now? Call our team at{" "}
                 <a href={site.phoneHref} className="font-semibold text-sky hover:underline">{site.phone}</a>.
               </p>
             </div>

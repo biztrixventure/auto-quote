@@ -41,10 +41,15 @@ export default async function AboutPage() {
         <div className="post-content">
           <h2>What we do</h2>
           <p>
-            {site.name} offers <strong>two separate services</strong>, and we keep them separate on purpose. The first is <Link href="/quote/auto">car insurance
-            quote comparison</Link>: you answer one short form and we help you compare prices from several insurance companies. The second is <Link href="/quote/vehicle-protection">vehicle
-            service contract quotes</Link>: optional contracts that may pay for eligible repairs when listed parts break down. A vehicle service contract is not
-            insurance, and we never present it as one.
+            {site.name} is a <strong>marketing and referral service</strong>. We are not an insurance company, an insurance agency or a vehicle service contract
+            provider. When you request a <Link href="/quote/auto">car insurance quote</Link> or a <Link href="/quote/vehicle-protection">vehicle service contract
+            quote</Link>, our team calls you, answers your questions and explains your options in plain English. If you want to go ahead, we connect you directly
+            with an authorized insurance company, agent or service contract provider, and that company gives you its price and terms.
+          </p>
+          <p>
+            Car insurance and vehicle service contracts are two different products, and we always explain the difference: insurance pays for damage after an
+            accident, theft or weather, while a vehicle service contract is not insurance and may pay for eligible repairs when listed parts break down. You
+            choose what you want, and there is never an obligation to buy.
           </p>
 
           <h2>How we create our guides</h2>

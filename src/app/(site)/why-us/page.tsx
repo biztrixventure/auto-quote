@@ -10,10 +10,10 @@ import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 const title = `Why Choose ${site.name}`;
-const description = `Why drivers choose a ${site.name} vehicle service contract: any ASE-certified shop, flexible plans, real people to talk to and a 30-day money-back guarantee.`;
+const description = `How ${site.name} helps: real people who explain car insurance and vehicle service contract options in plain English and connect you with authorized companies. Free, no obligation.`;
 
 export const metadata: Metadata = {
-  title: "Why Choose Our Vehicle Service Contracts",
+  title,
   description,
   alternates: { canonical: "/why-us" },
   ...ogMetadata({ eyebrow: "Why us", title, subtitle: description, image: "/images/why-us/car-warranty-agent-1024.webp" }, { url: "/why-us", title: `${title} | ${site.name}`, description }),
@@ -31,10 +31,10 @@ const REASON_ICONS = [
 ];
 
 const STEPS = [
-  { title: "Tell us about your car", body: "Year, make, model and mileage. It takes about two minutes." },
-  { title: "Compare your options", body: "See plan levels side by side, from essential to most complete." },
-  { title: "Get your price", body: "A clear monthly price with the deductible shown up front." },
-  { title: "Drive protected", body: "Repairs to listed parts are handled with the shop, not by you." },
+  { title: "Tell us what you need", body: "Car insurance, a vehicle service contract, or both. The form takes a few minutes." },
+  { title: "Talk to our team", body: "We call you, answer your questions and explain your options in plain English." },
+  { title: "Get connected", body: "If you want to go ahead, we connect you directly with an authorized insurance company or service contract provider." },
+  { title: "You decide", body: "Review the provider's price and terms. There's no obligation to buy." },
 ];
 
 const COVERED = ["Engine", "Transmission", "Cooling system", "Brakes", "Electrical", "Drive axle", "A/C", "Roadside help", "Trip interruption"];
@@ -80,7 +80,7 @@ export default async function WhyUsPage() {
             </span>
             <span className="absolute -right-2 bottom-6 flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-asphalt shadow-[0_12px_30px_rgba(16,24,40,0.14)] sm:-right-5">
               <span aria-hidden className="grid h-7 w-7 place-items-center rounded-full bg-asphalt text-line">{icon("M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z")}</span>
-              Any ASE-certified shop
+              Free, no obligation
             </span>
           </div>
         }
@@ -96,9 +96,9 @@ export default async function WhyUsPage() {
         <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
           <Reveal className="max-w-2xl">
             <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">What sets us apart</p>
-            <h2 className="mt-2 text-3xl font-extrabold leading-tight sm:text-4xl">Protection built around real drivers</h2>
+            <h2 className="mt-2 text-3xl font-extrabold leading-tight sm:text-4xl">Help from real people</h2>
             <p className="mt-4 text-lg leading-relaxed text-road">
-              A breakdown shouldn&apos;t turn into a financial emergency. Here&apos;s how {site.name} keeps repair costs predictable and the process simple.
+              Car insurance and repair protection can be confusing. Here&apos;s how {site.name} makes the process simpler.
             </p>
           </Reveal>
           <ul className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -192,7 +192,7 @@ export default async function WhyUsPage() {
               <strong className="text-asphalt">Car insurance</strong> pays after an accident, theft or weather damage, and most states require it. A <strong className="text-asphalt">vehicle service contract</strong>, often called an extended car warranty, is not insurance: it pays when a part listed in the contract breaks down on its own, such as an engine, transmission or A/C failure.
             </p>
             <p>
-              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. {site.name} offers a separate quote for each.
+              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. Our team can explain each one and connect you with authorized companies for the one you choose.
             </p>
             <p>
               Have questions? Read our <Link href="/faq" className="font-semibold text-sky underline-offset-2 hover:underline">frequently asked questions</Link>, check <Link href="/repair-costs" className="font-semibold text-sky underline-offset-2 hover:underline">what common repairs cost</Link>, or browse helpful guides on the <Link href="/blog" className="font-semibold text-sky underline-offset-2 hover:underline">{site.name} blog</Link>.

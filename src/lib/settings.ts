@@ -194,17 +194,17 @@ export const DEFAULTS = {
       subtitle: "Compare car insurance quotes from several companies, or get a price on a vehicle service contract that helps pay for costly repairs. Two separate products, one place to start.",
     },
     whyIntro:
-      "Our goal is simple: take the stress out of car repairs and surprise breakdowns. Repair bills can be expensive and often arrive at the worst possible time. A {company} vehicle service contract helps protect your budget from unexpected repair costs, and help is always just a phone call away.",
+      "Our goal is simple: help you find the right protection for your car and your budget. Car insurance and repair protection can be confusing, so our team explains your options in plain English and connects you with authorized companies that can help.",
     reasons: [
-      { title: "Unexpected Repairs", body: "When a part listed in your contract breaks down, {company} helps get the repair handled quickly so you can get back on the road." },
-      { title: "Any ASE-Certified Repair Shop", body: "You're never tied to one location. Take your vehicle to any ASE-certified technician, anywhere in the country." },
-      { title: "Flexible Plans", body: "Choose from several plan levels. We'll help you find the plan that fits your vehicle and your budget. Call us for a free quote." },
-      { title: "30-Day Money-Back Guarantee", body: "Your satisfaction comes first. If you're not happy with your plan for any reason within 30 days, {company} will refund you in full." },
+      { title: "Real People, Plain Answers", body: "Our team talks you through your options and answers your questions before you decide anything." },
+      { title: "Connected With Authorized Companies", body: "When you're ready, we connect you directly with an authorized insurance company or vehicle service contract provider." },
+      { title: "Options That Fit You", body: "Car insurance, a vehicle service contract or both: we explain the difference so you can choose what fits your car and budget." },
+      { title: "Free, No Obligation", body: "Quotes are free and you decide whether to buy. The company you choose sets the price and contract terms, and you can review them first." },
     ],
     faqs: [
       { q: "What is a vehicle service contract?", a: "A vehicle service contract, often called an extended car warranty, is an optional contract that pays for repairs and replacement parts it lists, such as the engine, transmission and brake system, after your factory warranty runs out. It isn't insurance." },
       { q: "Can I buy a vehicle service contract after I've bought my car?", a: "Yes. You can buy one at any time, not just when you buy the vehicle." },
-      { q: "What does a vehicle service contract include?", a: "Our basic plan includes the engine, transmission, cooling system, brake system, electrical system and drive axle, plus trip interruption and roadside assistance. {company} offers several plan levels, so you can choose the one that fits your vehicle. The exact parts, exclusions and deductible are listed in each contract." },
+      { q: "What does a vehicle service contract include?", a: "It depends on the plan. Basic plans usually include the engine, transmission and drivetrain, and higher levels add systems such as cooling, brakes, electrical and air conditioning; some also include roadside assistance and trip interruption. The exact parts, exclusions and deductible are listed in each contract." },
       { q: "Is a vehicle service contract the same as car insurance?", a: "No. Car insurance pays for damage and injuries after an accident, and most states require it. A vehicle service contract is optional and pays for repairs when a listed part breaks down. Many drivers have both, and you can get a quote for each here." },
       { q: "Can I get a vehicle service contract for an older car?", a: "Often, yes. Many plans accept older and higher-mileage cars, as long as the car is in good working condition when you buy the plan. Eligibility depends on the plan." },
     ],
@@ -258,20 +258,30 @@ const OLD_DEFAULT_TEXT = new Map<string, string>([
   ["Auto insurance, made easier", "Car insurance & vehicle service contracts"],
   ["Find coverage that keeps you moving.", "Protect your car and your budget."],
   ["Compare car insurance prices from several companies with one quick form. Get help from a licensed agent whenever you need it.", "Compare car insurance quotes from several companies, or get a price on a vehicle service contract that helps pay for costly repairs. Two separate products, one place to start."],
-  ["Our goal is simple: take the stress out of car repairs and surprise maintenance. Repair bills can be expensive and often arrive at the worst possible time. At {company}, we're committed to service you can count on, protecting your budget from unexpected repair costs and giving you the confidence that help is always just a phone call away.", "Our goal is simple: take the stress out of car repairs and surprise breakdowns. Repair bills can be expensive and often arrive at the worst possible time. A {company} vehicle service contract helps protect your budget from unexpected repair costs, and help is always just a phone call away."],
-  ["When your car breaks down without warning, {company} has your back. We handle covered repairs quickly and efficiently so you can get back on the road.", "When a part listed in your contract breaks down, {company} helps get the repair handled quickly so you can get back on the road."],
-  ["Choose from several customizable plans. We'll help you find coverage that fits your vehicle and your budget. Call us for a free quote.", "Choose from several plan levels. We'll help you find the plan that fits your vehicle and your budget. Call us for a free quote."],
+  ["Our goal is simple: take the stress out of car repairs and surprise maintenance. Repair bills can be expensive and often arrive at the worst possible time. At {company}, we're committed to service you can count on, protecting your budget from unexpected repair costs and giving you the confidence that help is always just a phone call away.", "Our goal is simple: help you find the right protection for your car and your budget. Car insurance and repair protection can be confusing, so our team explains your options in plain English and connects you with authorized companies that can help."],
+  ["When your car breaks down without warning, {company} has your back. We handle covered repairs quickly and efficiently so you can get back on the road.", "Our team talks you through your options and answers your questions before you decide anything."],
+  ["Choose from several customizable plans. We'll help you find coverage that fits your vehicle and your budget. Call us for a free quote.", "Car insurance, a vehicle service contract or both: we explain the difference so you can choose what fits your car and budget."],
   ["What is an extended auto warranty?", "What is a vehicle service contract?"],
   ["An extended auto warranty is a vehicle service contract that pays for unexpected repairs and replacement parts, such as the engine, transmission and brake system, after your factory warranty runs out.", "A vehicle service contract, often called an extended car warranty, is an optional contract that pays for repairs and replacement parts it lists, such as the engine, transmission and brake system, after your factory warranty runs out. It isn't insurance."],
   ["Can I buy an extended warranty after I've bought my car?", "Can I buy a vehicle service contract after I've bought my car?"],
   ["Yes. You can purchase an extended warranty at any time, not just when you buy the vehicle.", "Yes. You can buy one at any time, not just when you buy the vehicle."],
   ["What does an extended auto warranty cover?", "What does a vehicle service contract include?"],
-  ["Our basic plan covers the engine, transmission, cooling system, brake system, electrical system and drive axle, plus trip interruption and roadside assistance. {company} offers several coverage levels, so you can choose the plan that fits your vehicle.", "Our basic plan includes the engine, transmission, cooling system, brake system, electrical system and drive axle, plus trip interruption and roadside assistance. {company} offers several plan levels, so you can choose the one that fits your vehicle. The exact parts, exclusions and deductible are listed in each contract."],
+  ["Our basic plan covers the engine, transmission, cooling system, brake system, electrical system and drive axle, plus trip interruption and roadside assistance. {company} offers several coverage levels, so you can choose the plan that fits your vehicle.", "It depends on the plan. Basic plans usually include the engine, transmission and drivetrain, and higher levels add systems such as cooling, brakes, electrical and air conditioning; some also include roadside assistance and trip interruption. The exact parts, exclusions and deductible are listed in each contract."],
   ["Is a car warranty the same as car insurance?", "Is a vehicle service contract the same as car insurance?"],
   ["No. Car insurance typically protects you after an accident, while a car warranty helps pay for repairs and replacement parts when something breaks down or fails.", "No. Car insurance pays for damage and injuries after an accident, and most states require it. A vehicle service contract is optional and pays for repairs when a listed part breaks down. Many drivers have both, and you can get a quote for each here."],
   ["Can you buy a warranty for an older car?", "Can I get a vehicle service contract for an older car?"],
   ["Yes. Your vehicle's age doesn't matter, as long as it's in good working condition when you buy the plan.", "Often, yes. Many plans accept older and higher-mileage cars, as long as the car is in good working condition when you buy the plan. Eligibility depends on the plan."],
   ["Practical guides on car insurance, extended warranties and keeping repair costs down.", "Practical guides on car insurance, vehicle service contracts and keeping repair costs down."],
+  ["Our goal is simple: take the stress out of car repairs and surprise breakdowns. Repair bills can be expensive and often arrive at the worst possible time. A {company} vehicle service contract helps protect your budget from unexpected repair costs, and help is always just a phone call away.", "Our goal is simple: help you find the right protection for your car and your budget. Car insurance and repair protection can be confusing, so our team explains your options in plain English and connects you with authorized companies that can help."],
+  ["Unexpected Repairs", "Real People, Plain Answers"],
+  ["When a part listed in your contract breaks down, {company} helps get the repair handled quickly so you can get back on the road.", "Our team talks you through your options and answers your questions before you decide anything."],
+  ["Any ASE-Certified Repair Shop", "Connected With Authorized Companies"],
+  ["You're never tied to one location. Take your vehicle to any ASE-certified technician, anywhere in the country.", "When you're ready, we connect you directly with an authorized insurance company or vehicle service contract provider."],
+  ["Flexible Plans", "Options That Fit You"],
+  ["Choose from several plan levels. We'll help you find the plan that fits your vehicle and your budget. Call us for a free quote.", "Car insurance, a vehicle service contract or both: we explain the difference so you can choose what fits your car and budget."],
+  ["30-Day Money-Back Guarantee", "Free, No Obligation"],
+  ["Your satisfaction comes first. If you're not happy with your plan for any reason within 30 days, {company} will refund you in full.", "Quotes are free and you decide whether to buy. The company you choose sets the price and contract terms, and you can review them first."],
+  ["Our basic plan includes the engine, transmission, cooling system, brake system, electrical system and drive axle, plus trip interruption and roadside assistance. {company} offers several plan levels, so you can choose the one that fits your vehicle. The exact parts, exclusions and deductible are listed in each contract.", "It depends on the plan. Basic plans usually include the engine, transmission and drivetrain, and higher levels add systems such as cooling, brakes, electrical and air conditioning; some also include roadside assistance and trip interruption. The exact parts, exclusions and deductible are listed in each contract."],
 ]);
 const upgradeText = (t: string) => OLD_DEFAULT_TEXT.get(t) ?? t;
 
@@ -282,6 +292,13 @@ function upgradeOldDefaults(out: Settings) {
   c.reasons = c.reasons.map((r) => ({ title: upgradeText(r.title), body: upgradeText(r.body) }));
   c.faqs = c.faqs.map((f) => ({ q: upgradeText(f.q), a: upgradeText(f.a) }));
   out.blog.intro = upgradeText(out.blog.intro);
+  // The site is a referral service: old defaults that claimed a licensed agency or "its licensed
+  // agents" are replaced. Consent text only changes together with its version, so each lead still
+  // records exactly what it agreed to.
+  const b = out.business;
+  if (b.licenseNote === "Licensed insurance agency. National Producer Number: 0000000. State license numbers available on request.") b.licenseNote = site.licenseNote;
+  if (b.consentText === "By clicking \u201cSee my quotes\u201d, I agree that Vertex AutoCare and its licensed agents may contact me about insurance at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.") { b.consentText = site.consentText; b.consentVersion = site.consentVersion; }
+  if (b.vscConsentText === "By clicking \u201cGet my quote\u201d, I agree that Vertex AutoCare and the vehicle service contract providers it works with may contact me about vehicle service contracts at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.") { b.vscConsentText = site.vscConsentText; b.vscConsentVersion = site.vscConsentVersion; }
 }
 
 export async function getSettings(): Promise<Settings> {

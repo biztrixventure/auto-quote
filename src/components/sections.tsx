@@ -173,8 +173,8 @@ export function QuoteBanner({ product = "auto" }: { product?: ProductLine }) {
             </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-white/85">
               {vsc
-                ? "Tell us about your car and we'll contact you with vehicle service contract options and prices."
-                : "Compare prices from several insurance companies with one quick form, or call a licensed agent for help."}
+                ? "Tell us about your car. Our team will explain your options and connect you with an authorized service contract provider."
+                : "Answer one quick form and our team will help you get quotes from insurance companies that cover your area."}
             </p>
           </div>
           <div>
@@ -184,7 +184,7 @@ export function QuoteBanner({ product = "auto" }: { product?: ProductLine }) {
               <ZipStart dark />
             )}
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-white/90">
-              {(vsc ? ["Free quote", "Any ASE-certified shop", "Not insurance"] : ["Takes about 5 minutes", "Free to compare", "Licensed in all 50 states"]).map((t) => (
+              {(vsc ? ["Free quote", "No obligation", "Not insurance"] : ["Takes about 5 minutes", "Free to compare", "No obligation"]).map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <span aria-hidden className="grid h-5 w-5 place-items-center rounded-full bg-white/15 text-line">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>

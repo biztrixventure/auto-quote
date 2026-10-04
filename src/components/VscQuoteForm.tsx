@@ -105,7 +105,7 @@ export function VscQuoteForm({ consentText, consentVersion, phone, phoneHref }: 
         </span>
         <h1 className="mt-6 text-2xl font-bold">Thanks, we&apos;ve got your details</h1>
         <p className="mt-3 leading-relaxed text-road">
-          A member of our team will contact you shortly with vehicle service contract options and prices for your car. Want to talk now? Call{" "}
+          A member of our team will call you shortly to go over your options and connect you with an authorized vehicle service contract provider. Want to talk now? Call{" "}
           <a href={phoneHref} className="font-semibold text-sky hover:underline">{phone}</a>.
         </p>
       </div>
@@ -123,7 +123,7 @@ export function VscQuoteForm({ consentText, consentVersion, phone, phoneHref }: 
       <div className="rounded-2xl border border-rail bg-white px-6 py-8 shadow-[0_20px_50px_-24px_rgba(38,42,48,0.2)] sm:px-10 sm:py-10">
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">Vehicle service contract</p>
         <h1 className="mt-2 text-2xl font-extrabold leading-tight sm:text-[1.9rem]">Get a quote to help with repair bills</h1>
-        <p className="mt-2 max-w-xl leading-relaxed text-road">Tell us about your car. We&apos;ll contact you with plan options and prices. Free, with no obligation.</p>
+        <p className="mt-2 max-w-xl leading-relaxed text-road">Tell us about your car. Our team will call you, explain your options and connect you with an authorized provider. Free, with no obligation.</p>
 
         <fieldset className="mt-8">
           <legend className="text-lg font-bold">Your car</legend>
@@ -232,7 +232,7 @@ export function VscQuoteForm({ consentText, consentVersion, phone, phoneHref }: 
           <a href={phoneHref} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 font-semibold text-asphalt transition hover:bg-white/90">{phone}</a>
         </div>
         <ul className="space-y-3 rounded-2xl border border-rail bg-white p-6 text-sm text-road">
-          {["Free quote, no obligation", "Any ASE-certified repair shop", "Several plan levels to choose from"].map((t) => (
+          {["Free quote, no obligation", "Real people to help you", "Several plan levels to choose from"].map((t) => (
             <li key={t} className="flex items-center gap-3">
               <span aria-hidden className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-sky/10 text-sky">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>

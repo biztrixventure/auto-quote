@@ -11,9 +11,9 @@ export const site = {
   phoneHref: "tel:+18005550142",
   email: "quotes@example.com",
   agencyLegalName: "Vertex AutoCare",
-  // Many states require the agency license number on the website.
+  // Shown in the footer: what the business is (a referral service, not an insurer or agency).
   licenseNote:
-    "Licensed insurance agency. National Producer Number: 0000000. State license numbers available on request.",
+    "Vertex AutoCare is a marketing and referral service. We are not an insurance company, insurance agency or vehicle service contract provider; we connect you with authorized companies that provide quotes, coverage and contracts.",
   // Rating badges in the "Our Reputation" section. Use only real, current figures from
   // the named platform; the badges stay hidden while this list is empty. Example:
   // { score: "4.8", source: "Google", count: "1,200+ reviews", href: "https://g.page/..." }
@@ -35,12 +35,12 @@ export const site = {
   // the final TCPA consent wording. Change consentVersion every time
   // the text changes so each lead records exactly what the user saw.
   // ─────────────────────────────────────────────────────────────
-  consentVersion: "2026-10-01-draft",
+  consentVersion: "2026-10-04-draft",
   consentText:
-    "By clicking “See my quotes”, I agree that Vertex AutoCare and its licensed agents may contact me about insurance at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
+    "By clicking “See my quotes”, I agree that Vertex AutoCare and the insurance companies, agents and vehicle service contract providers it works with may contact me about car insurance and related products, such as vehicle service contracts, at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
   // Separate consent for the vehicle service contract form: it names that product, not insurance.
   // Also a placeholder for the lawyer, versioned the same way.
-  vscConsentVersion: "2026-10-03-draft",
+  vscConsentVersion: "2026-10-04-draft",
   vscConsentText:
-    "By clicking “Get my quote”, I agree that Vertex AutoCare and the vehicle service contract providers it works with may contact me about vehicle service contracts at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
+    "By clicking “Get my quote”, I agree that Vertex AutoCare and the vehicle service contract providers, insurance companies and agents it works with may contact me about vehicle service contracts and related products, such as car insurance, at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
 };

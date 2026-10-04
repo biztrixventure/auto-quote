@@ -71,9 +71,10 @@ export default async function VehicleProtectionQuotePage() {
 
         <h2>What happens after you request a quote</h2>
         <p>
-          After you send the form, a member of our team contacts you with plan options and prices for your car. You can ask questions, review the full
-          contract terms before you decide, and there is no obligation to buy. A vehicle service contract is not insurance; it is an optional contract that may
-          pay for eligible repairs depending on its terms.
+          After you send the form, a member of our team calls you to understand what you need and explain your options in plain English. If you want to go
+          ahead, we connect you directly with an authorized vehicle service contract provider, who gives you the price and the contract terms. You review the
+          contract before you decide, and there is no obligation to buy. A vehicle service contract is not insurance; it is an optional contract that may pay
+          for eligible repairs depending on its terms.
         </p>
         <p>
           Not sure a plan is right for you? Read <Link href="/blog/are-extended-car-warranties-worth-it">are extended car warranties worth it?</Link>, our guide
@@ -107,6 +108,6 @@ const FAQS = [
   },
   {
     q: "Do I have to buy after getting a quote?",
-    a: "No. The quote is free with no obligation. You can review the contract terms and decide later.",
+    a: "No. The quote is free with no obligation. You can review the provider's contract terms and decide later.",
   },
 ];

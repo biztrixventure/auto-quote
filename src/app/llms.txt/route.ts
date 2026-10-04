@@ -29,8 +29,9 @@ export async function GET() {
     `> ${line(biz.description)}`,
     "",
     line(
-      `${biz.name} offers two separate products to US drivers. Car insurance: compare quotes from several insurance companies with one form (${biz.licenseNote}). ` +
-        `Vehicle service contracts (often called extended car warranties): optional contracts that pay for repairs to listed parts; they are not insurance. Phone: ${biz.phone}.`,
+      `${biz.name} is a marketing and referral service for US drivers, not an insurance company, agency or service contract provider. ` +
+        `Its team explains two separate products, car insurance and vehicle service contracts (often called extended car warranties; they are not insurance), ` +
+        `and connects people with authorized insurance companies, agents and service contract providers. Phone: ${biz.phone}.`,
     ),
     "",
     "## Main pages",

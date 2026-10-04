@@ -37,11 +37,12 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
     return (
       <div className="mx-auto max-w-2xl px-5 py-16">
         <div aria-hidden className="lane h-2 w-24 rounded" />
-        <h1 className="mt-6 text-3xl font-bold">Thanks, {lead.firstName}. An agent will call you shortly.</h1>
+        <h1 className="mt-6 text-3xl font-bold">Thanks, {lead.firstName}. We&apos;ll call you shortly.</h1>
         <p className="mt-4 text-lg leading-relaxed text-road">
-          We couldn&apos;t show online prices for your situation, but a licensed agent can still find you coverage.
-          Expect a call from {site.name} or one of our insurance partners.
+          A member of the {site.name} team will call you to go over what you need and answer your questions. When you&apos;re ready, we&apos;ll connect you
+          directly with an authorized insurance company or agent that can give you a quote.
         </p>
+        <p className="mt-3 leading-relaxed text-road">There&apos;s no obligation to buy, and the insurance company sets your final price and coverage.</p>
         <a href={biz.phoneHref} className="btn-primary mt-8">Call now: {biz.phone}</a>
       </div>
     );
@@ -88,7 +89,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
 
       <p className="mt-8 text-sm leading-relaxed text-road">
         Final price is set by the insurance company after it checks your driving record and other details.
-        A licensed agent may reach out to help you finish.
+        Our team may call you to help you finish.
       </p>
     </div>
   );
