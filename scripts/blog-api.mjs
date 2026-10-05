@@ -12,6 +12,11 @@
 //   node scripts/blog-api.mjs update <id-or-slug> <post.json>   change only the fields in the file
 //   node scripts/blog-api.mjs upload <image> --alt "Alt text"   returns the image id
 //   node scripts/blog-api.mjs category "Name" [--description "..."]
+//   node scripts/blog-api.mjs states                              all state guides and their status
+//   node scripts/blog-api.mjs state <code> [--out file]           one state guide (e.g. TX)
+//   node scripts/blog-api.mjs state-update <code> <state.json>    change content; legal facts need "verified": true
+//     state.json: { "intro", "contentFile": "extra.html" (or "contentHtml"), "seoTitle", "seoDescription",
+//       "avgAnnualPremium", "premiumSource", "requirementNote", "verified", "published" }
 //
 // post.json: { "title", "contentFile": "post.html" (or "content"), "slug", "excerpt", "category",
 //   "tags": [..], "coverImageId", "coverAlt", "seoTitle", "seoDescription", "status": "draft"|"review"|"publish", "publishAt" }
@@ -124,6 +129,24 @@ switch (cmd) {
     console.log(JSON.stringify(await call(env, "POST", "/categories", { name: args[0], description }), null, 2));
     break;
   }
+  case "states":
+    await output(await call(env, "GET", "/states"), out);
+    break;
+  case "state":
+    if (!args[0]) fail("Usage: state <code>");
+    await output(await call(env, "GET", `/states/${encodeURIComponent(args[0])}`), out);
+    break;
+  case "state-update": {
+    if (!args[0] || !args[1]) fail("Usage: state-update <code> <state.json>");
+    const body = JSON.parse(await readFile(args[1], "utf8"));
+    if (body.contentFile) {
+      body.contentHtml = await readFile(path.resolve(path.dirname(path.resolve(args[1])), body.contentFile), "utf8");
+      delete body.contentFile;
+    }
+    const r = await call(env, "PATCH", `/states/${encodeURIComponent(args[0])}`, body);
+    console.log(JSON.stringify({ message: r.message, code: r.state.code, published: r.state.published, verifiedAt: r.state.verifiedAt, url: r.state.url }, null, 2));
+    break;
+  }
   default:
-    fail("Commands: site | get | create | update | upload | category (see the top of scripts/blog-api.mjs)");
+    fail("Commands: site | get | create | update | upload | category | states | state | state-update (see the top of scripts/blog-api.mjs)");
 }
