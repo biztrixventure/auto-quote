@@ -7,6 +7,9 @@ export const site = {
   url: (process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   description:
     "Compare car insurance quotes from several companies, or get a quote on a vehicle service contract for costly repairs. Two separate products, explained clearly.",
+  // Official profile pages on other sites (LinkedIn, Facebook, Trustpilot, Crunchbase, Bing Places…).
+  // Added to the Organization data as sameAs, which helps Google build a knowledge panel.
+  sameAs: [] as string[],
   phone: "(800) 555-0142",
   phoneHref: "tel:+18005550142",
   email: "quotes@example.com",
