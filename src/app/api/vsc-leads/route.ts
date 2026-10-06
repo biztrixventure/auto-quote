@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   const phone = digitsOnly(form.phone).replace(/^1(?=\d{10}$)/, "");
   const email = form.email.toLowerCase();
 
-  const existing = await recentDuplicate("vsc", phone, email);
+  const existing = await recentDuplicate("vsc", phone, email, { year: Number(form.vehicleYear), make: form.vehicleMake, model: form.vehicleModel });
   if (existing) {
     await audit("api", "duplicate_submission", "lead", existing);
     return NextResponse.json({ id: existing, duplicate: true });

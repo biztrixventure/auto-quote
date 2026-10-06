@@ -46,10 +46,19 @@ export async function readLeadRequest(req: NextRequest): Promise<{ body: unknown
   }
 }
 
-/** Same person, same product, within 24 hours: returns the earlier lead's id. */
-export async function recentDuplicate(line: string, phone: string, email: string) {
+/** Same person, same product and same car within 24 hours: returns the earlier lead's id. */
+export async function recentDuplicate(line: string, phone: string, email: string, vehicle: { year: number; make: string; model: string }) {
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const existing = await db.lead.findFirst({ where: { line, createdAt: { gte: since }, OR: [{ phone }, { email }] }, select: { id: true } });
+  // Only the same car counts as a repeat; a second car is a new request with its own quotes.
+  const existing = await db.lead.findFirst({
+    where: {
+      line,
+      createdAt: { gte: since },
+      OR: [{ phone }, { email }],
+      vehicles: { some: { year: vehicle.year, make: { equals: vehicle.make, mode: "insensitive" }, model: { equals: vehicle.model, mode: "insensitive" } } },
+    },
+    select: { id: true },
+  });
   return existing?.id ?? null;
 }
 
