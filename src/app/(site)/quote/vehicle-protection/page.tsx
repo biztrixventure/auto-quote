@@ -75,6 +75,11 @@ export default async function VehicleProtectionQuotePage() {
           with, and explains each one in plain English. You review the full contract before you decide, and there is no obligation to buy. A vehicle service contract is not insurance; it is an optional contract that may pay
           for eligible repairs depending on its terms.
         </p>
+        <h2>30-day money-back guarantee</h2>
+        <p>
+          If you&apos;re not happy with your vehicle service contract, you can cancel within 30 days of purchase and get a full refund, as long as no claims
+          have been filed. After 30 days you can still cancel for a prorated refund, minus any claims paid and fees listed in your contract.
+        </p>
         <p>
           Not sure a plan is right for you? Read <Link href="/blog/are-extended-car-warranties-worth-it">are extended car warranties worth it?</Link>, our guide
           to <Link href="/blog/extended-warranty-for-used-cars">extended warranties for used cars</Link>, or <Link href="/repair-costs">see common car repair costs</Link>.
@@ -108,5 +113,9 @@ const FAQS = [
   {
     q: "Do I have to buy after getting a quote?",
     a: "No. The quote is free with no obligation. You can review the provider's contract terms and decide later.",
+  },
+  {
+    q: "Can I cancel and get my money back?",
+    a: "Yes. Every vehicle service contract we sell comes with a 30-day money-back guarantee: cancel within 30 days of purchase for a full refund, as long as no claims have been filed. After that, you can usually cancel for a prorated refund under the terms of your contract.",
   },
 ];

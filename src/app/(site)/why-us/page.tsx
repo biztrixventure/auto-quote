@@ -192,7 +192,7 @@ export default async function WhyUsPage() {
               <strong className="text-asphalt">Car insurance</strong> pays after an accident, theft or weather damage, and most states require it. A <strong className="text-asphalt">vehicle service contract</strong>, often called an extended car warranty, is not insurance: it pays when a part listed in the contract breaks down on its own, such as an engine, transmission or A/C failure.
             </p>
             <p>
-              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. {site.name} offers both, and our team explains each one so you can choose what fits.
+              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. {site.name} offers both, and our team explains each one so you can choose what fits. Every service contract we sell comes with a 30-day money-back guarantee.
             </p>
             <p>
               Have questions? Read our <Link href="/faq" className="font-semibold text-sky underline-offset-2 hover:underline">frequently asked questions</Link>, check <Link href="/repair-costs" className="font-semibold text-sky underline-offset-2 hover:underline">what common repairs cost</Link>, or browse helpful guides on the <Link href="/blog" className="font-semibold text-sky underline-offset-2 hover:underline">{site.name} blog</Link>.

@@ -123,7 +123,7 @@ export function VscQuoteForm({ consentText, consentVersion, phone, phoneHref }: 
       <div className="rounded-2xl border border-rail bg-white px-6 py-8 shadow-[0_20px_50px_-24px_rgba(38,42,48,0.2)] sm:px-10 sm:py-10">
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">Vehicle service contract</p>
         <h1 className="mt-2 text-2xl font-extrabold leading-tight sm:text-[1.9rem]">Get a quote to help with repair bills</h1>
-        <p className="mt-2 max-w-xl leading-relaxed text-road">Tell us about your car. We&apos;ll contact you with plan options and prices. Free, with no obligation.</p>
+        <p className="mt-2 max-w-xl leading-relaxed text-road">Tell us about your car. We&apos;ll contact you with plan options and prices. Free, with no obligation, and every plan comes with a 30-day money-back guarantee.</p>
 
         <fieldset className="mt-8">
           <legend className="text-lg font-bold">Your car</legend>
