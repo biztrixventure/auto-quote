@@ -61,7 +61,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
             <FormField label="Legal business name" htmlFor="b-legal" hint="Shown in the footer copyright line.">
               <input id="b-legal" name="agencyLegalName" defaultValue={business.agencyLegalName} maxLength={120} className={inputCls} />
             </FormField>
-            <FormField label="License note" htmlFor="b-license" hint="Shown in the footer: what your business is (e.g. a referral service, not an insurance company). If you hold an insurance license, add your NPN and states here.">
+            <FormField label="License note" htmlFor="b-license" hint="Shown in the footer on every page, e.g. “Licensed insurance agency. License numbers available on request.” Many states have rules about showing license numbers in insurance ads; check with your lawyer.">
               <textarea id="b-license" name="licenseNote" defaultValue={business.licenseNote} maxLength={400} rows={2} className={`${inputCls} h-auto py-2.5`} />
             </FormField>
             <FormField

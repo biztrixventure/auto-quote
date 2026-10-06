@@ -82,7 +82,7 @@ export default async function Home() {
               Could You Afford A $3,000 Auto Repair Bill Today?
             </h2>
             <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-road md:mx-0">
-              A vehicle service contract can help protect your budget from expensive car repair surprises. Our team explains your options and connects you with an authorized provider.
+              A vehicle service contract through {site.name} can help protect your budget from expensive car repair surprises. Our team shows you plan options and prices for your car.
             </p>
             <p className="mx-auto mt-4 max-w-md text-sm text-road/80 md:mx-0">*A deductible may apply. {VSC_DISCLOSURE}</p>
             <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-7 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">

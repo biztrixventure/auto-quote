@@ -173,8 +173,8 @@ export function QuoteBanner({ product = "auto" }: { product?: ProductLine }) {
             </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-white/85">
               {vsc
-                ? "Tell us about your car. Our team will explain your options and connect you with an authorized service contract provider."
-                : "Answer one quick form and our team will help you get quotes from insurance companies that cover your area."}
+                ? "Tell us about your car and we'll contact you with vehicle service contract options and prices."
+                : "Compare quotes from the insurance companies we work with in one quick form, or call a licensed agent for help."}
             </p>
           </div>
           <div>

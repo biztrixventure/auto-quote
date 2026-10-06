@@ -16,7 +16,7 @@ const STEPS: { key: StepKey; label: string; title: string; subtitle: string }[] 
   { key: "driver", label: "Driver", title: "Who is the main driver?", subtitle: "Enter the details exactly as they appear on the driver's license." },
   { key: "history", label: "History", title: "Driving history", subtitle: "Insurance companies check driving records, so accurate answers mean the price you see is close to the price you pay." },
   { key: "insurance", label: "Coverage", title: "Your current insurance", subtitle: "Tell us about your current coverage and how much protection you want." },
-  { key: "contact", label: "Contact", title: "Where should we send your quotes?", subtitle: "Our team will contact you here to go over your options and connect you with insurance companies." },
+  { key: "contact", label: "Contact", title: "Where should we send your quotes?", subtitle: "We'll send your quotes here, and a licensed agent may contact you to help you finish." },
 ];
 
 const DRAFT_KEY = "aq_draft";
@@ -480,7 +480,7 @@ export function QuoteForm({ initialZip, consentText, consentVersion, phone, phon
 
         <div className="rounded-2xl bg-[linear-gradient(135deg,#0B2F5B_0%,#1F5FAD_100%)] p-6 text-white">
           <p className="text-lg font-bold">Prefer to talk to someone?</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-white/80">Our team can answer your questions and help you get quotes by phone.</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-white/80">A licensed agent can answer your questions and help you compare quotes by phone.</p>
           <a href={phoneHref} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 font-semibold text-asphalt transition hover:bg-white/90">
             <svg aria-hidden width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" /></svg>
             {phone}
@@ -488,7 +488,7 @@ export function QuoteForm({ initialZip, consentText, consentVersion, phone, phon
         </div>
 
         <ul className="space-y-3 rounded-2xl border border-rail bg-white p-6 text-sm text-road">
-          {["Free to compare", "No obligation to buy", "Real people to help you"].map((t) => (
+          {["Free to compare", "No obligation to buy", "Licensed agents to help you"].map((t) => (
             <li key={t} className="flex items-center gap-3">
               <span aria-hidden className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-sky/10 text-sky">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>

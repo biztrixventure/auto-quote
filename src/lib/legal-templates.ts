@@ -27,7 +27,7 @@ export const DEFAULT_PRIVACY_HTML = `
 <h2>How we use your information</h2>
 <ul>
 <li>To compare and show you car insurance quotes and vehicle protection options.</li>
-<li>To call you about your request and connect you with insurance companies, agents and vehicle service contract providers who can help you.</li>
+<li>To contact you about your request, provide quotes, and work with the insurance companies and vehicle service contract providers who can offer you coverage or a plan.</li>
 <li>To contact you by phone, text message and email about your request, with your consent.</li>
 <li>To run, secure and improve our website, prevent fraud and fix problems.</li>
 <li>To measure and improve our advertising.</li>
@@ -95,7 +95,7 @@ export const DEFAULT_TERMS_HTML = `
 <p>These Terms of Use apply to your use of {site_url} and any services offered on it by {legal_name} (“{company}”, “we”, “us”). By using this website you agree to these terms. If you do not agree, please do not use the website.</p>
 
 <h2>Our service</h2>
-<p>{company} is a marketing and referral service. When you request a car insurance or vehicle service contract quote, our team contacts you and, if you choose, connects you with an authorized insurance company, agent or service contract provider. We are not an insurance company, an insurance agency or a service contract provider, and we do not sell insurance policies or service contracts ourselves. Prices shown on this website are estimates based on the information you provide. For car insurance, your final price, coverage and eligibility are decided by the insurance company after it reviews your application, driving record and other details. For a vehicle service contract, the price, what is included and eligibility are set by the provider.</p>
+<p>{company} is a licensed insurance agency that also offers vehicle service contracts. We compare car insurance quotes from the insurance companies we work with, and we offer vehicle service contracts from the providers we partner with. We are not an insurance company: policies are issued by insurance companies, and service contracts are issued and administered by their providers. Prices shown on this website are estimates based on the information you provide. For car insurance, your final price, coverage and eligibility are decided by the insurance company after it reviews your application, driving record and other details. For a vehicle service contract, the price, what is included and eligibility are set by the provider.</p>
 
 <h2>Eligibility</h2>
 <p>You must be at least 18 years old and live in the United States to use our services.</p>

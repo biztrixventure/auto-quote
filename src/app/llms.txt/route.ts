@@ -29,9 +29,9 @@ export async function GET() {
     `> ${line(biz.description)}`,
     "",
     line(
-      `${biz.name} is a marketing and referral service for US drivers, not an insurance company, agency or service contract provider. ` +
-        `Its team explains two separate products, car insurance and vehicle service contracts (often called extended car warranties; they are not insurance), ` +
-        `and connects people with authorized insurance companies, agents and service contract providers. Phone: ${biz.phone}.`,
+      `${biz.name} is a licensed insurance agency for US drivers that also offers vehicle service contracts. ` +
+        `It offers two separate products: car insurance quotes from the insurance companies it works with, and vehicle service contracts ` +
+        `(often called extended car warranties; they are not insurance) from the providers it partners with. Phone: ${biz.phone}.`,
     ),
     "",
     "## Main pages",

@@ -41,10 +41,10 @@ export default async function AboutPage() {
         <div className="post-content">
           <h2>What we do</h2>
           <p>
-            {site.name} is a <strong>marketing and referral service</strong>. We are not an insurance company, an insurance agency or a vehicle service contract
-            provider. When you request a <Link href="/quote/auto">car insurance quote</Link> or a <Link href="/quote/vehicle-protection">vehicle service contract
-            quote</Link>, our team calls you, answers your questions and explains your options in plain English. If you want to go ahead, we connect you directly
-            with an authorized insurance company, agent or service contract provider, and that company gives you its price and terms.
+            {site.name} is a <strong>licensed insurance agency</strong> that also offers vehicle service contracts. When you request a{" "}
+            <Link href="/quote/auto">car insurance quote</Link>, our licensed agents compare quotes from the insurance companies we work with and help you choose
+            the coverage that fits. When you request a <Link href="/quote/vehicle-protection">vehicle service contract quote</Link>, our team shows you plan options
+            and prices from the service contract providers we partner with. You can buy through us, and the policy or contract is issued by the company you choose.
           </p>
           <p>
             Car insurance and vehicle service contracts are two different products, and we always explain the difference: insurance pays for damage after an
@@ -66,8 +66,8 @@ export default async function AboutPage() {
 
           <h2>How we are paid</h2>
           <p>
-            Our quotes and guides are free to use. We may be paid by insurance companies, agents, service contract providers and other partners when we connect
-            you with them or when you buy through them. That never changes what our guides say about the law or how these products work, and our{" "}
+            Our quotes and guides are free to use. We are paid commissions by the insurance companies and service contract providers we work with when you buy a
+            policy or plan through us. That never changes what our guides say about the law or how these products work, and our{" "}
             <Link href="/privacy">Privacy Policy</Link> explains how your information is used and how to <Link href="/do-not-sell">opt out of its sale or sharing</Link>.
           </p>
 

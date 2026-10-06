@@ -10,7 +10,7 @@ import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 const title = `Why Choose ${site.name}`;
-const description = `How ${site.name} helps: real people who explain car insurance and vehicle service contract options in plain English and connect you with authorized companies. Free, no obligation.`;
+const description = `Why drivers choose ${site.name}: licensed agents for car insurance, vehicle service contract plans for repair bills, quotes from companies we work with, and real people to help. Free, no obligation.`;
 
 export const metadata: Metadata = {
   title,
@@ -32,9 +32,9 @@ const REASON_ICONS = [
 
 const STEPS = [
   { title: "Tell us what you need", body: "Car insurance, a vehicle service contract, or both. The form takes a few minutes." },
-  { title: "Talk to our team", body: "We call you, answer your questions and explain your options in plain English." },
-  { title: "Get connected", body: "If you want to go ahead, we connect you directly with an authorized insurance company or service contract provider." },
-  { title: "You decide", body: "Review the provider's price and terms. There's no obligation to buy." },
+  { title: "Talk to our team", body: "A licensed agent, or a service contract specialist, answers your questions and explains your options in plain English." },
+  { title: "Compare prices", body: "See quotes and plans from the insurance companies and service contract providers we work with." },
+  { title: "Choose and buy", body: "Pick the option that fits and buy through us. There's no obligation." },
 ];
 
 const COVERED = ["Engine", "Transmission", "Cooling system", "Brakes", "Electrical", "Drive axle", "A/C", "Roadside help", "Trip interruption"];
@@ -192,7 +192,7 @@ export default async function WhyUsPage() {
               <strong className="text-asphalt">Car insurance</strong> pays after an accident, theft or weather damage, and most states require it. A <strong className="text-asphalt">vehicle service contract</strong>, often called an extended car warranty, is not insurance: it pays when a part listed in the contract breaks down on its own, such as an engine, transmission or A/C failure.
             </p>
             <p>
-              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. Our team can explain each one and connect you with authorized companies for the one you choose.
+              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. {site.name} offers both, and our team explains each one so you can choose what fits.
             </p>
             <p>
               Have questions? Read our <Link href="/faq" className="font-semibold text-sky underline-offset-2 hover:underline">frequently asked questions</Link>, check <Link href="/repair-costs" className="font-semibold text-sky underline-offset-2 hover:underline">what common repairs cost</Link>, or browse helpful guides on the <Link href="/blog" className="font-semibold text-sky underline-offset-2 hover:underline">{site.name} blog</Link>.
