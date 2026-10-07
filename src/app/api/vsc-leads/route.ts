@@ -49,8 +49,8 @@ export async function POST(req: NextRequest) {
       lastName: form.lastName,
       email,
       phone,
-      address: "",
-      city: "",
+      address: form.address,
+      city: form.city,
       state: form.state,
       zip: form.zip,
       coverageLevel: form.planInterest, // the plan level the person is most interested in
@@ -60,15 +60,29 @@ export async function POST(req: NextRequest) {
       doNotContact,
       doNotSell,
       trustedFormCertUrl: trustedFormCertUrl || null,
+      drivers: {
+        create: {
+          isPrimary: true,
+          firstName: form.firstName,
+          lastName: form.lastName,
+          dateOfBirth: form.dateOfBirth,
+          gender: form.gender,
+          maritalStatus: form.maritalStatus,
+          licenseStatus: form.licenseStatus,
+          accidents: Number(form.accidents),
+          violations: Number(form.violations),
+        },
+      },
       vehicles: {
         create: {
           year: Number(form.vehicleYear),
           make: form.vehicleMake,
           model: form.vehicleModel,
-          ownership: "own",
-          primaryUse: "pleasure",
-          annualMiles: 0,
+          ownership: form.ownership,
+          primaryUse: form.primaryUse,
+          annualMiles: Number(form.annualMiles),
           mileage: Number(form.mileage),
+          factoryWarranty: form.factoryWarranty,
         },
       },
       consent: {

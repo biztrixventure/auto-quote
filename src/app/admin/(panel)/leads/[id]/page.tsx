@@ -217,6 +217,9 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
                 {v && <Field label="Vehicle">{`${v.year} ${v.make} ${v.model}`}</Field>}
                 {v && !isVsc && <Field label="Use">{`${label(v.ownership)} · ${label(v.primaryUse)} · ${v.annualMiles.toLocaleString()} mi/yr`}</Field>}
                 {v?.mileage ? <Field label="Mileage">{v.mileage >= 200000 ? "150,000 or more miles" : `Up to ${v.mileage.toLocaleString()} miles`}</Field> : null}
+                {isVsc && v?.factoryWarranty ? (
+                  <Field label="Factory warranty">{({ yes: "Still active", no: "Ended", not_sure: "Not sure" } as Record<string, string>)[v.factoryWarranty] ?? v.factoryWarranty}</Field>
+                ) : null}
                 {isVsc && v && (
                   <Field label="Prices shown">
                     {estimatePlans(v, lead.createdAt).map((p) => `${p.name}: $${p.low}-$${p.high}/mo`).join(" · ") || "None (call for a price)"}

@@ -92,22 +92,14 @@ export const leadSubmissionSchema = z.object({
   website: z.string().max(200).optional(), // honeypot, must stay empty
 });
 
-// Vehicle service contract quote request: the car, its mileage and how to reach the person.
-// No driving or insurance questions: a service contract isn't priced on the driver.
+// Service contract quote request. Same six steps as the original quote form (location, vehicle,
+// driver, history, coverage, contact); the coverage step asks about the factory warranty and the
+// plan level instead of insurance, and the vehicle step adds the odometer mileage used for prices.
 export const VSC_MILEAGE = ["25000", "50000", "75000", "100000", "125000", "150000", "200000"] as const;
-export const vscFormSchema = z.object({
-  zip: quoteFormSchema.shape.zip,
-  state: quoteFormSchema.shape.state,
-  vehicleYear: quoteFormSchema.shape.vehicleYear,
-  vehicleMake: quoteFormSchema.shape.vehicleMake,
-  vehicleModel: quoteFormSchema.shape.vehicleModel,
+export const vscFormSchema = quoteFormSchema.omit({ currentlyInsured: true, currentCarrier: true, coverageLevel: true }).extend({
   mileage: z.enum(VSC_MILEAGE, { message: "Choose the mileage" }),
-  planInterest: z.enum(PLAN_INTEREST, { message: "Choose a plan, or “Not sure yet”" }),
-  firstName: quoteFormSchema.shape.firstName,
-  lastName: quoteFormSchema.shape.lastName,
-  email: quoteFormSchema.shape.email,
-  phone: quoteFormSchema.shape.phone,
-  consent: quoteFormSchema.shape.consent,
+  factoryWarranty: z.enum(["yes", "no", "not_sure"], { message: "Choose one" }),
+  planInterest: z.enum(PLAN_INTEREST, { message: "Choose a plan, or \u201cNot sure yet\u201d" }),
 });
 
 export type VscFormValues = z.infer<typeof vscFormSchema>;
@@ -116,10 +108,12 @@ export const vscSubmissionSchema = leadSubmissionSchema.extend({ form: vscFormSc
 
 // Steps of the service contract quote form and the fields each one checks before moving on.
 export const VSC_STEP_FIELDS = {
-  car: ["vehicleYear", "vehicleMake", "vehicleModel"],
-  details: ["mileage", "zip", "state"],
-  plan: ["planInterest"],
-  contact: ["firstName", "lastName", "email", "phone", "consent"],
+  location: ["zip", "state"],
+  vehicle: ["vehicleYear", "vehicleMake", "vehicleModel", "mileage", "ownership", "primaryUse", "annualMiles"],
+  driver: ["firstName", "lastName", "dateOfBirth", "gender", "maritalStatus"],
+  history: ["licenseStatus", "accidents", "violations"],
+  coverage: ["factoryWarranty", "planInterest"],
+  contact: ["email", "phone", "address", "city", "consent"],
 } as const satisfies Record<string, readonly (keyof VscFormValues)[]>;
 
 export type VscStepKey = keyof typeof VSC_STEP_FIELDS;

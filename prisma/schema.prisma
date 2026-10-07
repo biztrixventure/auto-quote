@@ -101,6 +101,7 @@ model Vehicle {
   primaryUse  String // commute | pleasure | business
   annualMiles Int
   mileage     Int? // odometer reading (service contract leads)
+  factoryWarranty String? // yes | no | not_sure (service contract leads)
 }
 
 // Proof of TCPA consent. Never delete or edit these rows.

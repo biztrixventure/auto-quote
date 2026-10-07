@@ -9,8 +9,9 @@ export const DEFAULT_PRIVACY_HTML = `
 <h2>Information we collect</h2>
 <h3>Information you give us</h3>
 <ul>
-<li><strong>Contact details:</strong> name, email address, phone number, ZIP code and state.</li>
-<li><strong>Vehicle details:</strong> year, make, model and current mileage.</li>
+<li><strong>Contact details:</strong> name, email address, phone number and home address.</li>
+<li><strong>Vehicle details:</strong> year, make, model, current mileage, ownership, use, annual mileage and whether the factory warranty is still active.</li>
+<li><strong>Driver details:</strong> date of birth, gender, marital status, license status, and recent accidents or violations.</li>
 <li><strong>Plan preferences:</strong> the kind of protection you are interested in.</li>
 <li><strong>Messages:</strong> anything you tell us by phone, email, text or our forms.</li>
 </ul>
@@ -68,7 +69,7 @@ export const DEFAULT_PRIVACY_HTML = `
 <p>To opt out of the sale or sharing of your personal information, use our <a href="/do-not-sell">Do Not Sell or Share My Personal Information</a> page. We also honor Global Privacy Control signals sent by your browser. Once you opt out, we will not sell or share your information with marketing partners, and we turn off advertising tracking for your browser.</p>
 
 <h2>California notice</h2>
-<p>In the last 12 months we collected these categories of personal information: identifiers (such as name, email, phone and IP address); commercial information (such as your vehicle, its mileage and the plans you asked about); internet activity; and inferences drawn from this information. We collect it from you, your device and the partners described above, for the purposes in <a href="#how-we-use-your-information">How we use your information</a>. We may have sold or shared identifiers, commercial information and internet activity with marketing partners and advertising networks. We do not knowingly sell or share the personal information of people under 16.</p>
+<p>In the last 12 months we collected these categories of personal information: identifiers (such as name, email, phone and IP address); personal records (such as address); characteristics of protected classes (such as age, gender and marital status); commercial information (such as your vehicle, its mileage and the plans you asked about); internet activity; and inferences drawn from this information. We collect it from you, your device and the partners described above, for the purposes in <a href="#how-we-use-your-information">How we use your information</a>. We may have sold or shared identifiers, personal records, commercial information and internet activity with marketing partners and advertising networks. We do not knowingly sell or share the personal information of people under 16.</p>
 
 <h2>How long we keep information</h2>
 <p>We keep personal information as long as needed for the purposes above, including to keep records of your consent and your contract, and to meet tax and other legal requirements, and then delete or de-identify it.</p>
