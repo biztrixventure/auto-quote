@@ -15,13 +15,13 @@ export function ZipStart({ dark = false }: { dark?: boolean }) {
       setError("Enter a 5-digit ZIP code");
       return;
     }
-    router.push(`/quote/auto?zip=${zip}`);
+    router.push(`/quote/vehicle-protection?zip=${zip}`);
   }
 
   return (
     <form onSubmit={start} noValidate className="w-full max-w-md">
       <label htmlFor={id} className={`label ${dark ? "text-white" : ""}`}>
-        Where do you park your car?
+        Enter your ZIP code to see plans for your area
       </label>
       <div className="flex gap-2">
         <input
@@ -40,7 +40,7 @@ export function ZipStart({ dark = false }: { dark?: boolean }) {
           className="input flex-1 text-lg"
         />
         <button type="submit" className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">
-          Start my quote
+          See my prices
         </button>
       </div>
       {error && <p id={`${id}-error`} className={`error ${dark ? "text-red-300" : ""}`}>{error}</p>}

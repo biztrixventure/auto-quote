@@ -8,8 +8,8 @@ import { digitsOnly, vscSubmissionSchema } from "@/lib/validation";
 
 export const runtime = "nodejs";
 
-// Vehicle service contract quote requests. Saved as Lead.line = "vsc" and handled by the team:
-// they are never sent to the car insurance rater or insurance lead buyers.
+// Vehicle service contract quote requests, saved as Lead.line = "vsc". The visitor then sees
+// estimated plan prices on /quote/results/[id], and the team calls to finish.
 export async function POST(req: NextRequest) {
   const request = await readLeadRequest(req);
   if (request instanceof NextResponse) return request;
@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
       city: "",
       state: form.state,
       zip: form.zip,
+      coverageLevel: form.planInterest, // the plan level the person is most interested in
       ...tracking,
       ipAddress: ip,
       userAgent,

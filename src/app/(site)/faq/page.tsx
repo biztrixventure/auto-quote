@@ -5,7 +5,7 @@ import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 const title = "Vehicle Service Contract FAQ";
-const description = "Vehicle service contract (extended car warranty) questions answered: what's included, when you can buy one and how it differs from car insurance.";
+const description = "Extended car warranty (vehicle service contract) questions answered: what's included, what it costs, when you can buy one and how cancellation works.";
 
 export const metadata: Metadata = {
   title,
@@ -19,9 +19,9 @@ export default async function FaqPage() {
   const faqs = content.faqs.map((f, i) => ({ q: fillCompany(f.q), a: fillCompany(f.a), call: i === 0 }));
   return (
     <>
-      <PageHero eyebrow="FAQ" title={title} intro="Quick answers about vehicle service contracts: what they include, what they cost and how they work. For car insurance questions, see our state guides." crumbs={[{ name: "FAQ", href: "/faq" }]} />
+      <PageHero eyebrow="FAQ" title={title} intro="Quick answers about extended car warranties, also called vehicle service contracts: what they include, what they cost and how they work." crumbs={[{ name: "FAQ", href: "/faq" }]} />
       <FaqSection faqs={faqs} phone={biz.phone} phoneHref={biz.phoneHref} bare withSchema />
-      <QuoteBanner product="vsc" />
+      <QuoteBanner />
     </>
   );
 }

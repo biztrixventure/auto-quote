@@ -10,7 +10,7 @@ import { fillCompany, getSettings, getSite } from "@/lib/settings";
 import { site } from "@/lib/site";
 
 const title = `Why Choose ${site.name}`;
-const description = `Why drivers choose ${site.name}: licensed agents for car insurance, vehicle service contract plans for repair bills, quotes from companies we work with, and real people to help. Free, no obligation.`;
+const description = `Why drivers choose ${site.name} for an extended car warranty: plans from powertrain to complete, prices for your car in minutes, a 30-day money-back guarantee and real people to help.`;
 
 export const metadata: Metadata = {
   title,
@@ -31,10 +31,10 @@ const REASON_ICONS = [
 ];
 
 const STEPS = [
-  { title: "Tell us what you need", body: "Car insurance, a vehicle service contract, or both. The form takes a few minutes." },
-  { title: "Talk to our team", body: "A licensed agent, or a service contract specialist, answers your questions and explains your options in plain English." },
-  { title: "Compare prices", body: "See quotes and plans from the insurance companies and service contract providers we work with." },
-  { title: "Choose and buy", body: "Pick the option that fits and buy through us. There's no obligation." },
+  { title: "Tell us about your car", body: "Year, make, model and mileage. The quote takes about 2 minutes." },
+  { title: "See your prices", body: "Get estimated prices for every plan your car qualifies for, from powertrain to complete." },
+  { title: "Talk to our team", body: "A service contract specialist answers your questions and confirms your exact price." },
+  { title: "Choose and drive", body: "Pick the plan that fits. Every plan comes with a 30-day money-back guarantee." },
 ];
 
 const COVERED = ["Engine", "Transmission", "Cooling system", "Brakes", "Electrical", "Drive axle", "A/C", "Roadside help", "Trip interruption"];
@@ -86,7 +86,7 @@ export default async function WhyUsPage() {
         }
       >
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</Link>
+          <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">See plan prices for my car</Link>
           <a href={biz.phoneHref} className="btn-secondary">Call {biz.phone}</a>
         </div>
       </PageHero>
@@ -98,7 +98,7 @@ export default async function WhyUsPage() {
             <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">What sets us apart</p>
             <h2 className="mt-2 text-3xl font-extrabold leading-tight sm:text-4xl">Help from real people</h2>
             <p className="mt-4 text-lg leading-relaxed text-road">
-              Car insurance and repair protection can be confusing. Here&apos;s how {site.name} makes the process simpler.
+              Extended car warranties can be confusing. Here&apos;s how {site.name} makes choosing one simpler.
             </p>
           </Reveal>
           <ul className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -185,14 +185,14 @@ export default async function WhyUsPage() {
       <section className="bg-[#F7F9FC]">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-2 md:gap-14 md:py-20">
           <Reveal>
-            <h2 className="text-3xl font-extrabold leading-tight text-asphalt sm:text-4xl">Vehicle service contract or car insurance: what&apos;s the difference?</h2>
+            <h2 className="text-3xl font-extrabold leading-tight text-asphalt sm:text-4xl">Extended car warranty or vehicle service contract: what&apos;s the difference?</h2>
           </Reveal>
           <Reveal delay={100} className="space-y-4 text-[17px] leading-relaxed text-road">
             <p>
-              <strong className="text-asphalt">Car insurance</strong> pays after an accident, theft or weather damage, and most states require it. A <strong className="text-asphalt">vehicle service contract</strong>, often called an extended car warranty, is not insurance: it pays when a part listed in the contract breaks down on its own, such as an engine, transmission or A/C failure.
+              Most people say <strong className="text-asphalt">extended car warranty</strong>, but what you actually buy after the factory warranty ends is a <strong className="text-asphalt">vehicle service contract</strong>: an optional contract that pays when a part it lists breaks down on its own, such as an engine, transmission or A/C failure. Only the carmaker&apos;s original coverage is technically a warranty.
             </p>
             <p>
-              Many drivers have both: insurance for accidents on the road, and a service contract for the repair bills that come with age and mileage. {site.name} offers both, and our team explains each one so you can choose what fits. Every service contract we sell comes with a 30-day money-back guarantee.
+              A service contract is not car insurance, which pays after accidents, theft or weather. It covers the repair bills that come with age and mileage. Every plan {site.name} sells comes with a 30-day money-back guarantee, so you can review your contract with no risk.
             </p>
             <p>
               Have questions? Read our <Link href="/faq" className="font-semibold text-sky underline-offset-2 hover:underline">frequently asked questions</Link>, check <Link href="/repair-costs" className="font-semibold text-sky underline-offset-2 hover:underline">what common repairs cost</Link>, or browse helpful guides on the <Link href="/blog" className="font-semibold text-sky underline-offset-2 hover:underline">{site.name} blog</Link>.
@@ -202,7 +202,7 @@ export default async function WhyUsPage() {
       </section>
 
       <CustomerReviews />
-      <QuoteBanner product="vsc" />
+      <QuoteBanner />
     </>
   );
 }

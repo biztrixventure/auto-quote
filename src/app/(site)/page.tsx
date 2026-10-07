@@ -54,14 +54,10 @@ export default async function Home() {
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/85">
               {fillCompany(content.hero.subtitle)}
             </p>
-            {/* Car insurance ZIP start first: the quickest way in. Service contracts get a quieter link. */}
+            {/* ZIP start first: the quickest way into the quote. */}
             <div className="mt-8 max-w-md">
               <ZipStart dark />
-              <p className="mt-3 text-sm text-white/75">Free to compare. No obligation to buy.</p>
-              <p className="mt-4 text-sm text-white/85">
-                Worried about repair bills instead?{" "}
-                <a href={PRODUCTS.vsc.quoteHref} className="font-semibold text-line underline-offset-2 hover:underline">Get a vehicle service contract quote →</a>
-              </p>
+              <p className="mt-3 text-sm text-white/75">Free quote. No obligation. 30-day money-back guarantee.</p>
             </div>
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-white/90">
               <span>Free quotes, no obligation</span>
@@ -86,7 +82,7 @@ export default async function Home() {
             </p>
             <p className="mx-auto mt-4 max-w-md text-sm text-road/80 md:mx-0">*A deductible may apply. {VSC_DISCLOSURE}</p>
             <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-7 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
-              Get a service contract quote
+              See plan prices for my car
             </a>
           </Reveal>
           <Reveal from="pop" delay={150} className="order-first md:order-2">
@@ -147,7 +143,7 @@ export default async function Home() {
                 })}
               </ul>
             )}
-            <a href="/quote" className="btn-primary mt-8 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
+            <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-8 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
               Get a free quote
             </a>
           </Reveal>
@@ -160,22 +156,7 @@ export default async function Home() {
 
       <FaqSection faqs={faqs} phone={biz.phone} phoneHref={biz.phoneHref} />
 
-      {/* Car insurance: a separate product with its own section and quote form. */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-6xl px-5 pb-6 pt-14 md:pt-20">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[0.14em] text-sky">{PRODUCTS.auto.label}</p>
-            <h2 className="mt-2 text-3xl font-extrabold leading-tight sm:text-4xl">Compare Car Insurance Quotes</h2>
-            <p className="mt-5 text-lg leading-relaxed text-road">
-              Car insurance pays for damage and injuries after an accident, and almost every state requires it. Compare prices from several insurance companies
-              with one form, and check exactly what your state requires.
-            </p>
-            <a href="/car-insurance" className="mt-5 inline-block font-semibold text-sky hover:underline">See car insurance requirements by state →</a>
-          </Reveal>
-        </div>
-      </section>
-
-      <QuoteBanner product="auto" />
+      <QuoteBanner />
     </>
   );
 }

@@ -15,8 +15,8 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     "@context": "https://schema.org",
     "@graph": [
       {
-        // A plain Organization: the business offers car insurance quotes AND vehicle service
-        // contracts, which are not insurance, so a sitewide InsuranceAgency type would be misleading.
+        // A plain Organization: vehicle service contracts are not insurance, so an InsuranceAgency
+        // type would be misleading.
         "@type": "Organization",
         "@id": `${site.url}/#organization`,
         name: site.name,

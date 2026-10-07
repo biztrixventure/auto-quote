@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 // Defaults come from site.ts; the SEO and verification fields in /admin/settings override them.
 export async function generateMetadata(): Promise<Metadata> {
   const { seo, verification } = await getSettings();
-  const title = seo.title || `Car Insurance Quotes & Service Contracts | ${site.name}`;
+  const title = seo.title || `Extended Car Warranty Plans & Quotes | ${site.name}`;
   const description = seo.description || site.description;
   const other: Record<string, string> = {};
   if (verification.bing) other["msvalidate.01"] = verification.bing;
@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     verification: { google: verification.google || undefined, yandex: verification.yandex || undefined, other },
     formatDetection: { telephone: false, email: false, address: false },
-    category: "insurance",
+    category: "automotive",
   };
 }
 

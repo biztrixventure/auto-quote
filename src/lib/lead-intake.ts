@@ -4,7 +4,7 @@ import { visitorOptedOut } from "./legal";
 import { rateLimit } from "./rate-limit";
 import { clientIp } from "./security";
 
-// Checks shared by the public lead forms (car insurance: /api/leads, service contract: /api/vsc-leads).
+// Checks shared by the public lead form (/api/vsc-leads).
 
 const MAX_BODY_BYTES = 32 * 1024;
 

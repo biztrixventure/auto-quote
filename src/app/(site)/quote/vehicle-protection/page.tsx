@@ -6,31 +6,32 @@ import { jsonLd } from "@/lib/security";
 import { site } from "@/lib/site";
 
 export const metadata = {
-  title: "Vehicle Service Contract Quote",
-  description: "Get a free quote on a vehicle service contract that helps pay for costly car repairs after your factory warranty ends. Tell us about your car; no obligation.",
+  title: "Extended Car Warranty Quote: See Plan Prices in 2 Minutes",
+  description: "Get a free extended car warranty (vehicle service contract) quote. See estimated prices for powertrain to complete plans for your car. 30-day money-back guarantee.",
   alternates: { canonical: "/quote/vehicle-protection" },
   ...ogMetadata(
     {
-      eyebrow: "Vehicle service contract",
-      title: "Get a quote to help with repair bills",
-      subtitle: "Plan options and prices for your car. Free, no obligation.",
+      eyebrow: "Extended car warranty",
+      title: "See plan prices for your car",
+      subtitle: "Powertrain to complete protection. Free quote, 30-day money-back guarantee.",
       image: "/images/cta-car.webp",
     },
-    { url: "/quote/vehicle-protection", title: `Vehicle Service Contract Quote | ${site.name}` },
+    { url: "/quote/vehicle-protection", title: `Extended Car Warranty Quote | ${site.name}` },
   ),
 };
 
-export default async function VehicleProtectionQuotePage() {
-  const biz = await getSite();
+export default async function VehicleProtectionQuotePage({ searchParams }: { searchParams: Promise<{ zip?: string }> }) {
+  const [biz, { zip }] = await Promise.all([getSite(), searchParams]);
+  const initialZip = /^\d{5}$/.test(zip ?? "") ? zip! : "";
   // Tells search engines what this page offers and who provides it.
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": site.url + "/quote/vehicle-protection#service",
     category: "Vehicle service contract (not insurance)",
-    name: "Vehicle service contract quotes",
+    name: "Extended car warranty (vehicle service contract) quotes",
     serviceType: "Vehicle service contract",
-    description: "Free quotes on vehicle service contracts that help pay for car repairs. A vehicle service contract is not insurance.",
+    description: "Free quotes on vehicle service contracts, often called extended car warranties, that help pay for car repairs after the factory warranty ends. A vehicle service contract is not insurance.",
     url: site.url + "/quote/vehicle-protection",
     provider: { "@id": site.url + "/#organization" },
     areaServed: { "@type": "Country", name: "United States" },
@@ -44,7 +45,7 @@ export default async function VehicleProtectionQuotePage() {
     <div className="mx-auto max-w-6xl px-5 py-8 sm:py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }} />
-      <VscQuoteForm consentText={biz.vscConsentText} consentVersion={biz.vscConsentVersion} phone={biz.phone} phoneHref={biz.phoneHref} />
+      <VscQuoteForm initialZip={initialZip} consentText={biz.vscConsentText} consentVersion={biz.vscConsentVersion} phone={biz.phone} phoneHref={biz.phoneHref} />
 
       {/* What searchers want to know before they request a quote. */}
       <section className="post-content mx-auto mt-14 max-w-3xl">

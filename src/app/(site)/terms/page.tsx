@@ -4,13 +4,13 @@ import { fillLegal, getLegal } from "@/lib/legal";
 import { ogMetadata } from "@/lib/og";
 import { site } from "@/lib/site";
 
-const description = `The terms that apply when you use ${site.name} to compare car insurance quotes or request a vehicle service contract quote.`;
+const description = `The terms that apply when you use ${site.name} to get a quote on or buy a vehicle service contract (extended car warranty).`;
 
 export const metadata: Metadata = {
   title: "Terms of Use",
   description,
   alternates: { canonical: "/terms" },
-  ...ogMetadata({ eyebrow: "Legal", title: "Terms of Use", subtitle: "The terms that apply when you use our website for car insurance or service contract quotes." }, { url: "/terms", title: `Terms of Use | ${site.name}`, description }),
+  ...ogMetadata({ eyebrow: "Legal", title: "Terms of Use", subtitle: "The terms that apply when you use our website and buy a vehicle service contract." }, { url: "/terms", title: `Terms of Use | ${site.name}`, description }),
 };
 
 export default async function TermsPage() {

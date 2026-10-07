@@ -78,7 +78,7 @@ export function cleanNavigation(input: unknown): { ok: true; nav: NavigationSett
     return { ok: false, error: at ? `${at}: ${msg}` : msg.charAt(0).toUpperCase() + msg.slice(1) };
   }
   const nav = r.data;
-  if (nav.ctaLabel && !linkOk(nav.ctaHref)) return { ok: false, error: "The button link must be a page path like /quote/auto or a full https:// address." };
+  if (nav.ctaLabel && !linkOk(nav.ctaHref)) return { ok: false, error: "The button link must be a page path like /quote/vehicle-protection or a full https:// address." };
   if (nav.announcement.enabled) {
     if (!nav.announcement.text) return { ok: false, error: "Write the announcement text, or turn the announcement off." };
     if (nav.announcement.href && !linkOk(nav.announcement.href)) return { ok: false, error: "The announcement link must be a page path or a full https:// address." };
@@ -109,14 +109,11 @@ export async function linkOptions(): Promise<LinkGroup[]> {
       group: "Main pages",
       items: [
         { label: "Home", href: "/" },
-        { label: "Get a quote (choose product)", href: "/quote" },
-        { label: "Car insurance quote", href: "/quote/auto" },
-        { label: "Service contract quote", href: "/quote/vehicle-protection" },
+        { label: "Get a quote", href: "/quote/vehicle-protection" },
         { label: "Repair costs", href: "/repair-costs" },
         { label: "Why us", href: "/why-us" },
         { label: "FAQ", href: "/faq" },
         { label: "Blog", href: "/blog" },
-        { label: "Car insurance by state", href: "/car-insurance" },
         { label: "About us", href: "/about" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms of Use", href: "/terms" },

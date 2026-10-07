@@ -91,7 +91,7 @@ export function PostArticle({ post, related, blog }: { post: ArticleData; relate
             <aside className="mt-14 overflow-hidden rounded-2xl bg-asphalt p-7 text-white sm:p-9">
               <p className="text-2xl font-extrabold leading-tight sm:text-[1.7rem]">{blog.ctaTitle}</p>
               {blog.ctaText && <p className="mt-3 max-w-xl leading-relaxed text-white/75">{blog.ctaText}</p>}
-              <Link href="/quote/auto" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-line px-6 py-3.5 font-bold text-asphalt transition hover:bg-[#E3B21F]">
+              <Link href="/quote/vehicle-protection" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-line px-6 py-3.5 font-bold text-asphalt transition hover:bg-[#E3B21F]">
                 Get my free quote
                 <svg aria-hidden width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </Link>

@@ -4,7 +4,7 @@ import { fillLegal, getLegal } from "@/lib/legal";
 import { ogMetadata } from "@/lib/og";
 import { site } from "@/lib/site";
 
-const description = `How ${site.name} uses, shares and protects your information when you request car insurance or service contract quotes, your rights, and how to opt out.`;
+const description = `How ${site.name} uses, shares and protects your information when you request a vehicle service contract quote, your rights, and how to opt out.`;
 
 export const metadata: Metadata = {
   title: "Privacy Policy",

@@ -138,8 +138,7 @@ export default async function RepairCostsPage() {
 
           <h2>How to pay for an unexpected repair</h2>
           <p>
-            Car insurance won&apos;t help here: it pays for damage from accidents, theft and weather, not for parts that wear out or fail on their own. We explain
-            exactly where that line falls in <Link href="/blog/does-car-insurance-cover-repairs">does car insurance cover repairs?</Link>
+            Car insurance won&apos;t help here: it pays for damage from accidents, theft and weather, not for parts that wear out or fail on their own.
           </p>
           <p>
             Many drivers set aside an emergency repair fund. Others choose a <strong>vehicle service contract</strong>, an optional contract (not insurance) that
@@ -162,7 +161,7 @@ export default async function RepairCostsPage() {
         </div>
       </section>
 
-      <QuoteBanner product="vsc" />
+      <QuoteBanner />
     </>
   );
 }

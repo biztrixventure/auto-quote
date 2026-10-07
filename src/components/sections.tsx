@@ -4,7 +4,7 @@ import { RepairCostDiagram } from "@/components/RepairCostDiagram";
 import { Reveal } from "@/components/Reveal";
 import { WhyChooseCarousel } from "@/components/WhyChooseCarousel";
 import { ZipStart } from "@/components/ZipStart";
-import { PRODUCTS, VSC_DISCLOSURE, type ProductLine } from "@/lib/products";
+import { PRODUCTS, VSC_DISCLOSURE } from "@/lib/products";
 import { jsonLd } from "@/lib/security";
 import { fillCompany, type ContentSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
@@ -135,7 +135,7 @@ export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = 
               <p className="mt-2 leading-relaxed text-road">
                 Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and our team will help.
               </p>
-              <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-5 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</Link>
+              <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-5 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">See plan prices for my car</Link>
             </aside>
           </>
         ) : (
@@ -145,7 +145,7 @@ export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = 
               <p className="mt-3 max-w-sm leading-relaxed text-road">
                 Still unsure? Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and our team will help.
               </p>
-              <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-6 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</a>
+              <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-6 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">See plan prices for my car</a>
             </div>
             {list}
           </>
@@ -155,36 +155,27 @@ export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = 
   );
 }
 
-/**
- * Blue quote box at the bottom of most pages. `product` picks which quote it offers: car insurance
- * (ZIP start) or a vehicle service contract. Pages about repairs use "vsc".
- */
-export function QuoteBanner({ product = "auto" }: { product?: ProductLine }) {
-  const vsc = product === "vsc";
+/** Blue quote box at the bottom of most pages: starts a vehicle service contract quote from a ZIP code. */
+export function QuoteBanner() {
   return (
     <section className="mx-auto max-w-6xl px-5 pt-4">
       <Reveal className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(120deg,#0B2F5B_0%,#1F5FAD_55%,#3D8FDB_100%)] px-6 pb-14 pt-10 text-white sm:px-12 md:pb-16 md:pt-14">
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(255,255,255,0.18),transparent_45%)]" />
         <div className="relative grid items-center gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.14em] text-line">{PRODUCTS[product].label} · Free · No obligation</p>
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-line">Extended car warranty · Free · No obligation</p>
             <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">
-              {vsc ? "Get a price on help with repair bills." : "See what you could pay for car insurance today."}
+              See what a plan for your car costs.
             </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-white/85">
-              {vsc
-                ? "Tell us about your car and we'll contact you with vehicle service contract options and prices."
-                : "Compare quotes from the insurance companies we work with in one quick form, or call a licensed agent for help."}
+              Answer a few quick questions about your car and see estimated prices for powertrain to complete plans, backed by a 30-day money-back
+              guarantee.
             </p>
           </div>
           <div>
-            {vsc ? (
-              <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary inline-flex bg-line text-asphalt hover:bg-[#E3B21F]">Get a service contract quote</Link>
-            ) : (
-              <ZipStart dark />
-            )}
+            <ZipStart dark />
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-white/90">
-              {(vsc ? ["Free quote", "No obligation", "Not insurance"] : ["Takes about 5 minutes", "Free to compare", "No obligation"]).map((t) => (
+              {["About 2 minutes", "Free, no obligation", "30-day money-back guarantee"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <span aria-hidden className="grid h-5 w-5 place-items-center rounded-full bg-white/15 text-line">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>

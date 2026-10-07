@@ -6,7 +6,7 @@ export const site = {
   // server starts, so changing the domain needs a restart, not a rebuild.
   url: (process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   description:
-    "Compare car insurance quotes from several companies, or get a quote on a vehicle service contract for costly repairs. Two separate products, explained clearly.",
+    "Extended car warranty plans (vehicle service contracts) that help pay for costly repairs after your factory warranty ends. See plan prices for your car in about 2 minutes.",
   // Official profile pages on other sites (LinkedIn, Facebook, Trustpilot, Crunchbase, Bing Places…).
   // Added to the Organization data as sameAs, which helps Google build a knowledge panel.
   sameAs: [] as string[],
@@ -14,9 +14,9 @@ export const site = {
   phoneHref: "tel:+18005550142",
   email: "quotes@example.com",
   agencyLegalName: "Vertex AutoCare",
-  // Shown in the footer on every page. License numbers are available on request (not printed).
+  // Shown in the footer on every page: what the business is.
   licenseNote:
-    "Licensed insurance agency. License numbers available on request.",
+    "Vertex AutoCare offers vehicle service contracts, which are backed and administered by the provider named in each contract. We are not an insurance company and do not sell insurance.",
   // Rating badges in the "Our Reputation" section. Use only real, current figures from
   // the named platform; the badges stay hidden while this list is empty. Example:
   // { score: "4.8", source: "Google", count: "1,200+ reviews", href: "https://g.page/..." }
@@ -43,7 +43,7 @@ export const site = {
     "By clicking “See my quotes”, I agree that Vertex AutoCare, its licensed agents, and the insurance companies and vehicle service contract providers it works with may contact me about car insurance and related products, such as vehicle service contracts, at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
   // Separate consent for the vehicle service contract form: it names that product, not insurance.
   // Also a placeholder for the lawyer, versioned the same way.
-  vscConsentVersion: "2026-10-07-draft",
+  vscConsentVersion: "2026-10-08-draft",
   vscConsentText:
-    "By clicking “Get my quote”, I agree that Vertex AutoCare, its licensed agents, and the vehicle service contract providers and insurance companies it works with may contact me about vehicle service contracts and related products, such as car insurance, at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
+    "By clicking “See my prices”, I agree that Vertex AutoCare and the vehicle service contract providers it works with may contact me about vehicle service contracts and related vehicle protection products at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
 };

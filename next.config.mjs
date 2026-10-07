@@ -32,6 +32,13 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/:path*", has: [{ type: "host", value: "www\\.(?<domain>.+)" }], destination: "https://:domain/:path*", permanent: true },
+      // The site only offers vehicle service contracts now: old car insurance pages point to the closest page.
+      { source: "/quote", destination: "/quote/vehicle-protection", permanent: true },
+      { source: "/quote/auto", destination: "/quote/vehicle-protection", permanent: true },
+      { source: "/car-insurance", destination: "/", permanent: true },
+      { source: "/car-insurance/:slug*", destination: "/", permanent: true },
+      { source: "/blog/what-states-dont-require-car-insurance", destination: "/", permanent: true },
+      { source: "/blog/does-car-insurance-cover-repairs", destination: "/blog/are-extended-car-warranties-worth-it", permanent: true },
     ];
   },
   async headers() {

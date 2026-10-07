@@ -1,18 +1,17 @@
-// Starting templates for the Privacy Policy and Terms of Use, written for a US car insurance
-// and vehicle service contract lead website. Tokens in {braces} are filled in from the
-// business and privacy settings when the page is shown. An attorney must review both
-// documents before relying on them (Admin → Legal & privacy has an "approved" checkbox).
+// Starting templates for the Privacy Policy and Terms of Use, written for a US vehicle service
+// contract (extended car warranty) website. Tokens in {braces} are filled in from the business and
+// privacy settings when the page is shown. An attorney must review both documents before relying
+// on them (Admin → Legal & privacy has an "approved" checkbox).
 
 export const DEFAULT_PRIVACY_HTML = `
-<p>This Privacy Policy explains how {legal_name} (“{company}”, “we”, “us”) collects, uses, shares and protects personal information when you visit {site_url}, request car insurance quotes or extended vehicle protection, or talk with our licensed agents. It also explains the choices and rights you have, including how to opt out of the sale or sharing of your personal information.</p>
+<p>This Privacy Policy explains how {legal_name} (“{company}”, “we”, “us”) collects, uses, shares and protects personal information when you visit {site_url}, request a vehicle service contract quote or talk with our team. It also explains the choices and rights you have, including how to opt out of the sale or sharing of your personal information.</p>
 
 <h2>Information we collect</h2>
 <h3>Information you give us</h3>
 <ul>
-<li><strong>Contact details:</strong> name, email address, phone number and home address.</li>
-<li><strong>Vehicle details:</strong> year, make, model, ownership, use and annual mileage.</li>
-<li><strong>Driver details:</strong> date of birth, gender, marital status, license status, and recent accidents or violations.</li>
-<li><strong>Insurance details:</strong> whether you are insured today, your current insurance company and the coverage you want.</li>
+<li><strong>Contact details:</strong> name, email address, phone number, ZIP code and state.</li>
+<li><strong>Vehicle details:</strong> year, make, model and current mileage.</li>
+<li><strong>Plan preferences:</strong> the kind of protection you are interested in.</li>
 <li><strong>Messages:</strong> anything you tell us by phone, email, text or our forms.</li>
 </ul>
 <h3>Information collected automatically</h3>
@@ -22,25 +21,24 @@ export const DEFAULT_PRIVACY_HTML = `
 <li>Information from cookies and similar technologies. See <a href="#cookies-analytics-and-advertising">Cookies, analytics and advertising</a>.</li>
 </ul>
 <h3>Information from others</h3>
-<p>Insurance companies, service-contract providers and our marketing partners may send us information about quotes, policies or plans you apply for. We may also use data providers to verify or complete contact and vehicle details.</p>
+<p>Vehicle service contract providers and administrators may send us information about plans you apply for or buy. We may also use data providers to verify or complete contact and vehicle details.</p>
 
 <h2>How we use your information</h2>
 <ul>
-<li>To compare and show you car insurance quotes and vehicle protection options.</li>
-<li>To contact you about your request, provide quotes, and work with the insurance companies and vehicle service contract providers who can offer you coverage or a plan.</li>
+<li>To show you vehicle service contract plans and estimated prices for your car.</li>
+<li>To contact you about your request, prepare your quote and help you buy and manage a plan.</li>
 <li>To contact you by phone, text message and email about your request, with your consent.</li>
 <li>To run, secure and improve our website, prevent fraud and fix problems.</li>
 <li>To measure and improve our advertising.</li>
-<li>To meet legal, regulatory and insurance-licensing obligations.</li>
+<li>To meet legal and regulatory obligations.</li>
 </ul>
 
 <h2>How we share your information</h2>
 <p>We share personal information only as described here:</p>
 <ul>
-<li><strong>Insurance companies and agents</strong> that can quote or sell you coverage, so they can give you prices and contact you.</li>
-<li><strong>Vehicle service contract providers and administrators</strong>, if you ask about extended vehicle protection.</li>
-<li><strong>Marketing partners and lead buyers</strong> who offer insurance or related products. When we receive payment for this, it may be a “sale” of personal information under some state laws. You can <a href="/do-not-sell">opt out at any time</a>.</li>
-<li><strong>Service providers</strong> that work for us, such as hosting, email, phone, analytics and consent-recording companies. They may use your information only to provide services to us.</li>
+<li><strong>Vehicle service contract providers and administrators</strong> that issue and service the plans we offer, so they can price your plan, issue your contract and handle claims.</li>
+<li><strong>Marketing partners</strong> who offer vehicle protection or related products. When we receive payment for this, it may be a “sale” of personal information under some state laws. You can <a href="/do-not-sell">opt out at any time</a>.</li>
+<li><strong>Service providers</strong> that work for us, such as hosting, email, phone, payment, analytics and consent-recording companies. They may use your information only to provide services to us.</li>
 <li><strong>Legal and safety reasons:</strong> to comply with law, respond to lawful requests, protect our rights, or in connection with a merger or sale of our business.</li>
 </ul>
 
@@ -67,19 +65,16 @@ export const DEFAULT_PRIVACY_HTML = `
 <p>Use our <a href="/do-not-sell">privacy request form</a>, email <a href="mailto:{privacy_email}">{privacy_email}</a> or call {privacy_phone}. Opt-out requests take effect right away. For access, deletion and correction requests we will confirm your identity by matching the details you give us with the details we hold, and we will respond within {response_days} days. You may use an authorized agent; we may ask for proof that the agent may act for you.</p>
 
 <h2>Do Not Sell or Share My Personal Information</h2>
-<p>To opt out of the sale or sharing of your personal information, use our <a href="/do-not-sell">Do Not Sell or Share My Personal Information</a> page. We also honor Global Privacy Control signals sent by your browser. Once you opt out, we will not sell or share your information with marketing partners or lead buyers, and we turn off advertising tracking for your browser.</p>
+<p>To opt out of the sale or sharing of your personal information, use our <a href="/do-not-sell">Do Not Sell or Share My Personal Information</a> page. We also honor Global Privacy Control signals sent by your browser. Once you opt out, we will not sell or share your information with marketing partners, and we turn off advertising tracking for your browser.</p>
 
 <h2>California notice</h2>
-<p>In the last 12 months we collected these categories of personal information: identifiers (such as name, email, phone and IP address); personal records (such as address and insurance details); characteristics of protected classes (such as age, gender and marital status); commercial information (such as vehicles and coverage wanted); internet activity; and inferences drawn from this information. We collect it from you, your device and the partners described above, for the purposes in <a href="#how-we-use-your-information">How we use your information</a>. We may have sold or shared identifiers, personal records, commercial information and internet activity with insurance companies, marketing partners and advertising networks. We do not knowingly sell or share the personal information of people under 16.</p>
+<p>In the last 12 months we collected these categories of personal information: identifiers (such as name, email, phone and IP address); commercial information (such as your vehicle, its mileage and the plans you asked about); internet activity; and inferences drawn from this information. We collect it from you, your device and the partners described above, for the purposes in <a href="#how-we-use-your-information">How we use your information</a>. We may have sold or shared identifiers, commercial information and internet activity with marketing partners and advertising networks. We do not knowingly sell or share the personal information of people under 16.</p>
 
 <h2>How long we keep information</h2>
-<p>We keep personal information as long as needed for the purposes above, including to keep records of your consent and to meet insurance, tax and other legal requirements, and then delete or de-identify it.</p>
+<p>We keep personal information as long as needed for the purposes above, including to keep records of your consent and your contract, and to meet tax and other legal requirements, and then delete or de-identify it.</p>
 
 <h2>How we protect information</h2>
 <p>We use administrative, technical and physical safeguards, including encrypted connections, restricted staff access and two-factor sign-in for our systems. No system is perfectly secure, so we cannot guarantee absolute security.</p>
-
-<h2>Insurance information</h2>
-<p>Where state or federal insurance privacy laws apply (such as the Gramm-Leach-Bliley Act), we follow those laws when we handle nonpublic personal information about you.</p>
 
 <h2>Children</h2>
 <p>Our website is for adults. We do not knowingly collect personal information from anyone under 18.</p>
@@ -95,19 +90,19 @@ export const DEFAULT_TERMS_HTML = `
 <p>These Terms of Use apply to your use of {site_url} and any services offered on it by {legal_name} (“{company}”, “we”, “us”). By using this website you agree to these terms. If you do not agree, please do not use the website.</p>
 
 <h2>Our service</h2>
-<p>{company} is a licensed insurance agency that also offers vehicle service contracts. We compare car insurance quotes from the insurance companies we work with, and we offer vehicle service contracts from the providers we partner with. We are not an insurance company: policies are issued by insurance companies, and service contracts are issued and administered by their providers. Prices shown on this website are estimates based on the information you provide. For car insurance, your final price, coverage and eligibility are decided by the insurance company after it reviews your application, driving record and other details. For a vehicle service contract, the price, what is included and eligibility are set by the provider.</p>
+<p>{company} offers vehicle service contracts, often called extended car warranties, for US drivers. Each contract is backed and administered by the provider named in it, which handles claims under the contract's terms. We are not an insurance company and we do not sell insurance. Prices shown on this website are estimates based on the information you provide; your final price, what is included and your eligibility depend on the plan, term, deductible and your vehicle, and are confirmed before you buy.</p>
 
 <h2>Eligibility</h2>
-<p>You must be at least 18 years old and live in the United States to use our services.</p>
+<p>You must be at least 18 years old and live in the United States to use our services. Plans are not available in every state, and some vehicles may not qualify.</p>
 
 <h2>Your information and consent to be contacted</h2>
 <p>You agree to give accurate, current and complete information and to use only your own name, phone number and email address. When you submit a quote request and agree to the consent notice shown on the form, you agree to be contacted as described in that notice and in our <a href="/privacy">Privacy Policy</a>. Consent is not a condition of purchase. You can withdraw consent at any time by replying STOP to a text, asking a caller to stop, or using our <a href="/do-not-sell">privacy request form</a>.</p>
 
-<h2>Quotes and third-party offers</h2>
-<p>Quotes, plans and offers come from third parties. We do not guarantee that you will receive a quote, that a quote will be the lowest available, or that any company will offer you coverage. Your relationship with an insurance company or provider is governed by its own policy, contract and terms.</p>
+<h2>Quotes and estimates</h2>
+<p>Estimated prices on this website are for information only and are not an offer. We do not guarantee that your vehicle will qualify for a plan or that an estimate will match your final price. Your contract, once issued, governs what is included, its exclusions and its terms.</p>
 
 <h2>Vehicle service contracts</h2>
-<p>Vehicle service contracts (sometimes called extended car warranties) are not insurance. What a contract includes, its exclusions, deductibles, waiting periods and cancellation rights are set by the contract you sign with the provider. Please read it carefully.</p>
+<p>Vehicle service contracts are not insurance. What a contract includes, its exclusions, deductibles, waiting periods and cancellation rights are set out in the contract you receive. Please read it carefully. Every plan we sell comes with a 30-day money-back guarantee: if you cancel within 30 days of purchase and no claims have been filed, you get a full refund. After that, cancellation and any prorated refund follow the terms of your contract.</p>
 
 <h2>Acceptable use</h2>
 <ul>

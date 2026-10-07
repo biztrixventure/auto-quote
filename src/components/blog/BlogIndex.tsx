@@ -81,8 +81,8 @@ export async function BlogIndex({ eyebrow, heading, intro, filter = {}, basePath
         {posts.length === 0 && !featured ? (
           <div className="rounded-2xl border border-dashed border-rail px-6 py-20 text-center">
             <p className="text-lg font-bold">{q ? "No articles match your search" : "New articles are on the way"}</p>
-            <p className="mt-2 text-road">{q ? "Try a different word." : "Check back soon for guides on car insurance and repair costs."}</p>
-            <Link href="/quote" className="btn-primary mt-6 bg-line text-asphalt hover:bg-[#E3B21F]">Get a free quote</Link>
+            <p className="mt-2 text-road">{q ? "Try a different word." : "Check back soon for guides on extended car warranties and repair costs."}</p>
+            <Link href="/quote/vehicle-protection" className="btn-primary mt-6 bg-line text-asphalt hover:bg-[#E3B21F]">Get a free quote</Link>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

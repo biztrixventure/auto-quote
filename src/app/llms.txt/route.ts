@@ -1,7 +1,6 @@
 import { livePosts } from "@/lib/blog";
 import { db } from "@/lib/db";
 import { fillCompany, getSettings, getSite } from "@/lib/settings";
-import { guidePath, quickAnswer } from "@/lib/state-guides";
 
 /** Cuts at a word boundary instead of mid-word. */
 const shorten = (t: string, max: number) => (t.length <= max ? t : t.slice(0, max).replace(/\s+\S*$/, "") + "…");
@@ -17,8 +16,7 @@ export async function GET() {
   if (!ai.llmsTxt) return new Response("Not found", { status: 404 });
   const u = (path: string) => `${biz.url}${path}`;
 
-  const [guides, posts, pages] = await Promise.all([
-    db.stateGuide.findMany({ where: { published: true }, orderBy: { name: "asc" } }),
+  const [posts, pages] = await Promise.all([
     db.post.findMany({ where: livePosts(), orderBy: { publishedAt: "desc" }, take: 50, select: { title: true, slug: true, excerpt: true } }),
     db.page.findMany({ where: { status: "published", noindex: false }, orderBy: { title: "asc" }, select: { title: true, slug: true, intro: true } }),
   ]);
@@ -29,26 +27,20 @@ export async function GET() {
     `> ${line(biz.description)}`,
     "",
     line(
-      `${biz.name} is a licensed insurance agency for US drivers that also offers vehicle service contracts. ` +
-        `It offers two separate products: car insurance quotes from the insurance companies it works with, and vehicle service contracts ` +
-        `(often called extended car warranties; they are not insurance) from the providers it partners with. Phone: ${biz.phone}.`,
+      `${biz.name} sells vehicle service contracts, often called extended car warranties, to US drivers. ` +
+        `Plans range from powertrain to complete protection, are backed and administered by established providers, and come with a ` +
+        `30-day money-back guarantee. A vehicle service contract is not insurance. Phone: ${biz.phone}.`,
     ),
     "",
     "## Main pages",
-    `- [Get a free car insurance quote](${u("/quote/auto")}): one short form to compare prices from several insurance companies.`,
-    `- [Get a vehicle service contract quote](${u("/quote/vehicle-protection")}): plan options and prices for help with repair bills.`,
+    `- [Get an extended car warranty quote](${u("/quote/vehicle-protection")}): a short form that shows estimated plan prices for your car.`,
     `- [Car repair costs](${u("/repair-costs")}): typical out-of-pocket costs of common car repairs.`,
-    `- [About ${biz.name}](${u("/about")}): who we are, our two separate services, how we research our guides and how we are paid.`,
+    `- [About ${biz.name}](${u("/about")}): who we are, what we offer, how we research our guides and how we are paid.`,
     `- [Why choose ${biz.name}](${u("/why-us")}): ${shorten(line(fillCompany(content.whyIntro)), 200)}`,
-    `- [Vehicle service contract FAQ](${u("/faq")}): what a service contract includes and how it differs from car insurance.`,
+    `- [Extended car warranty FAQ](${u("/faq")}): what a vehicle service contract includes, what it costs and how it works.`,
   ];
-  if (guides.length) out.push(`- [Car insurance requirements by state](${u("/car-insurance")}): minimum coverage and no-fault rules for each state.`);
-  out.push(`- [Blog](${u("/blog")}): guides on car insurance, vehicle service contracts and repair costs.`);
+  out.push(`- [Blog](${u("/blog")}): guides on extended car warranties, vehicle service contracts and repair costs.`);
 
-  if (guides.length) {
-    out.push("", "## Car insurance requirements by state");
-    for (const g of guides) out.push(`- [${g.name}](${u(guidePath(g))}): ${line(quickAnswer(g))}`);
-  }
   if (posts.length) {
     out.push("", "## Blog posts");
     for (const p of posts) out.push(`- [${line(p.title)}](${u(`/blog/${p.slug}`)})${p.excerpt ? `: ${line(p.excerpt)}` : ""}`);

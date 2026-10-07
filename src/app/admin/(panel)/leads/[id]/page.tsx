@@ -1,5 +1,6 @@
 import { ProductBadge } from "@/components/admin/ProductBadge";
 import { productLabel, productOf } from "@/lib/products";
+import { PLANS, estimatePlans } from "@/lib/vsc-pricing";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
@@ -198,6 +199,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
                 <Field label="Address">{[lead.address, lead.city, `${lead.state} ${lead.zip}`].filter(Boolean).join(", ")}</Field>
                 {!isVsc && <Field label="Insured now">{lead.currentlyInsured ? `Yes${lead.currentCarrier ? ` · ${lead.currentCarrier}` : ""}` : "No"}</Field>}
                 {!isVsc && <Field label="Coverage wanted">{label(lead.coverageLevel)}</Field>}
+                {isVsc && lead.coverageLevel && <Field label="Plan wanted">{PLANS.find((p) => p.key === lead.coverageLevel)?.name ?? "Not sure yet"}</Field>}
                 <Field label="Product">{productLabel(lead.line)}</Field>
               </dl>
             </Card>
@@ -214,7 +216,12 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
                 )}
                 {v && <Field label="Vehicle">{`${v.year} ${v.make} ${v.model}`}</Field>}
                 {v && !isVsc && <Field label="Use">{`${label(v.ownership)} · ${label(v.primaryUse)} · ${v.annualMiles.toLocaleString()} mi/yr`}</Field>}
-                {v?.mileage ? <Field label="Mileage">{`${v.mileage.toLocaleString()} miles`}</Field> : null}
+                {v?.mileage ? <Field label="Mileage">{v.mileage >= 200000 ? "150,000 or more miles" : `Up to ${v.mileage.toLocaleString()} miles`}</Field> : null}
+                {isVsc && v && (
+                  <Field label="Prices shown">
+                    {estimatePlans(v, lead.createdAt).map((p) => `${p.name}: $${p.low}-$${p.high}/mo`).join(" · ") || "None (call for a price)"}
+                  </Field>
+                )}
               </dl>
             </Card>
           </div>

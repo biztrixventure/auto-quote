@@ -1,6 +1,6 @@
-// The two products this site offers. They are kept apart everywhere: separate quote forms,
-// consent text, lead type (Lead.line) and wording. A vehicle service contract is NOT insurance,
-// so its copy never uses insurance words (policy, premium, insurer, coverage).
+// The site sells vehicle service contracts only. "auto" (car insurance) stays here so leads from
+// before October 2026 still show correctly in the admin. A vehicle service contract is NOT
+// insurance, so its copy never uses insurance words (policy, premium, insurer).
 
 export const PRODUCTS = {
   auto: { label: "Car insurance", short: "Insurance", quoteHref: "/quote/auto" },

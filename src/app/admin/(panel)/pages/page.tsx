@@ -13,9 +13,7 @@ const BUILT_IN = [
   { title: "Why us", href: "/why-us", edit: "/admin/content#why", what: "Reasons and intro" },
   { title: "FAQ", href: "/faq", edit: "/admin/content#faqs", what: "Questions and answers" },
   { title: "Blog", href: "/blog", edit: "/admin/blog", what: "Posts and categories" },
-  { title: "Get a quote (choose)", href: "/quote", edit: "/admin/pages", what: "Picks car insurance or service contract" },
-  { title: "Car insurance quote", href: "/quote/auto", edit: "/admin/settings", what: "Form, consent text" },
-  { title: "Service contract quote", href: "/quote/vehicle-protection", edit: "/admin/settings", what: "Form, consent text" },
+  { title: "Get a quote", href: "/quote/vehicle-protection", edit: "/admin/settings", what: "Quote form, consent text" },
 ];
 
 export default async function PagesPage() {

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { STATE_CODES } from "./states";
+import { PLAN_INTEREST } from "./vsc-pricing";
 
 const currentYear = new Date().getFullYear();
 
@@ -101,6 +102,7 @@ export const vscFormSchema = z.object({
   vehicleMake: quoteFormSchema.shape.vehicleMake,
   vehicleModel: quoteFormSchema.shape.vehicleModel,
   mileage: z.enum(VSC_MILEAGE, { message: "Choose the mileage" }),
+  planInterest: z.enum(PLAN_INTEREST, { message: "Choose a plan, or “Not sure yet”" }),
   firstName: quoteFormSchema.shape.firstName,
   lastName: quoteFormSchema.shape.lastName,
   email: quoteFormSchema.shape.email,
@@ -111,6 +113,16 @@ export const vscFormSchema = z.object({
 export type VscFormValues = z.infer<typeof vscFormSchema>;
 
 export const vscSubmissionSchema = leadSubmissionSchema.extend({ form: vscFormSchema });
+
+// Steps of the service contract quote form and the fields each one checks before moving on.
+export const VSC_STEP_FIELDS = {
+  car: ["vehicleYear", "vehicleMake", "vehicleModel"],
+  details: ["mileage", "zip", "state"],
+  plan: ["planInterest"],
+  contact: ["firstName", "lastName", "email", "phone", "consent"],
+} as const satisfies Record<string, readonly (keyof VscFormValues)[]>;
+
+export type VscStepKey = keyof typeof VSC_STEP_FIELDS;
 
 // Which fields belong to which step (used to validate one step at a time).
 export const STEP_FIELDS = {
