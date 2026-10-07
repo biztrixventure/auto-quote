@@ -19,8 +19,8 @@ export default async function Home() {
         {/* Self-hosted, pre-sized hero photos. Only the first loads straight away; the
             other two fade in after 10s and 20s, so they wait until the page has loaded. */}
         <img
-          src="/images/hero/hero-1-1600.webp"
-          srcSet="/images/hero/hero-1-640.webp 640w, /images/hero/hero-1-1024.webp 1024w, /images/hero/hero-1-1600.webp 1600w, /images/hero/hero-1-2048.webp 2048w"
+          src="/images/hero/hero-ram-1600.webp"
+          srcSet="/images/hero/hero-ram-640.webp 640w, /images/hero/hero-ram-1024.webp 1024w, /images/hero/hero-ram-1600.webp 1600w, /images/hero/hero-ram-2048.webp 2048w"
           sizes="100vw"
           fetchPriority="high"
           decoding="async"
@@ -29,16 +29,16 @@ export default async function Home() {
           className="hero-scene hero-scene--one object-[58%_55%]"
         />
         <DeferredImg
-          src="/images/hero/hero-2-1600.webp"
-          srcSet="/images/hero/hero-2-640.webp 640w, /images/hero/hero-2-1024.webp 1024w, /images/hero/hero-2-1600.webp 1600w, /images/hero/hero-2-2048.webp 2048w"
+          src="/images/hero/hero-f150-1600.webp"
+          srcSet="/images/hero/hero-f150-640.webp 640w, /images/hero/hero-f150-1024.webp 1024w, /images/hero/hero-f150-1600.webp 1600w, /images/hero/hero-f150-2048.webp 2048w"
           sizes="100vw"
           decoding="async"
           aria-hidden="true"
           className="hero-scene hero-scene--two object-[58%_55%]"
         />
         <DeferredImg
-          src="/images/hero/hero-3-1600.webp"
-          srcSet="/images/hero/hero-3-640.webp 640w, /images/hero/hero-3-1024.webp 1024w, /images/hero/hero-3-1600.webp 1600w, /images/hero/hero-3-2048.webp 2048w"
+          src="/images/hero/hero-rav4-1600.webp"
+          srcSet="/images/hero/hero-rav4-640.webp 640w, /images/hero/hero-rav4-1024.webp 1024w, /images/hero/hero-rav4-1600.webp 1600w, /images/hero/hero-rav4-2048.webp 2048w"
           sizes="100vw"
           decoding="async"
           aria-hidden="true"
