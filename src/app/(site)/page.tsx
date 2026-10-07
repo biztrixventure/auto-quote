@@ -1,5 +1,5 @@
 import { CustomerReviews } from "@/components/CustomerReviews";
-import { DeferredImg } from "@/components/DeferredImg";
+import { HeroSlides } from "@/components/HeroSlides";
 import { Reveal } from "@/components/Reveal";
 import { FaqSection, QuoteBanner, RepairCostsSection, WhyChooseSection } from "@/components/sections";
 import { ZipStart } from "@/components/ZipStart";
@@ -16,56 +16,29 @@ export default async function Home() {
   return (
     <>
       <section className="relative isolate min-h-[590px] overflow-hidden bg-asphalt text-white sm:min-h-[620px]">
-        {/* Self-hosted, pre-sized hero photos. Only the first loads straight away; the
-            other two fade in after 10s and 20s, so they wait until the page has loaded. */}
-        <img
-          src="/images/hero/hero-ram-1600.webp"
-          srcSet="/images/hero/hero-ram-640.webp 640w, /images/hero/hero-ram-1024.webp 1024w, /images/hero/hero-ram-1600.webp 1600w, /images/hero/hero-ram-2048.webp 2048w"
-          sizes="100vw"
-          fetchPriority="high"
-          decoding="async"
-          alt=""
-          aria-hidden="true"
-          className="hero-scene hero-scene--one object-[58%_55%]"
-        />
-        <DeferredImg
-          src="/images/hero/hero-f150-1600.webp"
-          srcSet="/images/hero/hero-f150-640.webp 640w, /images/hero/hero-f150-1024.webp 1024w, /images/hero/hero-f150-1600.webp 1600w, /images/hero/hero-f150-2048.webp 2048w"
-          sizes="100vw"
-          decoding="async"
-          aria-hidden="true"
-          className="hero-scene hero-scene--two object-[58%_55%]"
-        />
-        <DeferredImg
-          src="/images/hero/hero-rav4-1600.webp"
-          srcSet="/images/hero/hero-rav4-640.webp 640w, /images/hero/hero-rav4-1024.webp 1024w, /images/hero/hero-rav4-1600.webp 1600w, /images/hero/hero-rav4-2048.webp 2048w"
-          sizes="100vw"
-          decoding="async"
-          aria-hidden="true"
-          className="hero-scene hero-scene--three object-[58%_55%]"
-        />
+        <HeroSlides />
         <div aria-hidden className="absolute inset-0 -z-10 bg-asphalt/65" />
         <div className="mx-auto flex min-h-[590px] max-w-6xl items-center px-5 py-16 sm:min-h-[620px] md:py-20">
           <div className="max-w-2xl">
-            <p className="mb-5 text-sm font-bold uppercase tracking-[0.14em] text-line">{fillCompany(content.hero.eyebrow)}</p>
-            <h1 className="max-w-xl text-4xl font-bold leading-[1.08] sm:text-5xl md:text-[3.75rem]">
+            <p className="hero-rise mb-5 text-sm font-bold uppercase tracking-[0.14em] text-line">{fillCompany(content.hero.eyebrow)}</p>
+            <h1 style={{ animationDelay: "80ms" }} className="hero-rise max-w-xl text-4xl font-bold leading-[1.08] sm:text-5xl md:text-[3.75rem]">
               {fillCompany(content.hero.title)}
             </h1>
-            <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/85">
+            <p className="hero-rise mt-5 max-w-lg text-lg leading-relaxed text-white/85" style={{ animationDelay: "160ms" }}>
               {fillCompany(content.hero.subtitle)}
             </p>
             {/* ZIP start first: the quickest way into the quote. */}
-            <div className="mt-8 max-w-md">
+            <div className="hero-rise mt-8 max-w-md" style={{ animationDelay: "240ms" }}>
               <ZipStart dark />
               <p className="mt-3 text-sm text-white/75">Free quote. No obligation. 30-day money-back guarantee.</p>
             </div>
-            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-white/90">
+            <div className="hero-rise mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-white/90" style={{ animationDelay: "320ms" }}>
               <span>Free quotes, no obligation</span>
               <span>Secure, private quote requests</span>
             </div>
           </div>
         </div>
-        <div aria-hidden className="lane h-2.5 w-full" />
+        <div aria-hidden className="lane lane-move h-2.5 w-full" />
       </section>
 
       <RepairCostsSection costs={content.repairCosts} />

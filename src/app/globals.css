@@ -49,25 +49,45 @@
   .choice input:focus-visible { outline: none; }
   .step-in { animation: step-in 0.35s ease-out both; }
   .lane { background-image: repeating-linear-gradient(90deg, #F2C230 0 28px, transparent 28px 44px); }
-  .hero-scene {
+  /* Home hero: the photo that is showing zooms and drifts slowly, then crossfades (HeroSlides.tsx).
+     A slide that fades out keeps its zoom until it is hidden, then resets. */
+  .hero-slide {
     @apply absolute inset-0 -z-20 h-full w-full object-cover;
     opacity: 0;
-    animation: hero-drive-frames 30s ease-in-out infinite;
+    transform: scale(1.02);
+    transition: opacity 1.2s ease, transform 0s linear 1.2s;
     will-change: opacity, transform;
   }
-  .hero-scene--two { animation-delay: -20s; }
-  .hero-scene--three { animation-delay: -10s; }
+  .hero-slide.is-active {
+    opacity: 1;
+    transform: scale(1.12) translate3d(var(--kb-x, 0), 0, 0);
+    transition: opacity 1.2s ease, transform 8.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .hero-slide.is-intro { animation: hero-kb-intro 8.5s cubic-bezier(0.25, 0.1, 0.25, 1) both; }
+  .hero-progress { animation: hero-progress linear both; }
+  .hero-rise { animation: hero-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .lane-move { animation: lane-move 0.9s linear infinite; }
   @media (prefers-reduced-motion: reduce) {
-    .hero-scene { transform: none; }
-    .hero-scene--one { opacity: 1; }
+    .hero-slide, .hero-slide.is-active { transform: none; transition: opacity 0.6s ease; }
+    .hero-slide.is-intro, .hero-rise, .lane-move, .hero-progress { animation: none; }
   }
 }
 
-@keyframes hero-drive-frames {
-  0% { opacity: 1; transform: scale(1.04) translate3d(0, 0, 0); }
-  24% { opacity: 1; transform: scale(1.08) translate3d(-0.5%, 0, 0); }
-  32%, 99% { opacity: 0; transform: scale(1.12) translate3d(1%, 0, 0); }
-  100% { opacity: 1; transform: scale(1.04) translate3d(0, 0, 0); }
+@keyframes hero-kb-intro {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.12) translate3d(var(--kb-x, 0), 0, 0); }
+}
+@keyframes hero-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes hero-rise {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); }
+  to { opacity: 1; transform: none; }
+}
+/* The yellow lane stripe under the hero slides left, like road markings passing by. */
+@keyframes lane-move {
+  to { background-position-x: -44px; }
 }
 
 @keyframes step-in {
