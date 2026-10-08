@@ -6,7 +6,7 @@ export const site = {
   // server starts, so changing the domain needs a restart, not a rebuild.
   url: (process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   description:
-    "Extended car warranty plans (vehicle service contracts) that help pay for costly repairs after your factory warranty ends. See plan prices for your car in about 2 minutes.",
+    "Extended car warranty plans (vehicle service contracts) that help pay for costly repairs after your factory warranty ends. See plan prices for your car in a few minutes.",
   // Official profile pages on other sites (LinkedIn, Facebook, Trustpilot, Crunchbase, Bing Places…).
   // Added to the Organization data as sameAs, which helps Google build a knowledge panel.
   sameAs: [] as string[],

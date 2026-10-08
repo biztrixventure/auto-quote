@@ -31,7 +31,7 @@ const REASON_ICONS = [
 ];
 
 const STEPS = [
-  { title: "Tell us about your car", body: "Year, make, model and mileage. The quote takes about 2 minutes." },
+  { title: "Tell us about your car", body: "Year, make, model and mileage. The quote takes a few minutes." },
   { title: "See your prices", body: "Get estimated prices for every plan your car qualifies for, from powertrain to complete." },
   { title: "Talk to our team", body: "A service contract specialist answers your questions and confirms your exact price." },
   { title: "Choose and drive", body: "Pick the plan that fits. Every plan comes with a 30-day money-back guarantee." },

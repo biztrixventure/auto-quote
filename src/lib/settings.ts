@@ -184,13 +184,13 @@ export const DEFAULTS = {
     writersCanPublish: false,
     showQuoteCta: true,
     ctaTitle: "Worried about your next repair bill?",
-    ctaText: "See estimated extended car warranty prices for your car in about 2 minutes. Free, no obligation.",
+    ctaText: "See estimated extended car warranty prices for your car in a few minutes. Free, no obligation.",
   } as BlogSettings,
   content: {
     hero: {
       eyebrow: "Extended car warranty plans",
       title: "Protect your budget from costly car repairs.",
-      subtitle: "A vehicle service contract helps pay for engine, transmission and other major repairs after your factory warranty ends. See plan prices for your car in about 2 minutes.",
+      subtitle: "A vehicle service contract helps pay for engine, transmission and other major repairs after your factory warranty ends. See plan prices for your car in a few minutes.",
     },
     whyIntro:
       "Our goal is simple: take the stress out of car repairs. Repair bills can be expensive and often arrive at the worst possible time. A {company} vehicle service contract helps protect your budget, and real people are always a phone call away.",
@@ -206,7 +206,7 @@ export const DEFAULTS = {
       { q: "What does a vehicle service contract include?", a: "It depends on the plan. Basic plans usually include the engine, transmission and drivetrain, and higher levels add systems such as cooling, brakes, electrical and air conditioning; some also include roadside assistance and trip interruption. The exact parts, exclusions and deductible are listed in each contract." },
       { q: "Is a vehicle service contract the same as car insurance?", a: "No. Car insurance pays for damage and injuries after an accident, and most states require it. A vehicle service contract is optional and pays for repairs when a listed part breaks down. It doesn't replace the insurance your state requires." },
       { q: "Can I get a vehicle service contract for an older car?", a: "Often, yes. Many plans accept older and higher-mileage cars, as long as the car is in good working condition when you buy the plan. Eligibility depends on the plan." },
-      { q: "How much does an extended car warranty cost?", a: "Most plans cost about $600 to $1,500 a year, depending on the age, mileage and make of your car and the plan level, and many people pay monthly. Our free quote shows estimated prices for your car in about 2 minutes." },
+      { q: "How much does an extended car warranty cost?", a: "Most plans cost about $600 to $1,500 a year, depending on the age, mileage and make of your car and the plan level, and many people pay monthly. Our free quote shows estimated prices for your car in a few minutes." },
       { q: "Can I cancel my plan and get a refund?", a: "Yes. Every plan {company} sells comes with a 30-day money-back guarantee: cancel within 30 days of purchase for a full refund, as long as no claims have been filed. After that, you can usually cancel for a prorated refund under the terms of your contract." },
     ],
     repairCosts: {
@@ -259,7 +259,7 @@ const loadRows = unstable_cache(
 const OLD_DEFAULT_TEXT = new Map<string, string>([
   ["Auto insurance, made easier", "Extended car warranty plans"],
   ["Find coverage that keeps you moving.", "Protect your budget from costly car repairs."],
-  ["Compare car insurance prices from several companies with one quick form. Get help from a licensed agent whenever you need it.", "A vehicle service contract helps pay for engine, transmission and other major repairs after your factory warranty ends. See plan prices for your car in about 2 minutes."],
+  ["Compare car insurance prices from several companies with one quick form. Get help from a licensed agent whenever you need it.", "A vehicle service contract helps pay for engine, transmission and other major repairs after your factory warranty ends. See plan prices for your car in a few minutes."],
   ["Our goal is simple: take the stress out of car repairs and surprise maintenance. Repair bills can be expensive and often arrive at the worst possible time. At {company}, we're committed to service you can count on, protecting your budget from unexpected repair costs and giving you the confidence that help is always just a phone call away.", "Our goal is simple: take the stress out of car repairs. Repair bills can be expensive and often arrive at the worst possible time. A {company} vehicle service contract helps protect your budget, and real people are always a phone call away."],
   ["When your car breaks down without warning, {company} has your back. We handle covered repairs quickly and efficiently so you can get back on the road.", "Our team talks you through your options and answers your questions before you decide anything."],
   ["Choose from several customizable plans. We'll help you find coverage that fits your vehicle and your budget. Call us for a free quote.", "Choose from powertrain to complete plans, with terms and deductibles that fit your car and your budget."],
@@ -291,10 +291,10 @@ const OLD_DEFAULT_TEXT = new Map<string, string>([
   ["Prices shown are estimates based on the information you provided. Your final price is set by the insurance company after it reviews your driving record and other details.", "Prices shown are estimates based on your car's year, make and mileage. Your exact price depends on the plan, term and deductible you choose, and we confirm it before you buy."],
   ["Practical guides on car insurance, vehicle service contracts and keeping repair costs down.", "Practical guides on extended car warranties, vehicle service contracts and keeping repair costs down."],
   ["See how much you could save", "Worried about your next repair bill?"],
-  ["Compare car insurance quotes from several companies in about 3 minutes. Free, no obligation.", "See estimated extended car warranty prices for your car in about 2 minutes. Free, no obligation."],
+  ["Compare car insurance quotes from several companies in about 3 minutes. Free, no obligation.", "See estimated extended car warranty prices for your car in a few minutes. Free, no obligation."],
   ["Car insurance & vehicle service contracts", "Extended car warranty plans"],
   ["Protect your car and your budget.", "Protect your budget from costly car repairs."],
-  ["Compare car insurance quotes from several companies, or get a price on a vehicle service contract that helps pay for costly repairs. Two separate products, one place to start.", "A vehicle service contract helps pay for engine, transmission and other major repairs after your factory warranty ends. See plan prices for your car in about 2 minutes."],
+  ["Compare car insurance quotes from several companies, or get a price on a vehicle service contract that helps pay for costly repairs. Two separate products, one place to start.", "A vehicle service contract helps pay for engine, transmission and other major repairs after your factory warranty ends. See plan prices for your car in a few minutes."],
   ["Our goal is simple: help you protect your car and your budget. Our licensed agents compare car insurance quotes for you, and our team helps you choose a vehicle service contract plan for repair bills, all explained in plain English.", "Our goal is simple: take the stress out of car repairs. Repair bills can be expensive and often arrive at the worst possible time. A {company} vehicle service contract helps protect your budget, and real people are always a phone call away."],
   ["Quotes From Companies We Trust", "Backed by Trusted Providers"],
   ["We compare options from the insurance companies and service contract providers we work with, so you see more than one price.", "Every plan is backed and administered by an established vehicle service contract provider, so claims are handled by people who do this every day."],

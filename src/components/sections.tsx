@@ -175,7 +175,7 @@ export function QuoteBanner() {
           <div>
             <ZipStart dark />
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-white/90">
-              {["About 2 minutes", "Free, no obligation", "30-day money-back guarantee"].map((t) => (
+              {["Takes a few minutes", "Free, no obligation", "30-day money-back guarantee"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <span aria-hidden className="grid h-5 w-5 place-items-center rounded-full bg-white/15 text-line">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>

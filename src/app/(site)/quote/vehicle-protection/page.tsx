@@ -6,7 +6,7 @@ import { jsonLd } from "@/lib/security";
 import { site } from "@/lib/site";
 
 export const metadata = {
-  title: "Extended Car Warranty Quote: See Plan Prices in 2 Minutes",
+  title: "Extended Car Warranty Quote: See Plan Prices for Your Car",
   description: "Get a free extended car warranty (vehicle service contract) quote. See estimated prices for powertrain to complete plans for your car. 30-day money-back guarantee.",
   alternates: { canonical: "/quote/vehicle-protection" },
   ...ogMetadata(
