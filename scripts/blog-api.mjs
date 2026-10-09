@@ -17,6 +17,11 @@
 //   node scripts/blog-api.mjs state-update <code> <state.json>    change content; legal facts need "verified": true
 //     state.json: { "intro", "contentFile": "extra.html" (or "contentHtml"), "seoTitle", "seoDescription",
 //       "avgAnnualPremium", "premiumSource", "requirementNote", "verified", "published" }
+//   node scripts/blog-api.mjs settings <navigation|legal|content> [--out file]   read site settings
+//   node scripts/blog-api.mjs settings-update <section> <file.json>
+//     navigation: the whole menu object (as returned by "settings navigation")
+//     legal: { "privacyHtml", "termsHtml" } or { "reset": "privacy" | "terms" | "both" }
+//     content: any of { "hero", "whyIntro", "reasons", "faqs" }
 //
 // post.json: { "title", "contentFile": "post.html" (or "content"), "slug", "excerpt", "category",
 //   "tags": [..], "coverImageId", "coverAlt", "seoTitle", "seoDescription", "status": "draft"|"review"|"publish", "publishAt" }
@@ -147,6 +152,17 @@ switch (cmd) {
     console.log(JSON.stringify({ message: r.message, code: r.state.code, published: r.state.published, verifiedAt: r.state.verifiedAt, url: r.state.url }, null, 2));
     break;
   }
+  case "settings":
+    if (!args[0]) fail("Usage: settings <navigation|legal|content>");
+    await output(await call(env, "GET", `/settings/${encodeURIComponent(args[0])}`), out);
+    break;
+  case "settings-update": {
+    if (!args[0] || !args[1]) fail("Usage: settings-update <navigation|legal|content> <file.json>");
+    const body = JSON.parse(await readFile(args[1], "utf8"));
+    const r = await call(env, args[0] === "navigation" ? "PUT" : "PATCH", `/settings/${encodeURIComponent(args[0])}`, body);
+    console.log(JSON.stringify({ message: r.message, ...(r.legal ? { legal: r.legal } : {}), ...(r.fields ? { fields: r.fields } : {}) }, null, 2));
+    break;
+  }
   default:
-    fail("Commands: site | get | create | update | upload | category | states | state | state-update (see the top of scripts/blog-api.mjs)");
+    fail("Commands: site | get | create | update | upload | category | states | state | state-update | settings | settings-update (see the top of scripts/blog-api.mjs)");
 }
