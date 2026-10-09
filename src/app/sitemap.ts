@@ -22,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: u("/"), ...(latestPost ? { lastModified: latestPost } : {}) },
-    ...["/quote/vehicle-protection", "/repair-costs", "/why-us", "/faq", "/about"].map((p) => ({ url: u(p) })),
+    ...["/extended-car-warranty", "/quote/vehicle-protection", "/repair-costs", "/why-us", "/faq", "/about"].map((p) => ({ url: u(p) })),
     ...pages.map((p) => ({ url: u(`/${p.slug}`), lastModified: p.updatedAt })),
     ...(posts.length ? [{ url: u("/blog"), lastModified: latestPost }] : [{ url: u("/blog") }]),
     ...categories.map((c) => ({ url: u(`/blog/category/${c.slug}`), ...(c.posts[0] ? { lastModified: c.posts[0].updatedAt } : {}) })),

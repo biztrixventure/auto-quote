@@ -34,6 +34,7 @@ export async function GET(req: Request) {
     },
     pages: [
       { title: "Home", url: u("/") },
+      { title: "Extended car warranty (pillar: plans, prices, coverage)", url: u("/extended-car-warranty") },
       { title: "Extended car warranty quote", url: u("/quote/vehicle-protection") },
       { title: "Car repair costs", url: u("/repair-costs") },
       { title: "Why choose us", url: u("/why-us") },

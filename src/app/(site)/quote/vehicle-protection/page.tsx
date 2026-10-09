@@ -49,6 +49,11 @@ export default async function VehicleProtectionQuotePage({ searchParams }: { sea
 
       {/* What searchers want to know before they request a quote. */}
       <section className="post-content mx-auto mt-14 max-w-3xl">
+        <p>
+          New to extended warranties? Our <Link href="/extended-car-warranty">extended car warranty guide</Link> explains the plan levels, what they cover and
+          what they exclude.
+        </p>
+
         <h2>How vehicle service contract pricing works</h2>
         <p>
           The price of a vehicle service contract depends mostly on your car and the level of protection you choose. <strong>Older, higher-mileage cars and

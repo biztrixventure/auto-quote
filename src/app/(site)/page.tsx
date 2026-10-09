@@ -57,6 +57,9 @@ export default async function Home() {
             <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-7 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
               See plan prices for my car
             </a>
+            <a href="/extended-car-warranty" className="mt-4 block text-sm font-semibold text-sky hover:underline md:inline-block md:ml-5 md:mt-0">
+              How our plans work →
+            </a>
           </Reveal>
           <Reveal from="pop" delay={150} className="order-first md:order-2">
             <img

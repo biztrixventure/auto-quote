@@ -13,6 +13,7 @@ const BUILT_IN = [
   { title: "Why us", href: "/why-us", edit: "/admin/content#why", what: "Reasons and intro" },
   { title: "FAQ", href: "/faq", edit: "/admin/content#faqs", what: "Questions and answers" },
   { title: "Blog", href: "/blog", edit: "/admin/blog", what: "Posts and categories" },
+  { title: "Extended car warranty", href: "/extended-car-warranty", edit: "/admin/pages", what: "Plans, prices and coverage guide (in code)" },
   { title: "Get a quote", href: "/quote/vehicle-protection", edit: "/admin/settings", what: "Quote form, consent text" },
 ];
 

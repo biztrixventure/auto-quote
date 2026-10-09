@@ -128,6 +128,7 @@ export const DEFAULTS = {
   notifications: { emailTo: "", smsTo: "", webhookUrl: "", onNewLead: true, onNoQuotes: true } as NotificationSettings,
   navigation: {
     links: [
+      { id: "plans", label: "Warranty plans", href: "/extended-car-warranty" },
       { id: "repair-costs", label: "Repair costs", href: "/repair-costs" },
       { id: "why-us", label: "Why us", href: "/why-us" },
       { id: "faq", label: "FAQ", href: "/faq" },
@@ -145,6 +146,7 @@ export const DEFAULTS = {
         title: "Get a quote",
         links: [
           { id: "f-vsc", label: "Extended warranty quote", href: "/quote/vehicle-protection" },
+          { id: "f-plans", label: "Extended car warranty plans", href: "/extended-car-warranty" },
           { id: "f-repair", label: "Repair costs", href: "/repair-costs" },
           { id: "f-why", label: "Why choose us", href: "/why-us" },
           { id: "f-faq", label: "FAQ", href: "/faq" },
