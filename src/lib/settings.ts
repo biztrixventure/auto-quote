@@ -168,8 +168,8 @@ export const DEFAULTS = {
   legal: {
     privacyHtml: DEFAULT_PRIVACY_HTML,
     termsHtml: DEFAULT_TERMS_HTML,
-    privacyUpdated: "2026-10-02",
-    termsUpdated: "2026-10-02",
+    privacyUpdated: "2026-10-08", // date of the current default wording (warranty-only rewrite)
+    termsUpdated: "2026-10-08",
     privacyEmail: "",
     privacyPhone: "",
     mailingAddress: "",
