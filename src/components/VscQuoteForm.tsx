@@ -12,14 +12,14 @@ import { readTracking } from "./TrackingCapture";
 import { TrustedForm } from "./TrustedForm";
 
 // The original six-step quote form, worded for a vehicle service contract (extended car warranty).
-// It ends on /quote/results/[id], which shows estimated plan prices.
+// It ends on /quote/results/[id], a thank-you page; the team calls with plan options and prices.
 const STEPS: { key: VscStepKey; label: string; title: string; subtitle: string }[] = [
   { key: "location", label: "Location", title: "Where is the car kept?", subtitle: "Plans and prices vary by state, so we start with your ZIP code." },
   { key: "vehicle", label: "Vehicle", title: "Tell us about your car", subtitle: "Your car and its mileage decide which plans it qualifies for and what they cost." },
   { key: "driver", label: "Driver", title: "Who is the main driver?", subtitle: "Enter the details of the person who drives the car most." },
   { key: "history", label: "History", title: "Driving history", subtitle: "A few quick questions about how the car is driven help our team prepare your quote." },
   { key: "coverage", label: "Coverage", title: "Your warranty and coverage", subtitle: "Tell us whether the factory warranty is still active and how much protection you want." },
-  { key: "contact", label: "Contact", title: "Where should we send your prices?", subtitle: "Your estimated prices show on the next page, and a member of our team may call to help you choose." },
+  { key: "contact", label: "Contact", title: "How can we reach you?", subtitle: "A member of our team will contact you soon with plan options and prices for your car." },
 ];
 
 // Mileage choices are the top of each range; the last one means "150,000 or more".
@@ -435,7 +435,7 @@ export function VscQuoteForm({ initialZip = "", consentText, consentVersion, pho
           )}
           {isLast ? (
             <button key="submit" type="submit" className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F] sm:min-w-52">
-              See my prices <Arrow dir="right" />
+              Get my free quote <Arrow dir="right" />
             </button>
           ) : (
             <button key="next" type="button" onClick={next} className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F] sm:min-w-44">

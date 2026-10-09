@@ -8,8 +8,8 @@ import { digitsOnly, vscSubmissionSchema } from "@/lib/validation";
 
 export const runtime = "nodejs";
 
-// Vehicle service contract quote requests, saved as Lead.line = "vsc". The visitor then sees
-// estimated plan prices on /quote/results/[id], and the team calls to finish.
+// Vehicle service contract quote requests, saved as Lead.line = "vsc". The visitor then sees a
+// thank-you page (/quote/results/[id]) and the team calls with plan options and prices.
 export async function POST(req: NextRequest) {
   const request = await readLeadRequest(req);
   if (request instanceof NextResponse) return request;

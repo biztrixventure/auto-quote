@@ -221,7 +221,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
                   <Field label="Factory warranty">{({ yes: "Still active", no: "Ended", not_sure: "Not sure" } as Record<string, string>)[v.factoryWarranty] ?? v.factoryWarranty}</Field>
                 ) : null}
                 {isVsc && v && (
-                  <Field label="Prices shown">
+                  <Field label="Estimated prices (internal, not shown to the customer)">
                     {estimatePlans(v, lead.createdAt).map((p) => `${p.name}: $${p.low}-$${p.high}/mo`).join(" · ") || "None (call for a price)"}
                   </Field>
                 )}

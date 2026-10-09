@@ -47,8 +47,8 @@ export default async function AboutPage() {
           <h2>What we do</h2>
           <p>
             {site.name} offers <strong>vehicle service contracts</strong>, often called extended car warranties. When you{" "}
-            <Link href="/quote/vehicle-protection">request a quote</Link>, you see estimated prices for the plans your car qualifies for, from powertrain to
-            complete protection, and our team helps you choose. Each contract is backed and administered by an established provider, which handles claims under
+            <Link href="/quote/vehicle-protection">request a quote</Link>, our team contacts you with prices for the plans your car qualifies for, from
+            powertrain to complete protection, and helps you choose. Each contract is backed and administered by an established provider, which handles claims under
             the contract&apos;s terms.
           </p>
           <p>

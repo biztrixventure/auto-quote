@@ -6,7 +6,7 @@ export const site = {
   // server starts, so changing the domain needs a restart, not a rebuild.
   url: (process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   description:
-    "Extended car warranty plans (vehicle service contracts) that help pay for costly repairs after your factory warranty ends. See plan prices for your car in a few minutes.",
+    "Extended car warranty plans (vehicle service contracts) that help pay for costly repairs after your factory warranty ends. Get a free quote in a few minutes.",
   // Official profile pages on other sites (LinkedIn, Facebook, Trustpilot, Crunchbase, Bing Places…).
   // Added to the Organization data as sameAs, which helps Google build a knowledge panel.
   sameAs: [] as string[],
@@ -43,7 +43,7 @@ export const site = {
     "By clicking “See my quotes”, I agree that Vertex AutoCare, its licensed agents, and the insurance companies and vehicle service contract providers it works with may contact me about car insurance and related products, such as vehicle service contracts, at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
   // Separate consent for the vehicle service contract form: it names that product, not insurance.
   // Also a placeholder for the lawyer, versioned the same way.
-  vscConsentVersion: "2026-10-08-draft",
+  vscConsentVersion: "2026-10-09-draft",
   vscConsentText:
-    "By clicking “See my prices”, I agree that Vertex AutoCare and the vehicle service contract providers it works with may contact me about vehicle service contracts and related vehicle protection products at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
+    "By clicking “Get my free quote”, I agree that Vertex AutoCare and the vehicle service contract providers it works with may contact me about vehicle service contracts and related vehicle protection products at the phone number and email I provided, including by calls and texts that may use automated technology or prerecorded messages. Consent is not required to buy. Message and data rates may apply. I also agree to the Privacy Policy and Terms of Use.",
 };

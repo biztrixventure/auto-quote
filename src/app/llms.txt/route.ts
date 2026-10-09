@@ -33,7 +33,7 @@ export async function GET() {
     ),
     "",
     "## Main pages",
-    `- [Get an extended car warranty quote](${u("/quote/vehicle-protection")}): a short form that shows estimated plan prices for your car.`,
+    `- [Get an extended car warranty quote](${u("/quote/vehicle-protection")}): a short form; our team then contacts you with plan options and prices for your car.`,
     `- [Extended car warranty plans, prices and coverage](${u("/extended-car-warranty")}): what a vehicle service contract is, the three plan levels, what they cost and what they exclude.`,
     `- [Car repair costs](${u("/repair-costs")}): typical out-of-pocket costs of common car repairs.`,
     `- [About ${biz.name}](${u("/about")}): who we are, what we offer, how we research our guides and how we are paid.`,

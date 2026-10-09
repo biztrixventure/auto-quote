@@ -135,7 +135,7 @@ export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = 
               <p className="mt-2 leading-relaxed text-road">
                 Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and our team will help.
               </p>
-              <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-5 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">See plan prices for my car</Link>
+              <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-5 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get my free quote</Link>
             </aside>
           </>
         ) : (
@@ -145,7 +145,7 @@ export function FaqSection({ faqs, phone, phoneHref, bare = false, withSchema = 
               <p className="mt-3 max-w-sm leading-relaxed text-road">
                 Still unsure? Call <a href={phoneHref} className="font-semibold text-sky underline-offset-2 hover:underline">{phone}</a> and our team will help.
               </p>
-              <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-6 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">See plan prices for my car</a>
+              <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-6 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">Get my free quote</a>
             </div>
             {list}
           </>
@@ -168,7 +168,7 @@ export function QuoteBanner() {
               See what a plan for your car costs.
             </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-white/85">
-              Answer a few quick questions about your car and see estimated prices for powertrain to complete plans, backed by a 30-day money-back
+              Answer a few quick questions about your car and our team will contact you with plan options and prices, backed by a 30-day money-back
               guarantee.
             </p>
           </div>

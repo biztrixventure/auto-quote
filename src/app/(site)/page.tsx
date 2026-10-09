@@ -55,7 +55,7 @@ export default async function Home() {
             </p>
             <p className="mx-auto mt-4 max-w-md text-sm text-road/80 md:mx-0">*A deductible may apply. {VSC_DISCLOSURE}</p>
             <a href={PRODUCTS.vsc.quoteHref} className="btn-primary mt-7 inline-flex bg-line uppercase tracking-wide text-asphalt hover:bg-[#E3B21F]">
-              See plan prices for my car
+              Get my free quote
             </a>
             <a href="/extended-car-warranty" className="mt-4 block text-sm font-semibold text-sky hover:underline md:inline-block md:ml-5 md:mt-0">
               How our plans work →

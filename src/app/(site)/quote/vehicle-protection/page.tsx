@@ -6,13 +6,13 @@ import { jsonLd } from "@/lib/security";
 import { site } from "@/lib/site";
 
 export const metadata = {
-  title: "Extended Car Warranty Quote: See Plan Prices for Your Car",
-  description: "Get a free extended car warranty (vehicle service contract) quote. See estimated prices for powertrain to complete plans for your car. 30-day money-back guarantee.",
+  title: "Free Extended Car Warranty Quote for Your Car",
+  description: "Get a free extended car warranty (vehicle service contract) quote. Tell us about your car and our team will contact you with plan options and prices. 30-day money-back guarantee.",
   alternates: { canonical: "/quote/vehicle-protection" },
   ...ogMetadata(
     {
       eyebrow: "Extended car warranty",
-      title: "See plan prices for your car",
+      title: "Get a free quote for your car",
       subtitle: "Powertrain to complete protection. Free quote, 30-day money-back guarantee.",
       image: "/images/cta-car.webp",
     },

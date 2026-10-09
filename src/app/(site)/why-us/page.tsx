@@ -32,8 +32,8 @@ const REASON_ICONS = [
 
 const STEPS = [
   { title: "Tell us about your car", body: "Year, make, model and mileage. The quote takes a few minutes." },
-  { title: "See your prices", body: "Get estimated prices for every plan your car qualifies for, from powertrain to complete." },
-  { title: "Talk to our team", body: "A service contract specialist answers your questions and confirms your exact price." },
+  { title: "We contact you", body: "A member of our team calls you soon with prices for the plans your car qualifies for, from powertrain to complete." },
+  { title: "Ask anything", body: "Your service contract specialist answers your questions and explains each plan in plain English." },
   { title: "Choose and drive", body: "Pick the plan that fits. Every plan comes with a 30-day money-back guarantee." },
 ];
 
@@ -86,7 +86,7 @@ export default async function WhyUsPage() {
         }
       >
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">See plan prices for my car</Link>
+          <Link href={PRODUCTS.vsc.quoteHref} className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">Get my free quote</Link>
           <a href={biz.phoneHref} className="btn-secondary">Call {biz.phone}</a>
         </div>
       </PageHero>

@@ -38,7 +38,7 @@ const FAQS = [
   },
   {
     q: "How much does an extended car warranty cost?",
-    a: "Most plans cost several hundred to a few thousand dollars in total, depending on the car's age, mileage, make and model, the plan level, the term and the deductible. Many people pay monthly. Our free quote shows estimated prices for your car.",
+    a: "Most plans cost several hundred to a few thousand dollars in total, depending on the car's age, mileage, make and model, the plan level, the term and the deductible. Many people pay monthly. Request a free quote and our team will give you prices for your car.",
   },
   {
     q: "What does an extended car warranty cover?",
@@ -98,7 +98,7 @@ export default async function ExtendedCarWarrantyPage() {
         crumbs={[{ name: "Extended car warranty", href: PATH }]}
       >
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/quote/vehicle-protection" className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">See plan prices for my car</Link>
+          <Link href="/quote/vehicle-protection" className="btn-primary bg-line text-asphalt hover:bg-[#E3B21F]">Get my free quote</Link>
           <a href={biz.phoneHref} className="btn-secondary">Call {biz.phone}</a>
         </div>
       </PageHero>
@@ -116,7 +116,7 @@ export default async function ExtendedCarWarrantyPage() {
           </p>
           <p>
             {site.name} offers three plan levels backed and administered by established providers. You can{" "}
-            <Link href="/quote/vehicle-protection">see estimated prices for your car</Link> in a few minutes, and every plan comes with a 30-day money-back
+            <Link href="/quote/vehicle-protection">get a free quote for your car</Link> in a few minutes, and every plan comes with a 30-day money-back
             guarantee.
           </p>
 

@@ -26,7 +26,7 @@ export const DEFAULT_PRIVACY_HTML = `
 
 <h2>How we use your information</h2>
 <ul>
-<li>To show you vehicle service contract plans and estimated prices for your car.</li>
+<li>To prepare your quote and contact you with vehicle service contract plans and prices for your car.</li>
 <li>To contact you about your request, prepare your quote and help you buy and manage a plan.</li>
 <li>To contact you by phone, text message and email about your request, with your consent.</li>
 <li>To run, secure and improve our website, prevent fraud and fix problems.</li>
