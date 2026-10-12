@@ -162,7 +162,8 @@ export default async function ExtendedCarWarrantyPage() {
           <h3>Powertrain plans</h3>
           <p>
             A powertrain plan covers the parts that make the car go: the engine, transmission and drive axles. These are the most expensive repairs a car can
-            need. A transmission repair averages about $3,000 and engine work can cost far more, so a powertrain plan targets the bills that hurt most.
+            need. A transmission repair averages about $3,000 and engine work can cost far more, so a powertrain plan targets the bills that hurt most. Our guide to{" "}
+            <Link href="/blog/what-is-a-powertrain-warranty">what a powertrain warranty covers</Link> goes into detail.
           </p>
           <h3>Mid-level plans</h3>
           <p>
@@ -172,7 +173,8 @@ export default async function ExtendedCarWarrantyPage() {
           <h3>Complete (exclusionary) plans</h3>
           <p>
             The most complete plans work the other way around: they cover most mechanical and electrical parts and list only what is excluded. They are the
-            closest thing to a factory bumper-to-bumper warranty and usually have the strictest age and mileage limits.
+            closest thing to a factory{" "}
+            <Link href="/blog/bumper-to-bumper-warranty">bumper-to-bumper warranty</Link> and usually have the strictest age and mileage limits.
           </p>
 
           <h2>How much does an extended car warranty cost?</h2>
