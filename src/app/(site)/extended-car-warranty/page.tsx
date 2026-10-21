@@ -14,12 +14,12 @@ import { estimatePlans } from "@/lib/vsc-pricing";
 
 const title = "Extended Car Warranty: Plans, Prices and What's Covered";
 const description =
-  "How an extended car warranty (vehicle service contract) works, what powertrain to complete plans cover, what they cost and what's excluded. Free quote, 30-day money-back guarantee.";
+  "How an extended car warranty works, what powertrain to complete plans cover, what they cost and what's excluded. Free quote, 30-day money-back guarantee.";
 const PATH = "/extended-car-warranty";
 const FTC_URL = "https://consumer.ftc.gov/articles/auto-warranties-and-auto-service-contracts";
 
 export const metadata: Metadata = {
-  title: { absolute: `Extended Car Warranty: Plans, Prices & Coverage | ${site.name}` },
+  title: { absolute: `Extended Car Warranty Plans & Prices | ${site.name}` },
   description,
   alternates: { canonical: PATH },
   ...ogMetadata(
